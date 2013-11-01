@@ -12,7 +12,7 @@ require(['puzzle','three.min'],function(puzzle) {
     }
 
     function PuzzlePiece(index) {
-        var model = createPuzzleTile(index);
+        var model = createPuzzlePieceModel(index);
         setIndex(index);
 
         function setIndex(index) {
@@ -43,7 +43,7 @@ require(['puzzle','three.min'],function(puzzle) {
             puzzlePieces[j].setIndex(j);
     });
 
-    function createPuzzleTile( index ) {
+    function createPuzzlePieceModel( index ) {
         var geometry = new THREE.CubeGeometry( puzzleSize/puzzleDim-1, puzzleSize/puzzleDim-1, puzzleSize/puzzleDim/2 );
         var material = new THREE.MeshPhongMaterial( { color: colorPalette[index % colorPalette.length]} );
         var mesh = new THREE.Mesh( geometry, material );
