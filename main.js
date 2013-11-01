@@ -1,10 +1,9 @@
 "use strict";
 
-require(['pz','three.min'],function(pz) {
+require(['puzzle','three.min'],function(puzzle) {
     var camera, scene, renderer;
 
-    console.log(pz);
-    var puzzleModel = new pz.PuzzleModel();
+    var puzzleModel = new puzzle.PuzzleModel();
 
     function init() {
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
