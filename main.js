@@ -1,59 +1,10 @@
 "use strict";
 
-require(['puzzle','three.min'],function(puzzle) {
-    var colorPalette = [0x17A768, 0xF1601D, 0xF1AD1D, 0xE7E0D2, 0xBBAE93];
+require(['pz','three.min'],function(pz) {
     var camera, scene, renderer;
 
-    var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
-    var puzzlePieces = [];
-
-    function puzzleCoordinate( v ) {
-        return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
-    }
-
-    function PuzzlePieceModel( color ) {
-        var geometry = new THREE.CubeGeometry(
-            puzzleSize/puzzleDim-1,
-            puzzleSize/puzzleDim-1,
-            puzzleSize/puzzleDim/2
-        );
-
-        var material = new THREE.MeshPhongMaterial({
-            color: color
-        });
-
-        var mesh = new THREE.Mesh( geometry, material );
-
-        return mesh;
-    }
-
-    function PuzzlePiece( index ) {
-        var color = colorPalette[index % colorPalette.length]
-        var model = new PuzzlePieceModel( color );
-        setIndex( index );
-
-        function setIndex(index) {
-            model.position.x = puzzleCoordinate( index % puzzleDim ); 
-            model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
-            model.position.z = 0;
-        }
-
-        return {
-            setIndex:setIndex,
-            model:model
-        }
-    }
-
-    for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
-        if( index === Math.floor( puzzleDim*puzzleDim/2 ) ) {
-            puzzlePieces.push( false );
-        }
-        else {
-            puzzlePieces.push( new PuzzlePiece( index ) );
-        }
-    }
-
-    var puzzleObject = new puzzle.Puzzle( puzzlePieces );
+    console.log(pz);
+    var puzzleModel = new pz.PuzzleModel();
 
     function init() {
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -61,17 +12,7 @@ require(['puzzle','three.min'],function(puzzle) {
 
         scene = new THREE.Scene();
 
-        puzzleModel = new THREE.Object3D();
-        puzzleModel.rotation.x = -1;
-        puzzleModel.rotation.z = 0;
-
-        puzzlePieces.forEach( function( puzzlePiece ) {
-            if( puzzlePiece ) {
-                puzzleModel.add( puzzlePiece.model );
-            }
-        });
-
-        scene.add( puzzleModel );
+        scene.add( puzzleModel.model );
         
         var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
         directionalLight.position.set( 0, 1, 0 );
@@ -90,5 +31,5 @@ require(['puzzle','three.min'],function(puzzle) {
 
     init();
     animate();
-    puzzleObject.doAction(3);
+    puzzleModel.doAction(3);
 });
