@@ -2,7 +2,7 @@
 
 define(['colors','three.min'],function(colors) {
     function PuzzleStructure( arr ) {
-        var dim = arr.length;
+        var dim = Math.sqrt( arr.length );
 
         function hole() {
             return arr.indexOf( false );
@@ -40,6 +40,7 @@ define(['colors','three.min'],function(colors) {
         }
 
         function isHoleAdjacent( center ) {
+            var a = getAdjacentIndicies(center);
             return getAdjacentIndicies(center).indexOf( hole() ) >= 0;
         }
 
@@ -61,7 +62,7 @@ define(['colors','three.min'],function(colors) {
         }
     }
 
-    function PuzzleModel() {
+    function PuzzleModel( picker ) {
         var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
         var puzzlePieces = [];
 
@@ -85,18 +86,31 @@ define(['colors','three.min'],function(colors) {
             var object = new THREE.Object3D();
             object.add(mesh);
 
+            object.pickTarget = mesh;
+
             return object;
         }
 
-        function PuzzlePiece( index ) {
+        function PuzzlePiece( index, onPicked ) {
             var color = colors.palette[index % colors.palette.length];
             var model = new PuzzlePieceModel( color );
             setIndex( index );
 
-            function setIndex(index) {
-                model.position.x = puzzleCoordinate( index % puzzleDim ); 
-                model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+            var thisIndex = index;
+            function setIndex(i) {
+                thisIndex = i;
+                model.position.x = puzzleCoordinate( i % puzzleDim ); 
+                model.position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
                 model.position.z = 0;
+            }
+
+            function invokeOnPicked() {
+                onPicked(thisIndex);
+            }
+
+            if( model.pickTarget ) {
+                model.pickTarget.onPicked = invokeOnPicked;
+                picker.registerPickTarget( model.pickTarget );
             }
 
             function add( thing ) {
@@ -121,11 +135,15 @@ define(['colors','three.min'],function(colors) {
                 puzzlePieces.push( false );
             }
             else {
-                puzzlePieces.push( new PuzzlePiece( index ) );
+                puzzlePieces.push( new PuzzlePiece( index, doAction ) );
             }
         }
 
         var puzzleObject = new PuzzleStructure( puzzlePieces );
+        function doAction(index) {
+            console.log("action:",index);
+            puzzleObject.doAction(index);
+        }
 
         puzzleModel = new THREE.Object3D();
         puzzleModel.rotation.x = -1;
