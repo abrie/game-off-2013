@@ -68,7 +68,14 @@ define( [], function() {
             onIndiciesSwapped = handler;
         }
 
+        function get() {
+            return arr.map( function(i, index) {
+                return index === hole() ? false : i;
+            });
+        }
+
         return {
+            get:get,
             log:log,
             doAction:doAction,
             onIndiciesSwapped:setOnIndiciesSwapped,
