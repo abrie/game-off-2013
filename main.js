@@ -3,7 +3,7 @@
 require(['puzzle','three.min'],function(puzzle) {
     var camera, scene, renderer;
 
-    var puzzleModel = new puzzle.PuzzleModel();
+    var puzzleObject = new puzzle.PuzzleModel();
 
     function init() {
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -11,7 +11,7 @@ require(['puzzle','three.min'],function(puzzle) {
 
         scene = new THREE.Scene();
 
-        scene.add( puzzleModel.model );
+        scene.add( puzzleObject.model );
         
         var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
         directionalLight.position.set( 0, 1, 0 );
@@ -30,5 +30,5 @@ require(['puzzle','three.min'],function(puzzle) {
 
     init();
     animate();
-    puzzleModel.doAction(3);
+    puzzleObject.doAction(3);
 });
