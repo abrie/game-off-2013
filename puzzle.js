@@ -126,7 +126,7 @@ define(['three.min'],function() {
         });
 
         return {
-            model:puzzleModel,
+            model: puzzleModel,
             doAction: puzzleObject.doAction,
         }
     }
