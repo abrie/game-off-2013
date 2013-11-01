@@ -5,22 +5,27 @@ require(['puzzle','three.min'],function(puzzle) {
     var camera, scene, renderer;
 
     var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
-    var puzzleObject = new puzzle.Puzzle( [0,1,2,3,false,5,6,7,8] );
+    var puzzleArray = [];
+    for( var i = 0; i < puzzleDim*puzzleDim; i++ ) {
+        if( i === Math.floor( puzzleDim*puzzleDim/2 ) ) {
+            puzzleArray.push( false );
+        }
+        else {
+            puzzleArray.push( createPuzzleTile(i) );
+        }
+    }
+
+    var puzzleObject = new puzzle.Puzzle( puzzleArray );
     puzzleObject.onIndiciesSwapped( function(i,j) {
-        if( puzzleTileModels[j] ) {
-            puzzleTileModels[j].position.x = puzzleCoordinate( i % puzzleDim ); 
-            puzzleTileModels[j].position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
+        console.log("swap:",i,j);
+        if( puzzleArray[i] ) {
+            puzzleArray[i].position.x = puzzleCoordinate( i % puzzleDim ); 
+            puzzleArray[i].position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
         }
-
-        if( puzzleTileModels[i] ) {
-            puzzleTileModels[i].position.x = puzzleCoordinate( j % puzzleDim ); 
-            puzzleTileModels[i].position.y = puzzleCoordinate( Math.floor( j / puzzleDim ) )
+        if( puzzleArray[j] ) {
+            puzzleArray[j].position.x = puzzleCoordinate( j % puzzleDim ); 
+            puzzleArray[j].position.y = puzzleCoordinate( Math.floor( j / puzzleDim ) )
         }
-
-        var sw = puzzleTileModels[i];
-        puzzleTileModels[i] = puzzleTileModels[j];
-        puzzleTileModels[j] = sw;
-        console.log("model swap");
     });
 
     function puzzleCoordinate( v ) {
@@ -49,14 +54,9 @@ require(['puzzle','three.min'],function(puzzle) {
         puzzleModel.rotation.x = -1;
         puzzleModel.rotation.z = 0;
 
-        puzzleObject.get().forEach( function( i ) {
+        puzzleArray.forEach( function( i ) {
             if( i !== false ) {
-                var puzzleTile = createPuzzleTile( i );
-                puzzleModel.add( puzzleTile );
-                puzzleTileModels.push( puzzleTile );
-            }
-            else {
-                puzzleTileModels.push( false );
+                puzzleModel.add( i );
             }
         });
 
