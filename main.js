@@ -10,5 +10,4 @@ require(['puzzle', 'scene', 'player'],function( puzzle, scene, player ) {
     // TODO: the player object should also exposes a pickables[] for consistency
     var player = new player.Player();
     puzzleObject.addPlayer(player);
-    puzzleObject.doAction(4);
 });

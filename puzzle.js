@@ -183,7 +183,6 @@ define(['colors','three.min'],function(colors) {
 
         return {
             model: puzzleModel,
-            doAction: puzzleObject.doAction,
             addPlayer: addPlayer,
             pickables: pickables,
         }
