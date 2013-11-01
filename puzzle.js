@@ -3,6 +3,9 @@
 define(['colors','three.min'],function(colors) {
     function PuzzleStructure( arr ) {
         var dim = Math.sqrt( arr.length );
+        if( dim % 1 !== 0 ) {
+            console.log("warning: puzzle data array is not square.");
+        }
 
         function hole() {
             return arr.indexOf( false );
@@ -23,6 +26,7 @@ define(['colors','three.min'],function(colors) {
             if( center + dim < dim * dim ) {
                 result.push( center + dim );
             }
+
             return result;
         }
 
@@ -62,60 +66,64 @@ define(['colors','three.min'],function(colors) {
         }
     }
 
-    function PuzzleModel( picker ) {
-        var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
+    function Tile( params ) {
+        var geometry = new THREE.CubeGeometry(
+            params.width, 
+            params.height,
+            params.depth
+        );
+
+        var material = new THREE.MeshPhongMaterial({
+            color: params.color
+        });
+
+        var mesh = new THREE.Mesh( geometry, material );
+
+        return mesh;
+    }
+
+    function Puzzle() {
+        var puzzleDim = 3, puzzleSize = 100;
         var puzzlePieces = [];
         var pickables = [];
 
-        function addPickable( mesh, onPicked ) {
-            mesh.onPicked = onPicked;
-            pickables.push( mesh );
+        function addPickable( object, onPicked ) {
+            object.children.forEach( function(mesh) {
+                mesh.onPicked = onPicked;
+                pickables.push( mesh );
+            });
         }
 
         function puzzleCoordinate( v ) {
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePieceModel( color, onPicked ) {
-            var geometry = new THREE.CubeGeometry(
-                puzzleSize/puzzleDim-1,
-                puzzleSize/puzzleDim-1,
-                puzzleSize/puzzleDim/2
-            );
+        function PuzzlePiece( color ) {
+            var index = undefined;
+            var tileParams = {
+                color:color,
+                width: puzzleSize/puzzleDim-1,
+                height:puzzleSize/puzzleDim-1,
+                depth: puzzleSize/puzzleDim/2
+            }
+            var tile = new Tile( tileParams );
 
-            var material = new THREE.MeshPhongMaterial({
-                color: color
-            });
+            var model = new THREE.Object3D();
+            model.add( tile );
 
-            var mesh = new THREE.Mesh( geometry, material );
-
-            var object = new THREE.Object3D();
-            object.add(mesh);
-
-            addPickable( mesh, onPicked );
-
-            return object;
-        }
-
-        function PuzzlePiece( index, onPicked ) {
-            var color = colors.palette[index % colors.palette.length];
-            var model = new PuzzlePieceModel( color, invokeOnPicked );
-            setIndex( index );
-
-            var thisIndex = index;
             function setIndex(i) {
-                thisIndex = i;
-                model.position.x = puzzleCoordinate( i % puzzleDim ); 
-                model.position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
+                index = i;
+                model.position.x = puzzleCoordinate( index % puzzleDim ); 
+                model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
                 model.position.z = 0;
             }
 
-            function invokeOnPicked() {
-                onPicked(thisIndex);
+            function getIndex() {
+                return index;
             }
 
             function add( thing ) {
-                thing.model.position.z = 10;
+                thing.model.position.z = tileParams.depth;
                 model.add( thing.model );
             }
 
@@ -125,39 +133,53 @@ define(['colors','three.min'],function(colors) {
 
             return {
                 setIndex:setIndex,
+                getIndex:getIndex,
                 remove:remove,
                 model:model,
                 add:add,
             }
         }
+        
+        function generatePieces() {
+            var result = [];
+            for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
+                if( index === Math.floor( puzzleDim*puzzleDim/2 ) ) {
+                    result.push( false );
+                }
+                else {
+                    var color = colors.palette[index % colors.palette.length];
+                    var newPiece = new PuzzlePiece( color );
+                    newPiece.setIndex( index );
+                    result.push( newPiece );
+                }
+            }
 
-        for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
-            if( index === Math.floor( puzzleDim*puzzleDim/2 ) ) {
-                puzzlePieces.push( false );
-            }
-            else {
-                puzzlePieces.push( new PuzzlePiece( index, doAction ) );
-            }
+            return result;
         }
-
-        var puzzleObject = new PuzzleStructure( puzzlePieces );
-        function doAction(index) {
-            puzzleObject.doAction(index);
-        }
-
-        puzzleModel = new THREE.Object3D();
-        puzzleModel.rotation.x = -1;
-        puzzleModel.rotation.z = 0;
-
-        puzzlePieces.forEach( function( puzzlePiece ) {
-            if( puzzlePiece ) {
-                puzzleModel.add( puzzlePiece.model );
-            }
-        });
 
         function addPlayer( player ) {
             puzzlePieces[0].add( player );
         }
+
+        function Container( ) {
+            var result = new THREE.Object3D();
+            result.rotation.x = -1;
+            result.rotation.z = 0;
+            return result;
+        }
+
+        var puzzlePieces = generatePieces();
+        var puzzleObject = new PuzzleStructure( puzzlePieces );
+        var puzzleModel = new Container();
+
+        puzzlePieces.forEach( function(piece) {
+            if( piece ) {
+                puzzleModel.add( piece.model );
+                addPickable( piece.model, function() { 
+                    puzzleObject.doAction( piece.getIndex() );
+                })
+            }
+        });
 
         return {
             model: puzzleModel,
@@ -168,6 +190,6 @@ define(['colors','three.min'],function(colors) {
     }
 
     return {
-        PuzzleModel:PuzzleModel
+        PuzzleModel:Puzzle
     }
 });
