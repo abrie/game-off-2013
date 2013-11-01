@@ -17,16 +17,17 @@ require(['puzzle','three.min'],function(puzzle) {
 
     var puzzleObject = new puzzle.Puzzle( puzzleArray );
     puzzleObject.onIndiciesSwapped( function(i,j) {
-        console.log("swap:",i,j);
-        if( puzzleArray[i] ) {
-            puzzleArray[i].position.x = puzzleCoordinate( i % puzzleDim ); 
-            puzzleArray[i].position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
-        }
-        if( puzzleArray[j] ) {
-            puzzleArray[j].position.x = puzzleCoordinate( j % puzzleDim ); 
-            puzzleArray[j].position.y = puzzleCoordinate( Math.floor( j / puzzleDim ) )
-        }
+        update( i );
+        update( j );
     });
+
+    function update( index ) {
+        var tile = puzzleArray[index];
+        if( tile ) {
+            tile.position.x = puzzleCoordinate( index % puzzleDim ); 
+            tile.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+        }
+    }
 
     function puzzleCoordinate( v ) {
         return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
