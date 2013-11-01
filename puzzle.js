@@ -84,7 +84,10 @@ define(['three.min'],function() {
 
             var mesh = new THREE.Mesh( geometry, material );
 
-            return mesh;
+            var object = new THREE.Object3D();
+            object.add(mesh);
+
+            return object;
         }
 
         function PuzzlePiece( index ) {
