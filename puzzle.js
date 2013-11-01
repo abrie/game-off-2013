@@ -65,12 +65,18 @@ define(['colors','three.min'],function(colors) {
     function PuzzleModel( picker ) {
         var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
         var puzzlePieces = [];
+        var pickables = [];
+
+        function addPickable( mesh, onPicked ) {
+            mesh.onPicked = onPicked;
+            pickables.push( mesh );
+        }
 
         function puzzleCoordinate( v ) {
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePieceModel( color ) {
+        function PuzzlePieceModel( color, onPicked ) {
             var geometry = new THREE.CubeGeometry(
                 puzzleSize/puzzleDim-1,
                 puzzleSize/puzzleDim-1,
@@ -86,14 +92,14 @@ define(['colors','three.min'],function(colors) {
             var object = new THREE.Object3D();
             object.add(mesh);
 
-            object.pickTarget = mesh;
+            addPickable( mesh, onPicked );
 
             return object;
         }
 
         function PuzzlePiece( index, onPicked ) {
             var color = colors.palette[index % colors.palette.length];
-            var model = new PuzzlePieceModel( color );
+            var model = new PuzzlePieceModel( color, invokeOnPicked );
             setIndex( index );
 
             var thisIndex = index;
@@ -108,11 +114,6 @@ define(['colors','three.min'],function(colors) {
                 onPicked(thisIndex);
             }
 
-            if( model.pickTarget ) {
-                model.pickTarget.onPicked = invokeOnPicked;
-                picker.registerPickTarget( model.pickTarget );
-            }
-
             function add( thing ) {
                 thing.model.position.z = 10;
                 model.add( thing.model );
@@ -124,9 +125,9 @@ define(['colors','three.min'],function(colors) {
 
             return {
                 setIndex:setIndex,
-                add:add,
                 remove:remove,
-                model:model
+                model:model,
+                add:add,
             }
         }
 
@@ -141,7 +142,6 @@ define(['colors','three.min'],function(colors) {
 
         var puzzleObject = new PuzzleStructure( puzzlePieces );
         function doAction(index) {
-            console.log("action:",index);
             puzzleObject.doAction(index);
         }
 
@@ -163,6 +163,7 @@ define(['colors','three.min'],function(colors) {
             model: puzzleModel,
             doAction: puzzleObject.doAction,
             addPlayer: addPlayer,
+            pickables: pickables,
         }
     }
 

@@ -2,7 +2,10 @@
 
 require(['puzzle', 'scene', 'colors'],function( puzzle, scene, colors ) {
 
-    var puzzleObject = new puzzle.PuzzleModel( scene.objectPicker );
+    // puzzleObject exposes an interface of: .model and .pickables
+    var puzzleObject = new puzzle.PuzzleModel();
+
+    // scene.add interprets the interface of .model and .pickables
     scene.add( puzzleObject );
 
     function Player() {

@@ -25,10 +25,16 @@ define(['picker','three.min'], function(picker) {
 
     function add( object ) {
         scene.add( object.model );
+        object.pickables.forEach( function(mesh) {
+            objectPicker.registerPickTarget( mesh );
+        });
     }
 
     function remove( object ) {
         scene.remove( object.model );
+        object.pickables.forEach( function(mesh) {
+            //TODO: unregistered pickable mesh
+        });
     }
 
     function register( object ) {
@@ -38,6 +44,5 @@ define(['picker','three.min'], function(picker) {
         add: add,
         remove: remove,
         register: register,
-        objectPicker: objectPicker,
     }
 });
