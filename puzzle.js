@@ -43,10 +43,14 @@ function Puzzle( dim ) {
         return result;
     }
 
+    var onIndiciesSwapped = undefined;
     function swapIndicies( i, j ) {
         var sw = arr[i];
         arr[i] = arr[j];
         arr[j] = sw;
+        if( onIndiciesSwapped ) {
+            onIndiciesSwapped( i, j );
+        }
     }
 
     function isHoleAdjacent( center ) {
@@ -59,13 +63,19 @@ function Puzzle( dim ) {
         }
     }
 
+    function setOnIndiciesSwapped( handler ) {
+        onIndiciesSwapped = handler;
+    }
+
     return {
         log:log,
         doAction:doAction,
+        onIndiciesSwapped:setOnIndiciesSwapped,
     }
 }
 
 var puzzle = new Puzzle(3);
+puzzle.onIndiciesSwapped( function(i,j) { console.log("swap:",i,j); } );
 var playerPosition = puzzle.doAction(1);
 puzzle.doAction(playerPosition);
 puzzle.log();
