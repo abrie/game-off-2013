@@ -28,7 +28,46 @@ require(['puzzle','three.min'],function(puzzle) {
         renderer.render( scene, camera );
     }
 
+    var keyDownAction = {
+        37:function() { move(-1,0); },
+        38:function() { move(0,1); },
+        39:function() { move(1,0);},
+        40:function() { move(0,-1); },
+        90:function() { swap(); }
+    }
+
+    document.onkeydown = function (e) { 
+        e = e || window.event; 
+        if( keyDownAction[e.keyCode] ) {
+            keyDownAction[e.keyCode]();
+            e.preventDefault();
+            e.stopPropagation()
+            return false;
+        }
+    };
+
     init();
     animate();
+    
+    function Player() {
+        var geometry = new THREE.CubeGeometry(
+            20,20,20
+        );
+
+        var material = new THREE.MeshPhongMaterial({
+            color: 0xF1AD1D,
+        });
+
+        var mesh = new THREE.Mesh( geometry, material );
+        var object = new THREE.Object3D();
+        object.add(mesh);
+        
+        return {
+            model:object,
+        }
+    }
+
+    var player = new Player();
+    puzzleObject.addPlayer(player);
     puzzleObject.doAction(3);
 });

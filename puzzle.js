@@ -101,8 +101,19 @@ define(['three.min'],function() {
                 model.position.z = 0;
             }
 
+            function add( thing ) {
+                thing.model.position.z = 10;
+                model.add( thing.model );
+            }
+
+            function remove( thing ) {
+                model.remove( thing.model );
+            }
+
             return {
                 setIndex:setIndex,
+                add:add,
+                remove:remove,
                 model:model
             }
         }
@@ -128,9 +139,14 @@ define(['three.min'],function() {
             }
         });
 
+        function addPlayer( player ) {
+            puzzlePieces[0].add( player );
+        }
+
         return {
             model: puzzleModel,
             doAction: puzzleObject.doAction,
+            addPlayer: addPlayer,
         }
     }
 
