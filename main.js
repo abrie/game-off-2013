@@ -7,8 +7,11 @@ require(['puzzle','three.min'],function(puzzle) {
     var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
     var puzzlePieces = [];
 
-    function PuzzlePiece(i) {
-        var model = createPuzzleTile(i);
+    function PuzzlePiece(index) {
+        var model = createPuzzleTile(index);
+        model.position.x = puzzleCoordinate( index % puzzleDim ); 
+        model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+        model.position.z = 0;
 
         return {
             model:model
@@ -45,11 +48,7 @@ require(['puzzle','three.min'],function(puzzle) {
     function createPuzzleTile( index ) {
         var geometry = new THREE.CubeGeometry( puzzleSize/puzzleDim-1, puzzleSize/puzzleDim-1, puzzleSize/puzzleDim/2 );
         var material = new THREE.MeshPhongMaterial( { color: colorPalette[index % colorPalette.length]} );
-
         var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.x = puzzleCoordinate( index % puzzleDim ); 
-        mesh.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
-        mesh.position.z = 0;
 
         return mesh;
     }
