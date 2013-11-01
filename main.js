@@ -5,7 +5,7 @@ require(['puzzle','three.min'],function(puzzle) {
     var camera, scene, renderer;
 
     var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
-    var puzzleObject = new puzzle.Puzzle( puzzleDim );
+    var puzzleObject = new puzzle.Puzzle( [0,1,2,3,false,5,6,7,8] );
     puzzleObject.onIndiciesSwapped( function(i,j) {
         if( puzzleTileModels[j] ) {
             puzzleTileModels[j].position.x = puzzleCoordinate( i % puzzleDim ); 
