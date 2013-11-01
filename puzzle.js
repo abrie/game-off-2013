@@ -25,10 +25,32 @@ function Puzzle( dim ) {
         }
     }
 
+    function getAdjacentIndicies( center ) {
+        var result = [];
+
+        if( center % dim - 1 > 0 ) {
+            result.push( center - 1 );
+        }
+        if( center % dim + 1 < dim ) {
+            result.push( center + 1 );
+        }
+        if( center - dim >= 0 ) {
+            result.push( center - dim );
+        }
+        if( center + dim < dim * dim ) {
+            result.push( center + dim );
+        }
+        return result;
+    }
+
     return {
         log:log,
+        getAdjacentIndicies:getAdjacentIndicies
     }
 }
 
 var puzzle = new Puzzle(3);
 puzzle.log();
+
+var position = 0;
+console.log(position, puzzle.getAdjacentIndicies(position));
