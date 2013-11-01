@@ -26,13 +26,16 @@ define( [], function() {
             return result;
         }
 
-        var onIndiciesSwapped = undefined;
         function swapIndicies( i, j ) {
             var sw = arr[i];
             arr[i] = arr[j];
             arr[j] = sw;
-            if( onIndiciesSwapped ) {
-                onIndiciesSwapped( i, j );
+
+            if( arr[i].setIndex ) {
+                arr[i].setIndex(i);
+            }
+            if( arr[j].setIndex ) {
+                arr[j].setIndex(j);
             }
         }
 
@@ -46,10 +49,6 @@ define( [], function() {
             }
         }
 
-        function setOnIndiciesSwapped( handler ) {
-            onIndiciesSwapped = handler;
-        }
-
         function get() {
             return arr.map( function(i, index) {
                 return index === hole() ? false : i;
@@ -59,7 +58,6 @@ define( [], function() {
         return {
             get:get,
             doAction:doAction,
-            onIndiciesSwapped:setOnIndiciesSwapped,
         }
     }
 

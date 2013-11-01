@@ -45,12 +45,6 @@ require(['puzzle','three.min'],function(puzzle) {
     }
 
     var puzzleObject = new puzzle.Puzzle( puzzlePieces );
-    puzzleObject.onIndiciesSwapped( function( i, j ) {
-        if( puzzlePieces[i] )
-            puzzlePieces[i].setIndex(i);
-        if( puzzlePieces[j] )
-            puzzlePieces[j].setIndex(j);
-    });
 
     function init() {
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
