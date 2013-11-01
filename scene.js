@@ -24,11 +24,11 @@ define(['picker','three.min'], function(picker) {
     animate();
 
     function add( object ) {
-        scene.add( object );
+        scene.add( object.model );
     }
 
     function remove( object ) {
-        scene.remove( object );
+        scene.remove( object.model );
     }
 
     function register( object ) {

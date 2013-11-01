@@ -3,7 +3,7 @@
 require(['puzzle', 'scene', 'colors'],function( puzzle, scene, colors ) {
 
     var puzzleObject = new puzzle.PuzzleModel( scene.objectPicker );
-    scene.add( puzzleObject.model );
+    scene.add( puzzleObject );
 
     function Player() {
         var geometry = new THREE.CubeGeometry(
