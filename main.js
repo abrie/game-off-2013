@@ -4,8 +4,24 @@ require(['puzzle','three.min'],function(puzzle) {
     var colorPalette = [0x17A768, 0xF1601D, 0xF1AD1D, 0xE7E0D2, 0xBBAE93];
     var camera, scene, renderer;
 
-    var puzzleDim = 3, puzzleSize = 100, puzzleModel;
+    var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
     var puzzleObject = new puzzle.Puzzle( puzzleDim );
+    puzzleObject.onIndiciesSwapped( function(i,j) {
+        if( puzzleTileModels[j] ) {
+            puzzleTileModels[j].position.x = puzzleCoordinate( i % puzzleDim ); 
+            puzzleTileModels[j].position.y = puzzleCoordinate( Math.floor( i / puzzleDim ) )
+        }
+
+        if( puzzleTileModels[i] ) {
+            puzzleTileModels[i].position.x = puzzleCoordinate( j % puzzleDim ); 
+            puzzleTileModels[i].position.y = puzzleCoordinate( Math.floor( j / puzzleDim ) )
+        }
+
+        var sw = puzzleTileModels[i];
+        puzzleTileModels[i] = puzzleTileModels[j];
+        puzzleTileModels[j] = sw;
+        console.log("model swap");
+    });
 
     function puzzleCoordinate( v ) {
         return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
@@ -17,7 +33,7 @@ require(['puzzle','three.min'],function(puzzle) {
 
         var mesh = new THREE.Mesh( geometry, material );
         mesh.position.x = puzzleCoordinate( index % puzzleDim ); 
-        mesh.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ))
+        mesh.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
         mesh.position.z = 0;
 
         return mesh;
@@ -37,6 +53,10 @@ require(['puzzle','three.min'],function(puzzle) {
             if( i !== false ) {
                 var puzzleTile = createPuzzleTile( i );
                 puzzleModel.add( puzzleTile );
+                puzzleTileModels.push( puzzleTile );
+            }
+            else {
+                puzzleTileModels.push( false );
             }
         });
 
@@ -59,4 +79,5 @@ require(['puzzle','three.min'],function(puzzle) {
 
     init();
     animate();
+    puzzleObject.doAction(3);
 });
