@@ -1,36 +1,9 @@
 "use strict";
 
-require(['puzzle','colors','picker','three.min'],function(puzzle,colors,picker) {
-    var camera, scene, renderer, objectPicker, puzzleObject;
+require(['puzzle', 'scene', 'colors'],function( puzzle, scene, colors ) {
 
-
-    function init() {
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 150;
-
-        scene = new THREE.Scene();
-
-        var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
-        directionalLight.position.set( 0, 1, 0 );
-        scene.add( directionalLight );
-
-        renderer = new THREE.WebGLRenderer({antialias:true});
-        renderer.setSize( window.innerWidth, window.innerHeight );
-
-        document.body.appendChild( renderer.domElement );
-
-        objectPicker = new picker.Picker(camera);
-        puzzleObject = new puzzle.PuzzleModel( objectPicker );
-        scene.add( puzzleObject.model );
-    }
-
-    function animate() {
-        requestAnimationFrame( animate );
-        renderer.render( scene, camera );
-    }
-
-    init();
-    animate();
+    var puzzleObject = new puzzle.PuzzleModel( scene.objectPicker );
+    scene.add( puzzleObject.model );
 
     function Player() {
         var geometry = new THREE.CubeGeometry(
