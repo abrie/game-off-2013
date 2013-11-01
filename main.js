@@ -1,6 +1,6 @@
 "use strict";
 
-require(['puzzle','three.min'],function(puzzle) {
+require(['puzzle','colors','three.min'],function(puzzle,colors) {
     var camera, scene, renderer;
 
     var puzzleObject = new puzzle.PuzzleModel();
@@ -55,7 +55,7 @@ require(['puzzle','three.min'],function(puzzle) {
         );
 
         var material = new THREE.MeshPhongMaterial({
-            color: 0xF1AD1D,
+            color: colors.palette[0],
         });
 
         var mesh = new THREE.Mesh( geometry, material );

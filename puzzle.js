@@ -1,6 +1,6 @@
 "use strict";
 
-define(['three.min'],function() {
+define(['colors','three.min'],function(colors) {
     function PuzzleStructure( arr ) {
         var dim = arr.length;
 
@@ -62,8 +62,6 @@ define(['three.min'],function() {
     }
 
     function PuzzleModel() {
-        var colorPalette = [0x17A768, 0xF1601D, 0xF1AD1D, 0xE7E0D2, 0xBBAE93];
-
         var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
         var puzzlePieces = [];
 
@@ -91,7 +89,7 @@ define(['three.min'],function() {
         }
 
         function PuzzlePiece( index ) {
-            var color = colorPalette[index % colorPalette.length]
+            var color = colors.palette[index % colors.palette.length];
             var model = new PuzzlePieceModel( color );
             setIndex( index );
 
