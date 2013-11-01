@@ -7,13 +7,21 @@ require(['puzzle','three.min'],function(puzzle) {
     var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
     var puzzlePieces = [];
 
+    function puzzleCoordinate( v ) {
+        return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
+    }
+
     function PuzzlePiece(index) {
         var model = createPuzzleTile(index);
-        model.position.x = puzzleCoordinate( index % puzzleDim ); 
-        model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
-        model.position.z = 0;
+        setIndex(index);
 
+        function setIndex(index) {
+            model.position.x = puzzleCoordinate( index % puzzleDim ); 
+            model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+            model.position.z = 0;
+        }
         return {
+            setIndex:setIndex,
             model:model
         }
     }
@@ -29,21 +37,11 @@ require(['puzzle','three.min'],function(puzzle) {
 
     var puzzleObject = new puzzle.Puzzle( puzzlePieces );
     puzzleObject.onIndiciesSwapped( function(i,j) {
-        update( i );
-        update( j );
+        if( puzzlePieces[i] )
+            puzzlePieces[i].setIndex(i);
+        if( puzzlePieces[j] )
+            puzzlePieces[j].setIndex(j);
     });
-
-    function update( index ) {
-        var puzzlePiece = puzzlePieces[index];
-        if( puzzlePiece ) {
-            puzzlePiece.model.position.x = puzzleCoordinate( index % puzzleDim ); 
-            puzzlePiece.model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
-        }
-    }
-
-    function puzzleCoordinate( v ) {
-        return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
-    }
 
     function createPuzzleTile( index ) {
         var geometry = new THREE.CubeGeometry( puzzleSize/puzzleDim-1, puzzleSize/puzzleDim-1, puzzleSize/puzzleDim/2 );
