@@ -5,27 +5,36 @@ require(['puzzle','three.min'],function(puzzle) {
     var camera, scene, renderer;
 
     var puzzleDim = 3, puzzleSize = 100, puzzleModel, puzzleTileModels = [];
-    var puzzleArray = [];
-    for( var i = 0; i < puzzleDim*puzzleDim; i++ ) {
-        if( i === Math.floor( puzzleDim*puzzleDim/2 ) ) {
-            puzzleArray.push( false );
-        }
-        else {
-            puzzleArray.push( createPuzzleTile(i) );
+    var puzzlePieces = [];
+
+    function PuzzlePiece(i) {
+        var model = createPuzzleTile(i);
+
+        return {
+            model:model
         }
     }
 
-    var puzzleObject = new puzzle.Puzzle( puzzleArray );
+    for( var i = 0; i < puzzleDim*puzzleDim; i++ ) {
+        if( i === Math.floor( puzzleDim*puzzleDim/2 ) ) {
+            puzzlePieces.push( false );
+        }
+        else {
+            puzzlePieces.push( new PuzzlePiece(i) );
+        }
+    }
+
+    var puzzleObject = new puzzle.Puzzle( puzzlePieces );
     puzzleObject.onIndiciesSwapped( function(i,j) {
         update( i );
         update( j );
     });
 
     function update( index ) {
-        var tile = puzzleArray[index];
-        if( tile ) {
-            tile.position.x = puzzleCoordinate( index % puzzleDim ); 
-            tile.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+        var puzzlePiece = puzzlePieces[index];
+        if( puzzlePiece ) {
+            puzzlePiece.model.position.x = puzzleCoordinate( index % puzzleDim ); 
+            puzzlePiece.model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
         }
     }
 
@@ -55,9 +64,9 @@ require(['puzzle','three.min'],function(puzzle) {
         puzzleModel.rotation.x = -1;
         puzzleModel.rotation.z = 0;
 
-        puzzleArray.forEach( function( i ) {
-            if( i !== false ) {
-                puzzleModel.add( i );
+        puzzlePieces.forEach( function( puzzlePiece ) {
+            if( puzzlePiece ) {
+                puzzleModel.add( puzzlePiece.model );
             }
         });
 
