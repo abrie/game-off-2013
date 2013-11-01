@@ -11,16 +11,25 @@ require(['puzzle','three.min'],function(puzzle) {
         return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
     }
 
-    function PuzzlePieceModel( index ) {
-        var geometry = new THREE.CubeGeometry( puzzleSize/puzzleDim-1, puzzleSize/puzzleDim-1, puzzleSize/puzzleDim/2 );
-        var material = new THREE.MeshPhongMaterial( { color: colorPalette[index % colorPalette.length]} );
+    function PuzzlePieceModel( color ) {
+        var geometry = new THREE.CubeGeometry(
+            puzzleSize/puzzleDim-1,
+            puzzleSize/puzzleDim-1,
+            puzzleSize/puzzleDim/2
+        );
+
+        var material = new THREE.MeshPhongMaterial({
+            color: color
+        });
+
         var mesh = new THREE.Mesh( geometry, material );
 
         return mesh;
     }
 
     function PuzzlePiece( index ) {
-        var model = new PuzzlePieceModel( index );
+        var color = colorPalette[index % colorPalette.length]
+        var model = new PuzzlePieceModel( color );
         setIndex( index );
 
         function setIndex(index) {
