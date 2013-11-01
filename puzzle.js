@@ -43,9 +43,19 @@ function Puzzle( dim ) {
         return result;
     }
 
+    function swapIndicies( i, j ) {
+        var sw = arr[i];
+        arr[i] = arr[j];
+        arr[j] = sw;
+    }
+
+    function isHoleAdjacent( center ) {
+        return getAdjacentIndicies(center).indexOf( hole() ) >= 0;
+    }
+
     return {
         log:log,
-        getAdjacentIndicies:getAdjacentIndicies
+        isHoleAdjacent:isHoleAdjacent,
     }
 }
 
@@ -53,4 +63,7 @@ var puzzle = new Puzzle(3);
 puzzle.log();
 
 var position = 0;
-console.log(position, puzzle.getAdjacentIndicies(position));
+console.log(position, puzzle.isHoleAdjacent(position) );
+
+var position = 3;
+console.log(position, puzzle.isHoleAdjacent(position) );
