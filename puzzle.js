@@ -29,7 +29,7 @@ define( [], function() {
         function getAdjacentIndicies( center ) {
             var result = [];
 
-            if( center % dim - 1 > 0 ) {
+            if( center % dim - 1 >= 0 ) {
                 result.push( center - 1 );
             }
             if( center % dim + 1 < dim ) {
