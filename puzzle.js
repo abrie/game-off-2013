@@ -53,17 +53,19 @@ function Puzzle( dim ) {
         return getAdjacentIndicies(center).indexOf( hole() ) >= 0;
     }
 
+    function doAction( center ) {
+        if( isHoleAdjacent( center ) ) {
+            swapIndicies( center, hole() );
+        }
+    }
+
     return {
         log:log,
-        isHoleAdjacent:isHoleAdjacent,
+        doAction:doAction,
     }
 }
 
 var puzzle = new Puzzle(3);
+var playerPosition = puzzle.doAction(1);
+puzzle.doAction(playerPosition);
 puzzle.log();
-
-var position = 0;
-console.log(position, puzzle.isHoleAdjacent(position) );
-
-var position = 3;
-console.log(position, puzzle.isHoleAdjacent(position) );
