@@ -184,10 +184,6 @@ define(['colors','three.min'],function(colors) {
             return result;
         }
 
-        function addPlayer( player ) {
-            puzzlePieces[0].add( player );
-        }
-
         function Container( ) {
             var result = new THREE.Object3D();
             result.rotation.x = -1;
@@ -210,7 +206,6 @@ define(['colors','three.min'],function(colors) {
 
         return {
             model: puzzleModel,
-            addPlayer: addPlayer,
             pickables: pickables,
         }
     }
