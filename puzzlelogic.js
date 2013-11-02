@@ -58,10 +58,6 @@ define([],function() {
             if( isHoleAdjacent( center ) ) {
                 swapIndicies( center, hole() );
             }
-
-            if( isSolved() ) {
-                console.log("this puzzle is solved.");
-            }
         }
 
         function get() {
@@ -73,6 +69,7 @@ define([],function() {
         return {
             get:get,
             doAction:doAction,
+            isSolved:isSolved,
         }
     }
 

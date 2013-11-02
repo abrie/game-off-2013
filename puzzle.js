@@ -146,9 +146,18 @@ define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
                 container.add( piece.model );
                 addPickable( piece.model, function() { 
                     logic.doAction( piece.getIndex() );
+                    checkSolved();
                 })
             }
         });
+
+        function checkSolved() {
+            if( logic.isSolved() ) {
+                console.log("in solved configuration.");
+            }
+        }
+
+        checkSolved();
 
         return {
             model: container,
