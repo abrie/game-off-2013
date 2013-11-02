@@ -1,6 +1,6 @@
 "use strict";
 
-require(['puzzle', 'scene'],function( puzzle, scene ) {
+require(['puzzle', 'scene'], function( puzzle, scene ) {
     // puzzleObject exposes an interface with: .model and .pickables
     var puzzle_A = new puzzle.Puzzle();
     puzzle_A.model.position.x = 100;
