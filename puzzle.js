@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlelogic) {
+define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colors, puzzlelogic, arobject) {
 
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
@@ -10,7 +10,8 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
         );
 
         var material = new THREE.MeshPhongMaterial({
-            color: params.color
+            color: params.color,
+            side: THREE.DoubleSide,
         });
 
         var mesh = new THREE.Mesh( geometry, material );
@@ -43,8 +44,8 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
 
         var starGeometry = new THREE.ExtrudeGeometry( starShape, extrusionSettings );
 
-        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-        var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800 } );
+        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00, side:THREE.DoubleSide } );
+        var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800, side:THREE.DoubleSide } );
         var materialArray = [ materialFront, materialSide ];
         var starMaterial = new THREE.MeshFaceMaterial(materialArray);
 
@@ -72,7 +73,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
     }
 
     function Puzzle() {
-        var puzzleDim = 3, puzzleSize = 100;
+        var puzzleDim = 3, puzzleSize = arobject.getMarkerSize();
         var puzzlePieces = [];
         var pickables = [];
 
@@ -104,9 +105,9 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
 
             var hammerParams = {
                 color: colors.palette[1],
-                width: tileParams.width-2,
-                height:tileParams.height-4,
-                depth: tileParams.depth,
+                width: tileParams.width-0.1,
+                height:tileParams.height-0.1,
+                depth: tileParams.depth-0.1,
                 type: hammerParams.type,
                 rotation: hammerParams.rotation,
             }
@@ -158,7 +159,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
             function raiseHammer() {
                 if( hammerTween ) { hammerTween.stop(); }
                 hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:10 }, 500 )
+                    .to( { z:2.5 }, 500 )
                     .easing( TWEEN.Easing.Exponential.In )
                     .onUpdate( function () {
                             hammer.position.z = this.z
@@ -200,6 +201,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
             {type:"edge", rotation:0},
             {type:"corner", rotation:0}
         ];
+
         function generatePieces() {
             var result = [];
             for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
@@ -220,7 +222,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
 
         function Container( ) {
             var result = new THREE.Object3D();
-            result.rotation.x = -1;
+            result.rotation.x = 0;
             result.rotation.z = 0;
             return result;
         }
