@@ -18,6 +18,43 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
         return mesh;
     }
 
+    function ExtrudedHammer( params ) {
+        var starPoints = [];
+
+        if( params.type === "corner" ) {
+            starPoints.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
+            starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
+            starPoints.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
+            var starShape = new THREE.Shape( starPoints );
+        }
+        else if( params.type === "edge" ) {
+            starPoints.push( new THREE.Vector2 ( 0, -params.height/2) );
+            starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
+            starPoints.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
+            var starShape = new THREE.Shape( starPoints );
+        }
+
+        var extrusionSettings = {
+            amount: params.depth/2,
+            curveSegments: 3,
+            bevelThickness: 4, bevelSize: 2, bevelEnabled: false,
+            material: 0, extrudeMaterial: 1
+        };
+
+        var starGeometry = new THREE.ExtrudeGeometry( starShape, extrusionSettings );
+
+        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800 } );
+        var materialArray = [ materialFront, materialSide ];
+        var starMaterial = new THREE.MeshFaceMaterial(materialArray);
+
+        var mesh = new THREE.Mesh( starGeometry, starMaterial );
+        mesh.position.set(0,0,0);
+        mesh.rotation.z = params.rotation;
+
+        return mesh;
+    }
+
     function Hammer( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -52,7 +89,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePiece( color, hammerAngle ) {
+        function PuzzlePiece( color, hammerParams ) {
             var index = undefined;
             var solvedIndex = undefined;
 
@@ -67,13 +104,14 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
 
             var hammerParams = {
                 color: colors.palette[1],
-                width: tileParams.width/2,
-                height:tileParams.height/2,
+                width: tileParams.width-2,
+                height:tileParams.height-4,
                 depth: tileParams.depth,
+                type: hammerParams.type,
+                rotation: hammerParams.rotation,
             }
-            var hammer = new Hammer( hammerParams );
+            var hammer = new ExtrudedHammer( hammerParams );
             hammer.position.z = 0;
-            hammer.rotation.z = hammerAngle;
 
             var model = new THREE.Object3D();
             model.add( tile );
@@ -151,6 +189,17 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
             }
         }
         
+        var types = [
+            {type:"corner", rotation:Math.PI},
+            {type:"edge", rotation:Math.PI},
+            {type:"corner", rotation:-Math.PI/2},
+            {type:"edge", rotation:Math.PI/2},
+            {type:"hole", rotation:0},
+            {type:"edge", rotation:-Math.PI/2},
+            {type:"corner", rotation:Math.PI/2},
+            {type:"edge", rotation:0},
+            {type:"corner", rotation:0}
+        ];
         function generatePieces() {
             var result = [];
             for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
@@ -159,7 +208,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
                 }
                 else {
                     var color = colors.palette[index % colors.palette.length];
-                    var newPiece = new PuzzlePiece( color, Math.PI/4*(index+1) );
+                    var newPiece = new PuzzlePiece( color, types[index] ); //Math.PI/4*(index+1) );
                     newPiece.setSolvedIndex( index );
                     newPiece.setIndex( index );
                     result.push( newPiece );
