@@ -207,7 +207,7 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
                     result.push( false );
                 }
                 else {
-                    var color = colors.palette[index % colors.palette.length];
+                    var color = colors.palette[3];
                     var newPiece = new PuzzlePiece( color, types[index] ); //Math.PI/4*(index+1) );
                     newPiece.setSolvedIndex( index );
                     newPiece.setIndex( index );
