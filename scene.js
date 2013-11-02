@@ -1,5 +1,5 @@
 "use strict";
-define(['picker','three.min'], function(picker) {
+define(['picker','three.min','tween.min'], function(picker) {
     var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.z = 450;
 
@@ -19,6 +19,7 @@ define(['picker','three.min'], function(picker) {
     function animate() {
         requestAnimationFrame( animate );
         renderer.render( scene, camera );
+        TWEEN.update();
     };
 
     animate();

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
+define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlelogic) {
 
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
@@ -72,7 +72,7 @@ define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
                 depth: tileParams.depth,
             }
             var hammer = new Hammer( hammerParams );
-            hammer.position.z = 1;
+            hammer.position.z = 0;
             hammer.rotation.z = hammerAngle;
 
             var model = new THREE.Object3D();
@@ -102,9 +102,31 @@ define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
                 return solvedIndex === index;
             }
 
+            function raiseHammer() {
+                var tween = new TWEEN.Tween( { z:hammer.position.z } )
+                    .to( { z:10 }, 500 )
+                    .easing( TWEEN.Easing.Exponential.In )
+                    .onUpdate( function () {
+                            hammer.position.z = this.z
+                            } )
+                .start();
+            }
+
+            function lowerHammer() {
+                var tween = new TWEEN.Tween( { z:hammer.position.z } )
+                    .to( { z:0.1 }, 500 )
+                    .easing( TWEEN.Easing.Exponential.Out )
+                    .onUpdate( function () {
+                            hammer.position.z = this.z
+                            } )
+                .start();
+            }
+
             return {
                 setSolvedIndex:setSolvedIndex,
                 getSolvedIndex:getSolvedIndex,
+                raiseHammer:raiseHammer,
+                lowerHammer:lowerHammer,
                 isSolved:isSolved,
                 setIndex:setIndex,
                 getIndex:getIndex,
@@ -151,9 +173,21 @@ define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
             }
         });
 
+        
         function checkSolved() {
             if( logic.isSolved() ) {
-                console.log("in solved configuration.");
+                pieces.forEach( function(piece) {
+                    if( piece ) {
+                        piece.raiseHammer();
+                    }
+                });
+            }
+            else {
+                pieces.forEach( function(piece) {
+                    if( piece ) {
+                        piece.lowerHammer();
+                    }
+                });
             }
         }
 
