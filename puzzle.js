@@ -137,26 +137,26 @@ define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
             return result;
         }
 
-        var puzzlePieces = generatePieces();
-        var puzzleLogic = new puzzlelogic.PuzzleLogic( puzzlePieces );
-        var puzzleModel = new Container();
+        var pieces = generatePieces();
+        var logic = new puzzlelogic.PuzzleLogic( pieces );
+        var container = new Container();
 
-        puzzlePieces.forEach( function(piece) {
+        pieces.forEach( function(piece) {
             if( piece ) {
-                puzzleModel.add( piece.model );
+                container.add( piece.model );
                 addPickable( piece.model, function() { 
-                    puzzleLogic.doAction( piece.getIndex() );
+                    logic.doAction( piece.getIndex() );
                 })
             }
         });
 
         return {
-            model: puzzleModel,
+            model: container,
             pickables: pickables,
         }
     }
 
     return {
-        PuzzleModel:Puzzle
+        Puzzle:Puzzle
     }
 });
