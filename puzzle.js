@@ -82,6 +82,22 @@ define(['colors','three.min'],function(colors) {
         return mesh;
     }
 
+    function Hammer( params ) {
+        var geometry = new THREE.CubeGeometry(
+            params.width, 
+            params.height,
+            params.depth
+        );
+
+        var material = new THREE.MeshPhongMaterial({
+            color: params.color
+        });
+
+        var mesh = new THREE.Mesh( geometry, material );
+
+        return mesh;
+    }
+
     function Puzzle() {
         var puzzleDim = 3, puzzleSize = 100;
         var puzzlePieces = [];
@@ -98,7 +114,7 @@ define(['colors','three.min'],function(colors) {
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePiece( color ) {
+        function PuzzlePiece( color, hammerAngle ) {
             var index = undefined;
             var tileParams = {
                 color:color,
@@ -108,8 +124,19 @@ define(['colors','three.min'],function(colors) {
             }
             var tile = new Tile( tileParams );
 
+            var hammerParams = {
+                color: colors.palette[1],
+                width: tileParams.width/2,
+                height:tileParams.height/2,
+                depth: tileParams.depth,
+            }
+            var hammer = new Hammer( hammerParams );
+            hammer.position.z = 1;
+            hammer.rotation.z = hammerAngle;
+
             var model = new THREE.Object3D();
             model.add( tile );
+            model.add( hammer );
 
             function setIndex(i) {
                 index = i;
@@ -148,7 +175,7 @@ define(['colors','three.min'],function(colors) {
                 }
                 else {
                     var color = colors.palette[index % colors.palette.length];
-                    var newPiece = new PuzzlePiece( color );
+                    var newPiece = new PuzzlePiece( color, Math.PI/4*(index+1) );
                     newPiece.setIndex( index );
                     result.push( newPiece );
                 }
