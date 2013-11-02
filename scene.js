@@ -1,7 +1,7 @@
 "use strict";
 define(['picker','three.min'], function(picker) {
-    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 150;
+    var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
+    camera.position.z = 450;
 
     var objectPicker = new picker.Picker(camera);
 
