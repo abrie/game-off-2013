@@ -81,9 +81,23 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
 
             function setIndex(i) {
                 index = i;
-                model.position.x = puzzleCoordinate( index % puzzleDim ); 
-                model.position.y = puzzleCoordinate( Math.floor( index / puzzleDim ) )
-                model.position.z = 0;
+                movePiece();
+            }
+
+            var moveTween = undefined;
+            function movePiece() {
+                if( moveTween ) { moveTween.stop(); }
+                var newx = puzzleCoordinate( index % puzzleDim ); 
+                var newy = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+                moveTween = new TWEEN.Tween( { x:model.position.x, y:model.position.y } )
+                    .to( {x:newx, y:newy }, 500 )
+                    .easing( TWEEN.Easing.Bounce.Out)
+                    .onUpdate( function () {
+                            model.position.x = this.x; 
+                            model.position.y = this.y;
+                            model.position.z = 0;
+                            } )
+                .start();
             }
 
             function getIndex() {
@@ -102,8 +116,10 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
                 return solvedIndex === index;
             }
 
+            var hammerTween = undefined;
             function raiseHammer() {
-                var tween = new TWEEN.Tween( { z:hammer.position.z } )
+                if( hammerTween ) { hammerTween.stop(); }
+                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
                     .to( { z:10 }, 500 )
                     .easing( TWEEN.Easing.Exponential.In )
                     .onUpdate( function () {
@@ -113,7 +129,8 @@ define(['colors','puzzlelogic','three.min','tween.min'],function(colors, puzzlel
             }
 
             function lowerHammer() {
-                var tween = new TWEEN.Tween( { z:hammer.position.z } )
+                if( hammerTween ) { hammerTween.stop(); }
+                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
                     .to( { z:0.1 }, 500 )
                     .easing( TWEEN.Easing.Exponential.Out )
                     .onUpdate( function () {
