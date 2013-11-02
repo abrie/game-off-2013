@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','three.min'],function(colors,puzzlelogic) {
+define(['colors','puzzlelogic','three.min'],function(colors, puzzlelogic) {
 
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
@@ -41,8 +41,10 @@ define(['colors','puzzlelogic','three.min'],function(colors,puzzlelogic) {
 
         function addPickable( object, onPicked ) {
             object.children.forEach( function(mesh) {
-                mesh.onPicked = onPicked;
-                pickables.push( mesh );
+                if( mesh.isPickable ) {
+                    mesh.onPicked = onPicked;
+                    pickables.push( mesh );
+                }
             });
         }
 
@@ -61,6 +63,7 @@ define(['colors','puzzlelogic','three.min'],function(colors,puzzlelogic) {
                 depth: puzzleSize/puzzleDim/2
             }
             var tile = new Tile( tileParams );
+            tile.isPickable = true;
 
             var hammerParams = {
                 color: colors.palette[1],
