@@ -53,7 +53,7 @@ define(['JSARToolKit.min'],function() {
             return result;
         };
 
-        var persistTime = 1;
+        var persistTime = 10;
         var newMarker = function(id, matrix) {
             return {
                 id: id,

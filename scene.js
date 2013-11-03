@@ -1,9 +1,6 @@
 "use strict";
 
-define(['picker','canvas', 'video','ardetector','arview','arobject','three.min','tween.min'], function(picker,canvas,video,ardetector,arview,arobject) {
-    var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
-    camera.position.z = 450;
-
+define(['picker','canvas', 'video','ardetector','arview','arobject'], function(picker,canvas,video,ardetector,arview,arobject) {
     var detectorCanvas = canvas.create( video.getDimensions() );
 
     var detector = ardetector.create( detectorCanvas );
@@ -16,12 +13,10 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
     // Create marker objects associated with the desired marker ID.
     var markerObjects = {
         4: arobject.createMarkerObject({color:0xAA0000}), // Marker #4, red.
-        32: arobject.createMarkerObject({color:0xAA0044}), // Marker #32, red.
+        32: arobject.createMarkerObject({color:0x000000}), // Marker #32, red.
     };
 
-    function animate() {
-        requestAnimationFrame( animate );
-        TWEEN.update();
+    function update() {
         video.seek(1);
         detectorCanvas.update( video );
         detector.detect( onMarkerCreated, onMarkerUpdated, onMarkerDestroyed );
@@ -29,28 +24,18 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
         view.render();
     }
 
-    video.onLoaded( function() {
-        console.log("starting.");
-        animate();
-    });
-
-    function add( object ) {
+    function add( id, object ) {
         object.pickables.forEach( function(mesh) {
             objectPicker.registerPickTarget( mesh );
         });
 
-        addAR( 32, object );
-        addAR( 4, object );
+        markerObjects[id].add( object );
     }
 
     function remove( object ) {
         object.pickables.forEach( function(mesh) {
             //TODO: unregistered pickable mesh
         });
-    }
-
-    function addAR( id, object ) {
-        markerObjects[id].add( object );
     }
 
     // This function is called when a marker is initally detected on the stream
@@ -72,9 +57,9 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
         view.remove( object );
     }
 
-
     return {
         add: add,
         remove: remove,
+        update: update,
     };
 });

@@ -64,7 +64,11 @@ define(["three.min"], function() {
         var glCanvas = document.createElement('canvas');
 
         // Initialize the renderer and attach it to the canvas
-        var renderer = new THREE.WebGLRenderer({canvas:glCanvas});
+        var renderer = new THREE.WebGLRenderer({
+            canvas:glCanvas,
+            antialias:true
+        });
+
         renderer.setSize(dimensions.width, dimensions.height);
         renderer.autoClear = false;
 

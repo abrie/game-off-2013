@@ -1,10 +1,21 @@
 "use strict";
 
-require(['puzzle', 'scene'], function( puzzle, scene ) {
-    // puzzleObject exposes an interface with: .model and .pickables
-    var puzzle_A = new puzzle.Puzzle();
-    puzzle_A.model.position.x = 0;
+require(['video', 'puzzle', 'scene', 'mainloop' ], function( video, puzzle, scene, mainloop ) {
 
-    // scene.add expectes an interface with .model and .pickables
-    scene.add( puzzle_A);
+    function makePuzzle( ar_id ) {
+        // puzzleObject exposes an interface with: .model and .pickables
+        var puzzleObject = new puzzle.Puzzle();
+
+        // scene.add expectes an interface with .model and .pickables
+        scene.add( ar_id, puzzleObject );
+    }
+
+    makePuzzle( 4 );
+    makePuzzle( 32 );
+
+    video.onLoaded( function() {
+        console.log("starting.");
+        mainloop.start();
+    });
+
 });

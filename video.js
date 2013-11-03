@@ -1,6 +1,6 @@
 "use strict";
 
-define(['VideoFrame.min'],function() {
+define([],function() {
     var loaded = false;
     var video = document.createElement('video');
     video.width = 480;
@@ -50,6 +50,7 @@ define(['VideoFrame.min'],function() {
         }
 
     }
+
     return {
         seek:seek,
         onLoaded: onLoaded,

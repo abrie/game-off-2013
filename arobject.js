@@ -43,17 +43,6 @@ define(["colors", "three.min"], function(colors) {
         return mesh;
     }
 
-    function createMarkerHitboxMesh() {
-        var geometry = new THREE.PlaneGeometry( markerSize, markerSize );
-        var material = new THREE.MeshBasicMaterial({
-            visible:false,
-            side:THREE.DoubleSide
-        });
-        var mesh = new THREE.Mesh( geometry, material );
-
-        return mesh;
-    }
-
     function createMarkerOccluderMesh() {
         var geometry = new THREE.CubeGeometry( markerSize + 0.1, markerSize + 0.1, markerSize + 0.1 );
         var materials = [
@@ -76,11 +65,8 @@ define(["colors", "three.min"], function(colors) {
     function createMarkerObject(params) {
         var modelContainer = createContainer();
 
-        var pitMesh = createMarkerMesh(colors.palette[4]);
+        var pitMesh = createMarkerMesh(params.color);
         modelContainer.add( pitMesh );
-
-        var hitboxMesh = createMarkerHitboxMesh();
-        modelContainer.add( hitboxMesh );
 
         var occluderContainer = createContainer();
         var occluderMesh = createMarkerOccluderMesh();
@@ -101,13 +87,12 @@ define(["colors", "three.min"], function(colors) {
             transform: transform,
             model: modelContainer,
             occluder: occluderContainer,
-            hitbox: hitboxMesh,
             add: add,
-        }
+        };
     }
 
     return {
         createMarkerObject:createMarkerObject,
         getMarkerSize: function() { return markerSize; },
-    }
+    };
 });
