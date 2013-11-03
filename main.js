@@ -14,7 +14,6 @@ require(['video', 'puzzle', 'scene', 'mainloop' ], function( video, puzzle, scen
     makePuzzle( 32 );
 
     video.onLoaded( function() {
-        console.log("starting.");
         mainloop.start();
     });
 
