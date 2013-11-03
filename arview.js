@@ -31,8 +31,8 @@ define(["three.min"], function() {
             camera: camera,
             scene: scene,
             update: update, 
-        }
-    }
+        };
+    };
 
     var Scene = function() {
         var scene = new THREE.Scene();
@@ -56,8 +56,8 @@ define(["three.min"], function() {
             add:add,
             remove:remove,
             setProjectionMatrix:setProjectionMatrix,
-        }
-    }
+        };
+    };
 
     var create = function(dimensions, sourceCanvas) {
         // Create a canvas which will be used for WebGL
@@ -109,7 +109,7 @@ define(["three.min"], function() {
             occluder.setProjectionMatrix( matrix );
         }
 
-        function add( object, selectionCallback ) {
+        function add( object ) {
             if( object.model ) {
                 virtual.add( object.model );
             }
@@ -134,12 +134,12 @@ define(["three.min"], function() {
             render: render,
             glCanvas: glCanvas,
             setCameraMatrix: setCameraMatrix,
-            getCamera: function() { return virtual.camera },
-        }
-    }
+            getCamera: function() { return virtual.camera; },
+        };
+    };
 
     return {
         create: create,
-    }
+    };
 
 });

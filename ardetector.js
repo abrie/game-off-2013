@@ -1,3 +1,4 @@
+/* global NyARRgbRaster_Canvas2D, FLARParam, FLARMultiIdMarkerDetector, NyARTransMatResult */
 "use strict";
 
 define(['JSARToolKit.min'],function() {
@@ -19,7 +20,7 @@ define(['JSARToolKit.min'],function() {
             }
 
             return result;
-        }
+        };
 
         var getTransformMatrix = function(idx) {
             var mat = new NyARTransMatResult();
@@ -44,13 +45,13 @@ define(['JSARToolKit.min'],function() {
             cm[15] = 1;
 
             return cm;
-        }
+        };
 
         var getCameraMatrix = function(zNear, zFar) {
             var result = new Float32Array(16);
             JSARParameters.copyCameraMatrix(result, zNear, zFar);
             return result;
-        }
+        };
 
         var persistTime = 1;
         var newMarker = function(id, matrix) {
@@ -58,15 +59,16 @@ define(['JSARToolKit.min'],function() {
                 id: id,
                 matrix: matrix,
                 age: persistTime,
-            }
-        }
+            };
+        };
 
         var markers = {};
         var detect = function( onCreate, onUpdate, onDestroy ) {
             var markerCount = JSARDetector.detectMarkerLite(JSARRaster, 70); 
+            var marker;
             for( var index = 0; index < markerCount; index++ ) {
                 var id = getMarkerNumber(index);
-                var marker = markers[id];
+                marker = markers[id];
                 if( marker === undefined ) {
                     marker = newMarker(id, getTransformMatrix(index));
                     markers[id] = marker;
@@ -80,23 +82,23 @@ define(['JSARToolKit.min'],function() {
             }
 
             for( var id in markers ) {
-                var marker = markers[id];
+                marker = markers[id];
                 if( marker ) {
-                    if( marker.age-- == 0 ) {
+                    if( marker.age-- === 0 ) {
                         onDestroy( marker );
                         delete markers[id];
                     }
                 }
             }
-        }
+        };
 
         return {
             detect: detect,
             getCameraMatrix: getCameraMatrix,
-        }
-    }
+        };
+    };
 
     return {
         create: create,
-    }
+    };
 });

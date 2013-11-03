@@ -1,7 +1,6 @@
 "use strict";
 
 define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colors, puzzlelogic, arobject) {
-
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -21,18 +20,19 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
 
     function ExtrudedHammer( params ) {
         var starPoints = [];
+        var starShape;
 
         if( params.type === "corner" ) {
             starPoints.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
             starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
             starPoints.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
-            var starShape = new THREE.Shape( starPoints );
+            starShape = new THREE.Shape( starPoints );
         }
         else if( params.type === "edge" ) {
             starPoints.push( new THREE.Vector2 ( 0, -params.height/2) );
             starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
             starPoints.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
-            var starShape = new THREE.Shape( starPoints );
+            starShape = new THREE.Shape( starPoints );
         }
 
         var extrusionSettings = {
@@ -56,25 +56,8 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
         return mesh;
     }
 
-    function Hammer( params ) {
-        var geometry = new THREE.CubeGeometry(
-            params.width, 
-            params.height,
-            params.depth
-        );
-
-        var material = new THREE.MeshPhongMaterial({
-            color: params.color
-        });
-
-        var mesh = new THREE.Mesh( geometry, material );
-
-        return mesh;
-    }
-
     function Puzzle() {
         var puzzleDim = 3, puzzleSize = arobject.getMarkerSize();
-        var puzzlePieces = [];
         var pickables = [];
 
         function addPickable( object, onPicked ) {
@@ -99,19 +82,19 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                 width: puzzleSize/puzzleDim-1,
                 height:puzzleSize/puzzleDim-1,
                 depth: puzzleSize/puzzleDim/2
-            }
+            };
             var tile = new Tile( tileParams );
             tile.isPickable = true;
 
-            var hammerParams = {
+            var params = {
                 color: colors.palette[1],
                 width: tileParams.width-0.1,
                 height:tileParams.height-0.1,
                 depth: tileParams.depth-0.1,
                 type: hammerParams.type,
                 rotation: hammerParams.rotation,
-            }
-            var hammer = new ExtrudedHammer( hammerParams );
+            };
+            var hammer = new ExtrudedHammer( params );
             hammer.position.z = 0;
 
             var model = new THREE.Object3D();
@@ -127,7 +110,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             function movePiece() {
                 if( moveTween ) { moveTween.stop(); }
                 var newx = puzzleCoordinate( index % puzzleDim ); 
-                var newy = puzzleCoordinate( Math.floor( index / puzzleDim ) )
+                var newy = puzzleCoordinate( Math.floor( index / puzzleDim ) );
                 moveTween = new TWEEN.Tween( { x:model.position.x, y:model.position.y } )
                     .to( {x:newx, y:newy }, 500 )
                     .easing( TWEEN.Easing.Bounce.Out)
@@ -162,7 +145,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                     .to( { z:2.5 }, 500 )
                     .easing( TWEEN.Easing.Exponential.In )
                     .onUpdate( function () {
-                            hammer.position.z = this.z
+                            hammer.position.z = this.z;
                             } )
                 .start();
             }
@@ -173,7 +156,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                     .to( { z:0.1 }, 500 )
                     .easing( TWEEN.Easing.Exponential.Out )
                     .onUpdate( function () {
-                            hammer.position.z = this.z
+                            hammer.position.z = this.z;
                             } )
                 .start();
             }
@@ -187,7 +170,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                 setIndex:setIndex,
                 getIndex:getIndex,
                 model:model,
-            }
+            };
         }
         
         var types = [
@@ -237,7 +220,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                 addPickable( piece.model, function() { 
                     logic.doAction( piece.getIndex() );
                     checkSolved();
-                })
+                });
             }
         });
 
@@ -264,10 +247,10 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
         return {
             model: container,
             pickables: pickables,
-        }
+        };
     }
 
     return {
         Puzzle:Puzzle
-    }
+    };
 });

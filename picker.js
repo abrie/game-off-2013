@@ -32,10 +32,10 @@ define(["three.min"],function() {
 
         return {
             registerPickTarget:registerPickTarget,
-        }
+        };
     }
 
     return {
         Picker:Picker,
-    }
+    };
 });

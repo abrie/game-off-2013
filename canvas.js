@@ -1,4 +1,5 @@
 "use strict";
+
 define([],function() {
     function create( params ) {
         var canvas = document.createElement("canvas");
@@ -20,10 +21,10 @@ define([],function() {
             getWidth:getWidth,
             getHeight:getHeight,
             update:update
-        }
+        };
     }
 
     return {
         create:create
-    }
+    };
 });

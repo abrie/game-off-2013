@@ -1,4 +1,5 @@
 "use strict";
+
 define(['picker','canvas', 'video','ardetector','arview','arobject','three.min','tween.min'], function(picker,canvas,video,ardetector,arview,arobject) {
     var camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.z = 450;
@@ -19,7 +20,7 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
         detector.detect( onMarkerCreated, onMarkerUpdated, onMarkerDestroyed );
         view.update();
         view.render();
-    };
+    }
 
     animate();
 
@@ -46,9 +47,7 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
     function onMarkerCreated(marker) {
         var object = markerObjects[marker.id];
         object.transform( marker.matrix );
-        view.add( object, function(isSelected) {
-            onMarkerSelectionChanged(marker.id, isSelected);
-        });
+        view.add( object );
     }
 
     // This function is called when an existing marker is repositioned
@@ -63,11 +62,6 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
         view.remove( object );
     }
 
-    // This function is called when a marker object is selected/unselected.
-    function onMarkerSelectionChanged(id, isSelected) {
-        notifyWarpholeStateChanged( id, isSelected );
-    }
-
     // Create marker objects associated with the desired marker ID.
     var markerObjects = {
         4: arobject.createMarkerObject({color:0xAA0000}), // Marker #4, red.
@@ -77,5 +71,5 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
     return {
         add: add,
         remove: remove,
-    }
+    };
 });

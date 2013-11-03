@@ -1,0 +1,15 @@
+{
+  "undef": true,
+  "unused": true,
+  "globals": {
+    "define":true,
+    "require":true,
+    "THREE": true,
+    "TWEEN": true,
+    "document": true,
+    "window": true,
+    "requestAnimationFrame":true,
+    "console": true,
+    "Float32Array": true
+  }
+}

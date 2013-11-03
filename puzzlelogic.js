@@ -44,7 +44,6 @@ define([],function() {
         }
 
         function isHoleAdjacent( center ) {
-            var a = getAdjacentIndicies(center);
             return getAdjacentIndicies(center).indexOf( hole() ) >= 0;
         }
 
@@ -70,10 +69,10 @@ define([],function() {
             get:get,
             doAction:doAction,
             isSolved:isSolved,
-        }
+        };
     }
 
     return {
         PuzzleLogic:PuzzleLogic
-    }
+    };
 });

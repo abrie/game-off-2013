@@ -1,4 +1,5 @@
 "use strict";
+
 define([],function(){
     var palette = [
         0x17A768,
@@ -10,5 +11,5 @@ define([],function(){
 
     return {
         palette:palette,
-    }
+    };
 });
