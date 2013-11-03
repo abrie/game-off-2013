@@ -25,10 +25,9 @@ define([],function() {
         return Math.floor(video.currentTime.toFixed(5) * frameRate);
     }
 
-    function seek(frames) {
-        var direction = "forward";
-        var frame = getCurrentFrame();
-        video.currentTime = ((((direction === 'backward' ? (frame - frames) : (frame + frames))) / frameRate) + 0.00001);
+    function seek( delta ) {
+        var current = getCurrentFrame();
+        video.currentTime = (current + delta) / frameRate + 0.00001;
     }
 
     var getDimensions = function() {
@@ -48,7 +47,6 @@ define([],function() {
         if( loaded ) {
             loadCallback();
         }
-
     }
 
     return {
@@ -57,4 +55,5 @@ define([],function() {
         copyToContext:copyToContext,
         getDimensions:getDimensions,
     };
+
 }());
