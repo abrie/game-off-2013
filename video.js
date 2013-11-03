@@ -19,21 +19,26 @@ define([],function() {
         }, false);
 
         video.addEventListener('progress', function() {
-            // IndexSizeError: DOM Exception 1 occurs sometimes. Unable to track down the cause,
-            // wrap it in an exception handler as a workaround.
-            try {
+            if( this.buffered.length > 0 ) {
                 buffered = this.buffered.end(0);
             }
-            catch( e ) {
-                console.log("caught exception for video 'progress' event:",e);
+            else {
+                buffered = 0;
+                console.log("setting buffered to 0.");
             }
             notifyLoadPercentage();
         }, false);
 
-        video.load();
+        function load() {
+            duration = 0;
+            buffered = 0;
+            video.load();
+        }
+
+        load();
 
         function notifyLoadPercentage() {
-            if( duration && buffered ) {
+            if( duration > 0 && buffered > 0 ) {
                 var percent = Math.ceil( buffered / duration * 100 );
                 if( progressCallback ) {
                     progressCallback( percent );
@@ -78,9 +83,6 @@ define([],function() {
             loadCallback = callback;
             if( loaded ) {
                 loadCallback();
-                if( progressCallback ) {
-                    progressCallback(100);
-                }
             }
         }
 

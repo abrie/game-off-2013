@@ -1,3 +1,23 @@
 body {
     margin: 0px;
 }
+
+.assetProgress {
+    width: 150px;
+    height: 25px;
+    margin: auto;
+    position: absolute;
+    top:0; left:0; bottom:0; right:0;
+}
+
+.centered {
+    width: 175px;
+    height: 50px;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top:0; left:0; bottom:0; right:0;
+    background: #BBAE93;
+    border: 1px solid black;
+    border-radius: 5px;
+}

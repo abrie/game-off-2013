@@ -10,6 +10,9 @@ define(['video'], function(video) {
         });
 
         obj.onLoaded( function() {
+            if( progressCallback ) {
+                progressCallback( id, 100 );
+            }
             assetLoaded(id);
         });
 
