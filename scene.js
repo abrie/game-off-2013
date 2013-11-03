@@ -66,7 +66,6 @@ define(['picker','canvas', 'video','ardetector','arview','arobject'], function(p
         }
     }
 
-
     return {
         add: add,
         remove: remove,

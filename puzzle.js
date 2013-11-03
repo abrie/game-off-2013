@@ -193,7 +193,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                 }
                 else {
                     var color = colors.palette[3];
-                    var newPiece = new PuzzlePiece( color, types[index] ); //Math.PI/4*(index+1) );
+                    var newPiece = new PuzzlePiece( color, types[index] );
                     newPiece.setSolvedIndex( index );
                     newPiece.setIndex( index );
                     result.push( newPiece );
@@ -224,7 +224,6 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             }
         });
 
-        
         function checkSolved() {
             if( logic.isSolved() ) {
                 pieces.forEach( function(piece) {
