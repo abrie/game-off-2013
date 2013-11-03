@@ -18,7 +18,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
         return mesh;
     }
 
-    function ExtrudedHammer( params ) {
+    function Hammer( params ) {
         var starPoints = [];
         var starShape;
 
@@ -94,7 +94,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
                 type: hammerParams.type,
                 rotation: hammerParams.rotation,
             };
-            var hammer = new ExtrudedHammer( params );
+            var hammer = new Hammer( params );
             hammer.position.z = 0;
 
             var model = new THREE.Object3D();
