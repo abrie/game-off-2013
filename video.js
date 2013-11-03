@@ -12,12 +12,6 @@ define([],function() {
         video.loop = true;
         video.preload = "auto";
         video.setAttribute("src",params.src);
-        video.addEventListener('canplaythrough', function() {
-            loaded = true;
-            if( loadCallback ) {
-                loadCallback();
-            }
-        }, false);
 
         video.addEventListener('loadedmetadata', function() {
             duration = this.duration;
@@ -40,7 +34,14 @@ define([],function() {
 
         function notifyLoadPercentage() {
             if( duration && buffered ) {
-                console.log( Math.ceil( buffered / duration * 100 ) + "%" );
+                var percent = Math.ceil( buffered / duration * 100 );
+                console.log( percent + "%" );
+                if( percent >= 100 ) {
+                    loaded = true;
+                    if( loadCallback ) {
+                        loadCallback();
+                    }
+                }
             }
         }
 
