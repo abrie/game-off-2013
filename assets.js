@@ -49,7 +49,7 @@ define(['video'], function(video) {
     // Define the assets here. Might be better in a seperate file...
     function start( callback ) {
         add( "clip1", new video.Video({
-            src: "clip1.webm",
+            src: "assets/clip1.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
