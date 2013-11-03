@@ -1,59 +1,73 @@
 "use strict";
 
 define([],function() {
-    var loaded = false;
-    var video = document.createElement('video');
-    video.width = 480;
-    video.height = 360;
-    video.autoplay = false;
-    video.loop = true;
-    video.preload = "auto";
-    video.setAttribute("src","clip1.webm");
-    video.addEventListener('loadeddata', function() {
-        loaded = true;
-        console.log("loadeddata!");
-        if( loadCallback ) {
-            loadCallback();
+
+    function Video( params ) {
+        var loaded = false;
+        var video = document.createElement('video');
+        video.width = params.width;
+        video.height = params.height;
+        video.autoplay = false;
+        video.loop = true;
+        video.preload = "auto";
+        video.setAttribute("src",params.src);
+        video.addEventListener('loadeddata', function() {
+            loaded = true;
+            if( loadCallback ) {
+                loadCallback();
+            }
+        }, false);
+
+        video.load();
+
+        function getCurrentFrame() {
+            return Math.floor(
+                video.currentTime.toFixed(5) * params.frameRate
+            );
         }
-    }, false);
 
-    video.load();
+        function frameToTime( frame ) {
+            return frame / params.frameRate + 0.00001;
+        }
 
-    var frameRate = 29.970628;
+        function seek( delta ) {
+            var time = frameToTime( getCurrentFrame() + delta );
+            video.currentTime = time;
+        }
 
-    function getCurrentFrame() {
-        return Math.floor(video.currentTime.toFixed(5) * frameRate);
-    }
-
-    function seek( delta ) {
-        var current = getCurrentFrame();
-        video.currentTime = (current + delta) / frameRate + 0.00001;
-    }
-
-    var getDimensions = function() {
-        return {
-            width:video.width,
-            height:video.height
+        var getDimensions = function() {
+            return {
+                width:video.width,
+                height:video.height
+            };
         };
-    };
 
-    var copyToContext = function(context) {
-        context.drawImage(video, 0, 0);
-    };
-        
-    var loadCallback;
-    function onLoaded( callback ) {
-        loadCallback = callback;
-        if( loaded ) {
-            loadCallback();
+        var copyToContext = function(context) {
+            context.drawImage(video, 0, 0);
+        };
+            
+        var loadCallback;
+        function onLoaded( callback ) {
+            loadCallback = callback;
+            if( loaded ) {
+                loadCallback();
+            }
         }
+
+        function isLoaded() {
+            return loaded;
+        }
+
+        return {
+            seek:seek,
+            onLoaded: onLoaded,
+            isLoaded: isLoaded,
+            copyToContext:copyToContext,
+            getDimensions:getDimensions,
+        };
     }
 
     return {
-        seek:seek,
-        onLoaded: onLoaded,
-        copyToContext:copyToContext,
-        getDimensions:getDimensions,
-    };
-
+        Video:Video,
+    }
 }());

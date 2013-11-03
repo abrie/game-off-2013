@@ -1,6 +1,6 @@
 "use strict";
 
-require(['video', 'puzzle', 'scene', 'mainloop' ], function( video, puzzle, scene, mainloop ) {
+require(['assets', 'puzzle', 'scene', 'mainloop' ], function( assets, puzzle, scene, mainloop ) {
 
     function makePuzzle( ar_id ) {
         // puzzleObject exposes an interface with: .model and .pickables
@@ -13,8 +13,8 @@ require(['video', 'puzzle', 'scene', 'mainloop' ], function( video, puzzle, scen
     makePuzzle( 4 );
     makePuzzle( 32 );
 
-    video.onLoaded( function() {
+    assets.whenAllLoaded( function() {
         mainloop.start();
-    });
+    } );
 
 });

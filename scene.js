@@ -1,19 +1,20 @@
 "use strict";
 
-define(['picker','canvas', 'video','ardetector','arview','arobject'], function(picker,canvas,video,ardetector,arview,arobject) {
+define(['picker','canvas','assets','ardetector','arview','arobject'], function(picker,canvas,assets,ardetector,arview,arobject) {
+    var video = assets.get("clip1");
     var detectorCanvas = canvas.create( video.getDimensions() );
 
     var detector = ardetector.create( detectorCanvas );
     var view = arview.create( video.getDimensions(), detectorCanvas );
-    view.setCameraMatrix( detector.getCameraMatrix(10,10000) );
+    view.setCameraMatrix( detector.getCameraMatrix( 10, 10000 ) );
     document.body.appendChild( view.glCanvas );
 
-    var objectPicker = new picker.Picker(view.getCamera(), view.glCanvas);
+    var objectPicker = new picker.Picker( view.getCamera(), view.glCanvas );
 
     // Create marker objects associated with the desired marker ID.
     var markerObjects = {
-        32: arobject.createMarkerObject({color:0x0000AA}), // Marker #4, red.
-        4: arobject.createMarkerObject({color:0xAA0000}), // Marker #32, red.
+        32: arobject.createMarkerObject({color:0x000000}), 
+        4: arobject.createMarkerObject({color:0x000000}),
     };
 
     function update() {
