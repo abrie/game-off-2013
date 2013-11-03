@@ -1,15 +1,18 @@
 "use strict";
+
 define(["three.min"],function() {
     function Picker( camera, element ) {
         element.addEventListener( 'mousedown', onDocumentMouseDown, false );
 
         var projector = new THREE.Projector();
-        var mouse = {x:0,y:0};
+        var mouse = { x:0, y:0 };
 
         function onDocumentMouseDown( event ) 
         {
-            mouse.x = ( event.clientX / element.width ) * 2 - 1;
-            mouse.y = - ( event.clientY / element.height ) * 2 + 1;
+            var x = event.clientX - element.offsetLeft;
+            var y = event.clientY - element.offsetTop;
+            mouse.x = x / element.width * 2 - 1;
+            mouse.y = -y / element.height * 2 + 1;
             detect();
         }
 
