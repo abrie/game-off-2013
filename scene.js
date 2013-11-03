@@ -12,8 +12,8 @@ define(['picker','canvas', 'video','ardetector','arview','arobject'], function(p
 
     // Create marker objects associated with the desired marker ID.
     var markerObjects = {
-        4: arobject.createMarkerObject({color:0xAA0000}), // Marker #4, red.
-        32: arobject.createMarkerObject({color:0x000000}), // Marker #32, red.
+        32: arobject.createMarkerObject({color:0x0000AA}), // Marker #4, red.
+        4: arobject.createMarkerObject({color:0xAA0000}), // Marker #32, red.
     };
 
     function update() {
@@ -29,7 +29,10 @@ define(['picker','canvas', 'video','ardetector','arview','arobject'], function(p
             objectPicker.registerPickTarget( mesh );
         });
 
-        markerObjects[id].add( object );
+        var arObject = markerObjects[id];
+        if( arObject ) {
+            arObject.add( object );
+        }
     }
 
     function remove( object ) {
@@ -41,21 +44,28 @@ define(['picker','canvas', 'video','ardetector','arview','arobject'], function(p
     // This function is called when a marker is initally detected on the stream
     function onMarkerCreated(marker) {
         var object = markerObjects[marker.id];
-        object.transform( marker.matrix );
-        view.add( object );
+        if( object ) {
+            object.transform( marker.matrix );
+            view.add( object );
+        }
     }
 
     // This function is called when an existing marker is repositioned
     function onMarkerUpdated(marker) {
         var object = markerObjects[marker.id];
-        object.transform( marker.matrix );
+        if( object ) {
+            object.transform( marker.matrix );
+        }
     }
 
     // This function is called when a marker disappears from the stream.
     function onMarkerDestroyed(marker) {
         var object = markerObjects[marker.id]; 
-        view.remove( object );
+        if( object ) {
+            view.remove( object );
+        }
     }
+
 
     return {
         add: add,
