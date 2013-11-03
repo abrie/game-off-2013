@@ -12,7 +12,7 @@ define([],function() {
         video.loop = true;
         video.preload = "auto";
         video.setAttribute("src",params.src);
-        video.addEventListener('loadeddata', function() {
+        video.addEventListener('canplaythrough', function() {
             loaded = true;
             if( loadCallback ) {
                 loadCallback();
