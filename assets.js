@@ -31,8 +31,6 @@ define(['video'], function(video) {
         }
     }
 
-
-
     function areAllLoaded() {
         return list.every( function(asset) {
             return asset.obj.isLoaded();
