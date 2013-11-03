@@ -31,13 +31,6 @@ define(['video'], function(video) {
         }
     }
 
-    // Define the assets here. Might be better in a seperate file...
-    add( "clip1", new video.Video({
-        src: "clip1.webm",
-        width: 480,
-        height: 360,
-        frameRate: 29.970628
-    }));
 
 
     function areAllLoaded() {
@@ -46,15 +39,27 @@ define(['video'], function(video) {
         });
     }
 
-    function setNotifyAllLoaded( callback ) {
+    function whenAllLoaded( callback ) {
         notifyAllLoaded = callback;
         if( areAllLoaded() ) {
             notifyAllLoaded();
         }
     }
 
+    // Define the assets here. Might be better in a seperate file...
+    function start( callback ) {
+        add( "clip1", new video.Video({
+            src: "clip1.webm",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }));
+
+        whenAllLoaded( callback );
+    }
+
     return {
-        whenAllLoaded: setNotifyAllLoaded,
+        start: start,
         get: get
     };
 });
