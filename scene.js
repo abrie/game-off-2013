@@ -5,7 +5,7 @@ define(['picker','canvas', 'video','ardetector','arview','arobject'], function(p
 
     var detector = ardetector.create( detectorCanvas );
     var view = arview.create( video.getDimensions(), detectorCanvas );
-    view.setCameraMatrix( detector.getCameraMatrix(10,1000) );
+    view.setCameraMatrix( detector.getCameraMatrix(10,10000) );
     document.body.appendChild( view.glCanvas );
 
     var objectPicker = new picker.Picker(view.getCamera(), view.glCanvas);
