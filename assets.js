@@ -25,11 +25,8 @@ define(['video'], function(video) {
     var notifyAllLoaded;
     function assetLoaded( id ) {
         console.log("asset complete:",id);
-        var allLoaded = list.every( function(asset) {
-            return asset.obj.isLoaded;
-        });
 
-        if( allLoaded && notifyAllLoaded ) {
+        if( areAllLoaded() && notifyAllLoaded ) {
             notifyAllLoaded();
         }
     }
@@ -43,8 +40,21 @@ define(['video'], function(video) {
     }));
 
 
+    function areAllLoaded() {
+        return list.every( function(asset) {
+            return asset.obj.isLoaded;
+        });
+    }
+
+    function setNotifyAllLoaded( callback ) {
+        notifyAllLoaded = callback;
+        if( areAllLoaded() ) {
+            notifyAllLoaded();
+        }
+    }
+
     return {
-        whenAllLoaded: function( callback ) { notifyAllLoaded = callback; },
+        whenAllLoaded: setNotifyAllLoaded,
         get: get
     };
 });

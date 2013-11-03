@@ -18,7 +18,7 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
     };
 
     function update() {
-        video.seek(1);
+        video.seek(5);
         detectorCanvas.update( video );
         detector.detect( onMarkerCreated, onMarkerUpdated, onMarkerDestroyed );
         view.update();

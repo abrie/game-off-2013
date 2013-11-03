@@ -8,6 +8,7 @@ define(['scene', 'tween.min'],function( scene ){
     }
 
     function start() {
+        console.log("starting.");
         requestAnimationFrame( animate );
     }
 
