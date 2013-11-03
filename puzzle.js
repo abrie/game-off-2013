@@ -19,20 +19,20 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
     }
 
     function Hammer( params ) {
-        var starPoints = [];
-        var starShape;
+        var points = [];
+        var shape;
 
         if( params.type === "corner" ) {
-            starPoints.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
-            starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            starPoints.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
-            starShape = new THREE.Shape( starPoints );
+            points.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
+            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
+            points.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
+            shape = new THREE.Shape( points );
         }
         else if( params.type === "edge" ) {
-            starPoints.push( new THREE.Vector2 ( 0, -params.height/2) );
-            starPoints.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            starPoints.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
-            starShape = new THREE.Shape( starPoints );
+            points.push( new THREE.Vector2 ( 0, -params.height/2) );
+            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
+            points.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
+            shape = new THREE.Shape( points );
         }
 
         var extrusionSettings = {
@@ -42,14 +42,14 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             material: 0, extrudeMaterial: 1
         };
 
-        var starGeometry = new THREE.ExtrudeGeometry( starShape, extrusionSettings );
+        var geometry = new THREE.ExtrudeGeometry( shape, extrusionSettings );
 
         var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00, side:THREE.DoubleSide } );
         var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800, side:THREE.DoubleSide } );
         var materialArray = [ materialFront, materialSide ];
-        var starMaterial = new THREE.MeshFaceMaterial(materialArray);
+        var material = new THREE.MeshFaceMaterial(materialArray);
 
-        var mesh = new THREE.Mesh( starGeometry, starMaterial );
+        var mesh = new THREE.Mesh( geometry, material );
         mesh.position.set(0,0,0);
         mesh.rotation.z = params.rotation;
 
