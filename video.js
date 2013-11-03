@@ -3,6 +3,7 @@
 define([],function() {
 
     function Video( params ) {
+        var duration, buffered;
         var loaded = false;
         var video = document.createElement('video');
         video.width = params.width;
@@ -18,7 +19,30 @@ define([],function() {
             }
         }, false);
 
+        video.addEventListener('loadedmetadata', function() {
+            duration = this.duration;
+            notifyLoadPercentage();
+        }, false);
+
+        video.addEventListener('progress', function() {
+            // IndexSizeError: DOM Exception 1 occurs sometimes. Unable to track down the cause,
+            // wrap it in an exception handler as a workaround.
+            try {
+                buffered = this.buffered.end(0);
+            }
+            catch( e ) {
+                console.log("caught exception for video 'progress' event:",e);
+            }
+            notifyLoadPercentage();
+        }, false);
+
         video.load();
+
+        function notifyLoadPercentage() {
+            if( duration && buffered ) {
+                console.log( Math.ceil( buffered / duration * 100 ) + "%" );
+            }
+        }
 
         function getCurrentFrame() {
             return Math.floor(
