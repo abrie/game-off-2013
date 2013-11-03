@@ -109,6 +109,10 @@ define(["three.min"], function() {
             occluder.setProjectionMatrix( matrix );
         }
 
+        function getCamera() {
+            return virtual.camera;
+        }
+
         function add( object ) {
             if( object.model ) {
                 virtual.add( object.model );
@@ -134,7 +138,7 @@ define(["three.min"], function() {
             render: render,
             glCanvas: glCanvas,
             setCameraMatrix: setCameraMatrix,
-            getCamera: function() { return virtual.camera; },
+            getCamera: getCamera,
         };
     };
 
