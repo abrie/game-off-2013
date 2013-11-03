@@ -13,16 +13,26 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
 
     var objectPicker = new picker.Picker(view.getCamera(), view.glCanvas);
 
+    // Create marker objects associated with the desired marker ID.
+    var markerObjects = {
+        4: arobject.createMarkerObject({color:0xAA0000}), // Marker #4, red.
+        32: arobject.createMarkerObject({color:0xAA0044}), // Marker #32, red.
+    };
+
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
+        video.seek(1);
         detectorCanvas.update( video );
         detector.detect( onMarkerCreated, onMarkerUpdated, onMarkerDestroyed );
         view.update();
         view.render();
     }
 
-    animate();
+    video.onLoaded( function() {
+        console.log("starting.");
+        animate();
+    });
 
     function add( object ) {
         object.pickables.forEach( function(mesh) {
@@ -62,11 +72,6 @@ define(['picker','canvas', 'video','ardetector','arview','arobject','three.min',
         view.remove( object );
     }
 
-    // Create marker objects associated with the desired marker ID.
-    var markerObjects = {
-        4: arobject.createMarkerObject({color:0xAA0000}), // Marker #4, red.
-        32: arobject.createMarkerObject({color:0xAA0044}), // Marker #32, red.
-    };
 
     return {
         add: add,
