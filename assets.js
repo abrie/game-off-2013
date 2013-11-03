@@ -3,7 +3,7 @@
 define(['video'], function(video) {
 
     var list = [];
-    function add( id, obj ) {
+    function add( id, obj, progressCallback ) {
         list.push( {
             id:id,
             obj:obj
@@ -12,6 +12,12 @@ define(['video'], function(video) {
         obj.onLoaded( function() {
             assetLoaded(id);
         });
+
+        if( progressCallback ) {
+            obj.onProgress( function(percent) {
+                progressCallback( id, percent );
+            });
+        }
     }
 
     function get( id ) {
@@ -45,13 +51,13 @@ define(['video'], function(video) {
     }
 
     // Define the assets here. Might be better in a seperate file...
-    function start( callback ) {
+    function start( callback, progressCallback ) {
         add( "clip1", new video.Video({
             src: "assets/clip1.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
-        }));
+        }), progressCallback );
 
         whenAllLoaded( callback );
     }

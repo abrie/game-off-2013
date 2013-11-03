@@ -35,7 +35,9 @@ define([],function() {
         function notifyLoadPercentage() {
             if( duration && buffered ) {
                 var percent = Math.ceil( buffered / duration * 100 );
-                console.log( percent + "%" );
+                if( progressCallback ) {
+                    progressCallback( percent );
+                }
                 if( percent >= 100 ) {
                     loaded = true;
                     if( loadCallback ) {
@@ -76,7 +78,15 @@ define([],function() {
             loadCallback = callback;
             if( loaded ) {
                 loadCallback();
+                if( progressCallback ) {
+                    progressCallback(100);
+                }
             }
+        }
+
+        var progressCallback;
+        function onProgress( callback ) {
+            progressCallback = callback;
         }
 
         function isLoaded() {
@@ -87,6 +97,7 @@ define([],function() {
             seek:seek,
             onLoaded: onLoaded,
             isLoaded: isLoaded,
+            onProgress: onProgress,
             copyToContext:copyToContext,
             getDimensions:getDimensions,
         };

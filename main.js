@@ -2,8 +2,14 @@
 
 require(['assets', 'mainloop' ], function( assets, mainloop ) {
 
-    assets.start( function() {
+    function loadComplete() {
         mainloop.start();
-    } );
+    }
+
+    function loadProgress(id, percent) {
+        console.log(id,":",percent+"%");
+    }
+
+    assets.start( loadComplete, loadProgress );
 
 });
