@@ -9,19 +9,19 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
         sceneObject.update();
     }
 
-    var hold;
+    var holds = [];
     function start() {
         console.log("starting.");
         sceneObject = new scene.Scene();
 
-        makePuzzle( 4 );
-        hold = makePuzzle( 32 );
+        holds.push( makePuzzle( 4 ) );
+        holds.push( makePuzzle( 32 ) );
 
         requestAnimationFrame( animate );
     }
 
     function createThing() {
-        var geometry = new THREE.SphereGeometry( 5 );
+        var geometry = new THREE.SphereGeometry( 0.5,100,100 );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -33,8 +33,12 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
         return mesh;
     }
 
+    var index = 0;
+        function calculateTime( position ) {
+            return Math.sqrt( Math.pow(position.x, 2) + Math.pow(position.y, 2) + Math.pow(position.z, 2) );
+        }
     GLOBAL.test = function() {
-        var position = hold.getHolePosition();
+        var position = holds[index++%holds.length].getHolePosition();
         var thing = createThing();
           
         var object = new THREE.Object3D();
@@ -50,9 +54,17 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
 
         sceneObject.add( result );
 
+        var vary = function() {
+            var v = 0.5;
+            return Math.random()*v/2-v;
+        };
+
+        var time = calculateTime( object.position )*3;
+        var tx = vary();
+        var ty = vary();
         var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z } )
-            .to( {x:Math.random()*0.25-0.5, y:Math.random()*0.25-0.5, z:-5 }, 2000 )
-            .easing( TWEEN.Easing.Exponential.In)
+            .to( {x:tx, y:ty, z:0 }, time )
+            .easing( TWEEN.Easing.Quintic.Out)
             .onUpdate( function () {
                     object.position.x = this.x; 
                     object.position.y = this.y;
