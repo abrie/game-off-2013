@@ -7,7 +7,7 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
 
         var detector = ardetector.create( detectorCanvas );
         var view = arview.create( video.getDimensions(), detectorCanvas );
-        view.setCameraMatrix( detector.getCameraMatrix( 10, 10000 ) );
+        view.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
         document.body.appendChild( view.glCanvas );
 
         var objectPicker = new picker.Picker( view.getCamera(), view.glCanvas );
@@ -26,7 +26,16 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
             view.render();
         }
 
-        function add( id, object ) {
+        function add( object ) {
+            object.pickables.forEach( function(mesh) {
+                objectPicker.registerPickTarget( mesh );
+            });
+
+            view.add( object );
+
+        }
+
+        function addToAR( id, object ) {
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
@@ -41,6 +50,8 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
             object.pickables.forEach( function(mesh) {
                 //TODO: unregistered pickable mesh
             });
+
+            view.remove( object );
         }
 
         // This function is called when a marker is initally detected on the stream
@@ -70,6 +81,7 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
 
         return {
             add: add,
+            addToAR: addToAR,
             remove: remove,
             update: update,
         };

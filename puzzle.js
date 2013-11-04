@@ -241,9 +241,16 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             }
         }
 
+        function getHolePosition() {
+            var vector = new THREE.Vector3();
+            vector.getPositionFromMatrix( container.matrixWorld );
+            return vector;
+        }
+
         checkSolved();
 
         return {
+            getHolePosition: getHolePosition,
             model: container,
             pickables: pickables,
         };
