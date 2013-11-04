@@ -10,21 +10,19 @@ define([],function() {
         video.height = params.height;
         video.autoplay = false;
         video.loop = true;
-        video.preload = "auto";
         video.setAttribute("src",params.src);
 
         video.addEventListener('loadedmetadata', function() {
             duration = this.duration;
+            if( this.buffered.length > 0 ) {
+                buffered = this.buffered.end(0);
+            }
             notifyLoadPercentage();
         }, false);
 
         video.addEventListener('progress', function() {
             if( this.buffered.length > 0 ) {
                 buffered = this.buffered.end(0);
-            }
-            else {
-                buffered = 0;
-                console.log("setting buffered to 0.");
             }
             notifyLoadPercentage();
         }, false);
@@ -38,7 +36,7 @@ define([],function() {
         load();
 
         function notifyLoadPercentage() {
-            if( duration > 0 && buffered > 0 ) {
+            if( duration > 0 && buffered > 0 && !loaded ) {
                 var percent = Math.ceil( buffered / duration * 100 );
                 if( progressCallback ) {
                     progressCallback( percent );
