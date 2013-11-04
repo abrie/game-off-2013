@@ -43,6 +43,8 @@ define([],function() {
                 }
                 if( percent >= 100 ) {
                     loaded = true;
+                    video.pause();
+                    video.currentTime = 0;
                     if( loadCallback ) {
                         loadCallback();
                     }
