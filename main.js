@@ -4,29 +4,15 @@ requirejs.config({
     waitSeconds: 200,
 });
 
-require(['assets', 'mainloop' ], function( assets, mainloop ) {
+require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mainloop ) {
+
+    var loadScreen = new loadscreen.LoadScreen( document.body );
 
     function loadComplete() {
+        loadScreen.close();
         mainloop.start();
-        document.body.removeChild( progressContainer );
     }
 
-    function loadProgress(id, percent) {
-        var element = document.getElementById(id);
-        if( !element ) {
-            element = document.createElement("progress");
-            element.max = 100;
-            element.id = id;
-            element.className = "assetProgress";
-            progressContainer.appendChild(element);
-        }
-        element.value = percent;
-    }
-
-    var progressContainer = document.createElement("div");
-    progressContainer.className = "centered";
-    document.body.appendChild( progressContainer );
-
-    assets.start( loadComplete, loadProgress );
+    assets.start( loadComplete, loadScreen.update );
 
 });
