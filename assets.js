@@ -2,23 +2,19 @@
 
 define(['video'], function(video) {
 
-    var list = [];
-    function add( id, obj, progressCallback ) {
+    var list = [], onAllLoaded;
+
+    function add( id, obj, onProgress ) {
         list.push( {
             id:id,
             obj:obj
         });
 
-        obj.onLoaded( function() {
-            if( progressCallback ) {
-                progressCallback( id, 100 );
-            }
-            assetLoaded(id);
-        });
+        obj.onLoaded( assetLoaded );
 
-        if( progressCallback ) {
+        if( onProgress ) {
             obj.onProgress( function(percent) {
-                progressCallback( id, percent );
+                onProgress( id, percent );
             });
         }
     }
@@ -31,12 +27,9 @@ define(['video'], function(video) {
         return matched[0].obj;
     }
 
-    var notifyAllLoaded;
-    function assetLoaded( id ) {
-        console.log("asset complete:",id);
-
-        if( areAllLoaded() && notifyAllLoaded ) {
-            notifyAllLoaded();
+    function assetLoaded() {
+        if( areAllLoaded() && onAllLoaded ) {
+            onAllLoaded();
         }
     }
 
@@ -46,23 +39,17 @@ define(['video'], function(video) {
         });
     }
 
-    function whenAllLoaded( callback ) {
-        notifyAllLoaded = callback;
-        if( areAllLoaded() ) {
-            notifyAllLoaded();
-        }
-    }
-
     // Define the assets here. Might be better in a seperate file...
-    function start( callback, progressCallback ) {
+    function start( onComplete, onProgress ) {
+
+        onAllLoaded = onComplete;
+
         add( "clip1", new video.Video({
             src: "assets/clip1.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
-        }), progressCallback );
-
-        whenAllLoaded( callback );
+        }), onProgress );
     }
 
     return {
