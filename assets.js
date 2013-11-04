@@ -10,13 +10,13 @@ define(['video'], function(video) {
             obj:obj
         });
 
-        obj.onLoaded( assetLoaded );
-
         if( onProgress ) {
             obj.onProgress( function(percent) {
                 onProgress( id, percent );
             });
         }
+
+        obj.onLoaded( assetLoaded );
     }
 
     function get( id ) {
