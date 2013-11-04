@@ -31,6 +31,7 @@ define([], function() {
 
         function close() {
             parent.removeChild( progressContainer );
+            parent.removeChild( document.getElementById("logo") );
         }
 
         return {

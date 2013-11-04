@@ -2,6 +2,24 @@ body {
     margin: 0px;
 }
 
+#logo {
+    width:100px;
+    height:100px;
+    margin:auto;
+    margin-top:50px;
+    transition: all 1s ease-in-out;
+    perspective: 800px;
+    perspective-origin: 50% 100px;
+    border: 1px solid #444444;
+    border-radius: 5px;
+}
+
+#logo:hover {
+    -webkit-transform:rotateY(180deg);
+    -moz-transform:rotateY(180deg);
+    cursor:pointer;
+}
+
 .assetProgress {
     width: 150px;
     height: 25px;

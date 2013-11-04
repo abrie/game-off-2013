@@ -11,7 +11,6 @@ require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mai
     function beginAfterDelay() {
         // A brief delay allows the progress bar states to reflect the 100% state.
         window.setTimeout( loadComplete, 500 );
-        console.log("load is complete. waiting and then starting.");
     }
 
     function loadComplete() {
