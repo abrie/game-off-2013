@@ -8,7 +8,7 @@ define([],function() {
         var video = document.createElement('video');
         video.width = params.width;
         video.height = params.height;
-        video.autoplay = false;
+        video.autoplay = true;
         video.loop = true;
         video.setAttribute("src",params.src);
 
