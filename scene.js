@@ -26,6 +26,9 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
         }
 
         function add( id, object ) {
+            // a rotation adjustment for the idiosyncratic AR camera
+            //object.model.rotation.y = Math.PI;
+
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
@@ -33,6 +36,9 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             var arObject = markerObjects[id];
             if( arObject ) {
                 arObject.add( object );
+            }
+            else {
+                view.add( object );
             }
         }
 
@@ -44,6 +50,9 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             var arObject = markerObjects[id];
             if( arObject ) {
                 arObject.remove( object );
+            }
+            else {
+                view.remove( object );
             }
         }
 
@@ -76,11 +85,21 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             return view.getCamera().position;
         }
 
+        function updateMatrixWorld() {
+            view.updateMatrixWorld();
+        }
+
+        function getCamera() {
+            return view.getCamera();
+        }
+
         return {
             add: add,
             remove: remove,
             update: update,
             getCameraPosition: getCameraPosition,
+            getCamera: getCamera,
+            updateMatrixWorld: updateMatrixWorld,
         };
     }
 

@@ -36,7 +36,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
         }
 
         var extrusionSettings = {
-            amount: params.depth/2,
+            amount: -params.depth/2,
             curveSegments: 3,
             bevelThickness: 4, bevelSize: 2, bevelEnabled: false,
             material: 0, extrudeMaterial: 1
@@ -142,7 +142,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             function raiseHammer() {
                 if( hammerTween ) { hammerTween.stop(); }
                 hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:2.5 }, 500 )
+                    .to( { z:-2.5 }, 500 )
                     .easing( TWEEN.Easing.Exponential.In )
                     .onUpdate( function () {
                             hammer.position.z = this.z;
@@ -153,7 +153,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
             function lowerHammer() {
                 if( hammerTween ) { hammerTween.stop(); }
                 hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:0.1 }, 500 )
+                    .to( { z:-0.1 }, 500 )
                     .easing( TWEEN.Easing.Exponential.Out )
                     .onUpdate( function () {
                             hammer.position.z = this.z;

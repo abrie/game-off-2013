@@ -3,7 +3,7 @@
 define(['picker', 'three.min'], function(picker) {
     function View() {
         var camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 10, 10000 );
-        camera.position.z = 100;
+        camera.position.z = -100;
         camera.position.y = 100;
         camera.position.x = -200;
         camera.lookAt( new THREE.Vector3(0,0,0) );
@@ -75,6 +75,11 @@ define(['picker', 'three.min'], function(picker) {
                 object.remove( child.model );
             }
 
+            object.up.x = 0;
+            object.up.y = -1;
+            object.up.z = -1;
+
+            console.log( object.up );
             return {
                 model: object,
                 add: add,
@@ -129,12 +134,17 @@ define(['picker', 'three.min'], function(picker) {
             view.updateMatrixWorld();
         }
 
+        function getCamera() {
+            return view.getCamera();
+        }
+
         return {
             add: add,
             remove: remove,
             update: update,
             getCameraPosition: getCameraPosition,
             updateMatrixWorld: updateMatrixWorld,
+            getCamera: getCamera,
         };
     }
 
