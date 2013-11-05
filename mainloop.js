@@ -24,15 +24,15 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     function createThing() {
         var geometry = new THREE.CylinderGeometry( 10.0, 1.0, 100 );
 
-	var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), Math.PI/2 );
+        var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), Math.PI/2 );
 
-	var rMatrix = new THREE.Matrix4();
-	rMatrix.makeRotationFromQuaternion( quaternion );
-	geometry.applyMatrix( rMatrix );
+        var rMatrix = new THREE.Matrix4();
+        rMatrix.makeRotationFromQuaternion( quaternion );
+        geometry.applyMatrix( rMatrix );
 
-	var tMatrix = new THREE.Matrix4();
-	tMatrix.makeTranslation( 0, 0, -50);
-	geometry.applyMatrix( tMatrix );
+        var tMatrix = new THREE.Matrix4();
+        tMatrix.makeTranslation( 0, 0, -50);
+        geometry.applyMatrix( tMatrix );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -45,10 +45,11 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     }
 
     var index = 0;
-        function calculateTime( position ) {
-            return Math.sqrt( Math.pow(position.x, 2) + Math.pow(position.y, 2) + Math.pow(position.z, 2) );
-        }
-GLOBAL.test = function() {
+    function calculateTime( position ) {
+        return Math.sqrt( Math.pow(position.x, 2) + Math.pow(position.y, 2) + Math.pow(position.z, 2) );
+    }
+
+    GLOBAL.test = function() {
         var position = holds[index++%holds.length].getHolePosition();
         var object = createThing();
         object.position.x = position.x;
@@ -60,22 +61,22 @@ GLOBAL.test = function() {
             pickables: [],
         };
 
-        sceneObject.add( result );
+        sceneObject.add( -1, result );
 
         var targetPosition = sceneObject.getCameraPosition();
         var timeToTarget = 2000;
         var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z, r:0 } )
-            .to( {x:targetPosition.x, y:targetPosition.y, z:targetPosition.z, r:2*Math.PI }, timeToTarget )
-            .easing( TWEEN.Easing.Quintic.Out)
-            .onUpdate( function () {
-                    object.position.x = this.x; 
-                    object.position.y = this.y;
-                    object.position.z = this.z;
-                    object.rotation.x = this.r;
-                    } )
-            .onComplete( function() {
-                sceneObject.remove( result );
-            })
+        .to( {x:targetPosition.x, y:targetPosition.y, z:targetPosition.z, r:2*Math.PI }, timeToTarget )
+        .easing( TWEEN.Easing.Quintic.Out)
+        .onUpdate( function () {
+            object.position.x = this.x; 
+            object.position.y = this.y;
+            object.position.z = this.z;
+            object.rotation.x = this.r;
+        } )
+        .onComplete( function() {
+            sceneObject.remove( -1, result );
+        })
         .start();
     };
 
@@ -84,8 +85,7 @@ GLOBAL.test = function() {
         var puzzleObject = new puzzle.Puzzle();
 
         // scene.add expectes an interface with .model and .pickables
-        //sceneObject.addToAR( ar_id, puzzleObject );
-        sceneObject.add( puzzleObject );
+        sceneObject.add( ar_id, puzzleObject );
         return puzzleObject;
     }
 

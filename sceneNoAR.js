@@ -46,25 +46,64 @@ define(['picker', 'three.min'], function(picker) {
 
         var objectPicker = new picker.Picker( view.getCamera(), view.glCanvas );
 
+        function createPlace( x, y, z) {
+            var object = new THREE.Object3D();
+            object.position.x = x;
+            object.position.y = y;
+            object.position.z = z;
+
+            function add( child ) {
+                object.add( child.model );
+            }
+
+            function remove( child ) {
+                object.remove( child.model );
+            }
+
+            return {
+                model: object,
+                add: add,
+                remove: remove,
+            };
+        }
+
+        var places = {
+            4: createPlace( 200, 0, 0),
+            32: createPlace( -200, 0, 0)
+        };
+
+        view.add( places[4] );
+        view.add( places[32] );
+
         function update() {
             view.update();
             view.render();
         }
 
-        function add( object ) {
+        function add( id, object ) {
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
 
-            view.add( object );
+            if( id >= 0) {
+                places[id].add( object );
+            }
+            else {
+                view.add( object );
+            }
         }
 
-        function remove( object ) {
+        function remove( id, object ) {
             object.pickables.forEach( function(mesh) {
                 //TODO: unregistered pickable mesh
             });
 
-            view.remove( object );
+            if( id >= 0) {
+                places[id].remove( object );
+            }
+            else {
+                view.remove( object );
+            }
         }
 
         function getCameraPosition() {

@@ -25,15 +25,7 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             view.render();
         }
 
-        function add( object ) {
-            object.pickables.forEach( function(mesh) {
-                objectPicker.registerPickTarget( mesh );
-            });
-
-            view.add( object );
-        }
-
-        function addToAR( id, object ) {
+        function add( id, object ) {
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
@@ -44,12 +36,15 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             }
         }
 
-        function remove( object ) {
+        function remove( id, object ) {
             object.pickables.forEach( function(mesh) {
                 //TODO: unregistered pickable mesh
             });
 
-            view.remove( object );
+            var arObject = markerObjects[id];
+            if( arObject ) {
+                arObject.remove( object );
+            }
         }
 
         // This function is called when a marker is initally detected on the stream
@@ -83,7 +78,6 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
 
         return {
             add: add,
-            addToAR: addToAR,
             remove: remove,
             update: update,
             getCameraPosition: getCameraPosition,
