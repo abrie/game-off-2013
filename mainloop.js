@@ -36,7 +36,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
-        });
+       });
 
         var mesh = new THREE.Mesh( geometry, material );
 
@@ -62,7 +62,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
         }
 
         function addExternal() {
-            sceneObject.updateMatrixWorld(); // caused an update so we can get the world position from inside it
+            sceneObject.updateMatrixWorld();
             var position = pz.getHolePosition();
             var object = createThing();
             object.position.x = position.x;
@@ -84,12 +84,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     GLOBAL.add = function() {
         addThing( holds[0] );
         addThing( holds[1] );
-    }
-
-    var index = 0;
-    function calculateTime( position ) {
-        return Math.sqrt( Math.pow(position.x, 2) + Math.pow(position.y, 2) + Math.pow(position.z, 2) );
-    }
+    };
 
     function makePuzzle( ar_id ) {
         // puzzleObject exposes an interface with: .model and .pickables
@@ -104,6 +99,5 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
     return {
         start: start,
-        stop: stop,
     };
 });
