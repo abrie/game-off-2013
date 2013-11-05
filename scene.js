@@ -77,11 +77,16 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
             }
         }
 
+        function getCameraPosition() {
+            return view.getCamera().position;
+        }
+
         return {
             add: add,
             addToAR: addToAR,
             remove: remove,
             update: update,
+            getCameraPosition: getCameraPosition,
         };
     }
 
