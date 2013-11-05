@@ -146,7 +146,6 @@ define(["three.min"], function() {
             virtual.updateMatrixWorld();
         }
 
-
         return {
             add: add,
             remove: remove,
