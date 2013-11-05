@@ -86,10 +86,12 @@ define(["three.min"], function() {
         // Create an occluder scene
         var occluder = new Scene();
 
-        var light = new THREE.SpotLight(0xffffff);
-        light.position.set(0, 0, 9000);
-        light.lookAt( new THREE.Vector3(0,0,0) );
-        virtual.scene.add(light);
+        var light = new THREE.DirectionalLight( 0xFFFFFF );
+        light.position.x = 0;
+        light.position.y = 0;
+        light.position.z = 9000;
+        light.lookAt( virtual.scene.position );
+        virtual.scene.add( light );
 
         function render() {
             // Render the reality scene

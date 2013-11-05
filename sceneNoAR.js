@@ -127,7 +127,11 @@ define(['picker', 'three.min'], function(picker) {
         }
 
         function getCameraPosition() {
-            return view.getCamera().position;
+            var position = view.getCamera().position.clone();
+            position.z = -position.z;
+            position.x = -position.x;
+            position.y = -position.y;
+            return position;
         }
 
         function updateMatrixWorld() {
