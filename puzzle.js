@@ -205,8 +205,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
 
         function Container( ) {
             var result = new THREE.Object3D();
-            result.rotation.x = 0;
-            result.rotation.z = 0;
+            result.matrixAutoUpdate = false;
             return result;
         }
 
@@ -249,9 +248,15 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
 
         checkSolved();
 
+        function transform(m) {
+            container.matrix.fromArray(m);
+            container.matrixWorldNeedsUpdate = true;
+        };
+
         return {
             getHolePosition: getHolePosition,
             model: container,
+            transform: transform,
             pickables: pickables,
         };
     }

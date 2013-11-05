@@ -39,6 +39,12 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
        });
 
         var mesh = new THREE.Mesh( geometry, material );
+        mesh.matrixAutoUpdate = false;
+
+        mesh.transform = function(m) {
+            mesh.matrix.fromArray(m);
+            mesh.matrixWorldNeedsUpdate = true;
+        };
 
         return mesh;
     }
@@ -46,19 +52,19 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     function addThing( pz ) {
 
         function addInternal() {
-            var position = new THREE.Vector3(0,0,0);
+            var position = new THREE.Vector3( 0, 0, 40);
             var object = createThing();
-            object.position.x = position.x;
-            object.position.y = position.y;
-            object.position.z = position.z;
+            object.position = position;
             //object.lookAt( sceneObject.getCameraPosition() );
 
             var thing = {
                 model: object,
+                transform: object.transform,
                 pickables: [],
             };
 
-            pz.model.add( thing.model );
+            //pz.model.add( thing.model );
+            sceneObject.add( pz.AR_ID, thing );
         }
 
         function addExternal() {
@@ -89,6 +95,9 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     function makePuzzle( ar_id ) {
         // puzzleObject exposes an interface with: .model and .pickables
         var puzzleObject = new puzzle.Puzzle();
+
+        // DEVELOPMENT
+        puzzleObject.AR_ID = ar_id;
 
         // scene.add expectes an interface with .model and .pickables
         sceneObject.add( ar_id, puzzleObject );

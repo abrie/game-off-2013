@@ -13,8 +13,8 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
 
         // Create marker objects associated with the desired marker ID.
         var markerObjects = {
-            32: arobject.createMarkerObject({color:0x000000}), 
-            4: arobject.createMarkerObject({color:0x000000}),
+            32: [arobject.createMarkerObject({color:0x000000})], 
+            4: [arobject.createMarkerObject({color:0x000000})],
         };
 
         function update() {
@@ -30,11 +30,16 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
                 objectPicker.registerPickTarget( mesh );
             });
 
-            var arObject = markerObjects[id];
-            if( arObject ) {
-                arObject.add( object );
+            var arObjects = markerObjects[id];
+            if( arObjects ) {
+                var index = arObjects.indexOf( object );
+                if( index < 0) {
+                    arObjects.push( object );
+                    view.add( object );
+                }
             }
             else {
+                // not attached to an AR marker, so just add to the scene.
                 view.add( object );
             }
         }
@@ -44,37 +49,54 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
                 //TODO: unregistered pickable mesh
             });
 
-            var arObject = markerObjects[id];
-            if( arObject ) {
-                arObject.remove( object );
+            var arObjects = markerObjects[id];
+            if( arObjects ) {
+                var index = arObjects.indexOf( object );
+                if( index >= 0 ) {
+                    var arObject = arObjects.spice(index,1);
+                    view.remove( arObject );
+                }
             }
             else {
+                // not attached to an AR object, just remove from scene.
                 view.remove( object );
             }
         }
 
         // This function is called when a marker is initally detected on the stream
         function onMarkerCreated(marker) {
-            var object = markerObjects[marker.id];
-            if( object ) {
-                object.transform( marker.matrix );
-                view.add( object );
+            var objects = markerObjects[marker.id];
+            if( objects ) {
+                objects.forEach( function(object){
+                    if( object.transform ) {
+                        object.transform( marker.matrix );
+                        view.add( object );
+                    }
+                    else {
+                        console.log("DEVELOPMENT: found an object attached to an AR marker but without transform() method.");
+                        console.log( object );
+                    }
+                });
             }
         }
 
         // This function is called when an existing marker is repositioned
         function onMarkerUpdated(marker) {
-            var object = markerObjects[marker.id];
-            if( object ) {
-                object.transform( marker.matrix );
+            var objects = markerObjects[marker.id];
+            if( objects ) {
+                objects.forEach( function(object) {
+                    object.transform( marker.matrix );
+                });
             }
         }
 
         // This function is called when a marker disappears from the stream.
         function onMarkerDestroyed(marker) {
-            var object = markerObjects[marker.id]; 
-            if( object ) {
-                view.remove( object );
+            var objects = markerObjects[marker.id]; 
+            if( objects ) {
+                objects.forEach( function(object) {
+                    view.remove( object );
+                });
             }
         }
 
