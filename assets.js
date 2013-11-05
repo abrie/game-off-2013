@@ -4,11 +4,13 @@ define(['video'], function(video) {
 
     var list = [], onAllLoaded;
 
-    function add( id, obj, onProgress ) {
+    function add( id, obj, onInitialize, onProgress ) {
         list.push( {
             id:id,
             obj:obj
         });
+
+        onInitialize( id );
 
         if( onProgress ) {
             obj.onProgress( function(percent) {
@@ -40,7 +42,7 @@ define(['video'], function(video) {
     }
 
     // Define the assets here. Might be better in a seperate file...
-    function start( onComplete, onProgress ) {
+    function start( onComplete, onInitialize, onProgress ) {
 
         onAllLoaded = onComplete;
 
@@ -49,14 +51,14 @@ define(['video'], function(video) {
             width: 480,
             height: 360,
             frameRate: 29.970628
-        }), onProgress );
+        }), onInitialize, onProgress );
 
         add( "clip2", new video.Video({
             src: "assets/clip2.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
-        }), onProgress );
+        }), onInitialize, onProgress );
     }
 
     return {

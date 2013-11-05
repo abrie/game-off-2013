@@ -18,6 +18,6 @@ require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mai
         mainloop.start();
     }
 
-    assets.start( beginAfterDelay, loadScreen.update );
+    assets.start( beginAfterDelay, loadScreen.initialize, loadScreen.update );
 
 });

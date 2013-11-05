@@ -7,12 +7,19 @@ define([], function() {
         progressContainer.className = "centered";
         parent.appendChild( progressContainer );
 
-        function update(id, percent) {
+        function initialize( id ) {
+            console.log("init");
             var elementId = "preload_"+id;
             var element = getProgressElement( elementId );
             if( !element ) {
                 element = createProgressElement(elementId);
+                element.value = 0;
             }
+        }
+
+        function update(id, percent) {
+            var elementId = "preload_"+id;
+            var element = getProgressElement( elementId );
             element.value = percent;
         }
 
@@ -35,6 +42,7 @@ define([], function() {
         }
 
         return {
+            initialize: initialize,
             update: update,
             close: close,
         };
