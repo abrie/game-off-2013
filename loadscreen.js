@@ -39,6 +39,7 @@ define([], function() {
         function close() {
             parent.removeChild( progressContainer );
             parent.removeChild( document.getElementById("logo") );
+            document.body.removeChild( document.getElementById("status"));
         }
 
         return {

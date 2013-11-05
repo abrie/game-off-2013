@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="index.css"/>
     <script>GLOBAL={};</script>
-    <script data-main="main" src="require.min.js"></script>
 </head>
 <body>
     <div id="logo"><img src="assets/logo.png" alt="logo"></div>
+    <div id="status"></div>
+    <script data-main="main" src="require.min.js"></script>
+    <script>
+        var element = document.getElementById("status");
+        requirejs.onResourceLoad = function(context, map, depArray) {
+           element.innerHTML = map.id;
+        }
+    </script>
 </body>
 </html>

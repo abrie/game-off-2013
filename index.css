@@ -20,6 +20,17 @@ body {
     cursor:pointer;
 }
 
+#status {
+    width:300px;
+    height:25px;
+    text-align: center;
+    margin: auto;
+    margin-top: 10px;
+    background: #BBAE93;
+    border: 1px solid #333333;
+    border-radius: 3px;
+}
+
 progress.assetProgress {
     width: 150px;
     height: 25px;
