@@ -24,19 +24,18 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     function createThing() {
         var geometry = new THREE.CylinderGeometry( 10.0, 1.0, 100 );
 
-        var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), Math.PI/2 );
+        var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
         var rMatrix = new THREE.Matrix4();
         rMatrix.makeRotationFromQuaternion( quaternion );
         geometry.applyMatrix( rMatrix );
 
         var tMatrix = new THREE.Matrix4();
-        tMatrix.makeTranslation( 0, 0, -50);
+        tMatrix.makeTranslation( 0, 0, 50);
         geometry.applyMatrix( tMatrix );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
-            side: THREE.DoubleSide,
         });
 
         var mesh = new THREE.Mesh( geometry, material );
@@ -63,6 +62,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
         sceneObject.add( -1, result );
 
+        /*
         var targetPosition = sceneObject.getCameraPosition();
         var timeToTarget = 2000;
         var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z, r:0 } )
@@ -78,7 +78,9 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
             sceneObject.remove( -1, result );
         })
         .start();
+       */
     };
+
 
     function makePuzzle( ar_id ) {
         // puzzleObject exposes an interface with: .model and .pickables
@@ -86,6 +88,23 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
         // scene.add expectes an interface with .model and .pickables
         sceneObject.add( ar_id, puzzleObject );
+
+        sceneObject.updateMatrixWorld(); // caused an update so we can get the world position from inside it
+
+        var position = puzzleObject.getHolePosition();
+        var object = createThing();
+        object.position.x = position.x;
+        object.position.y = position.y;
+        object.position.z = position.z;
+        object.lookAt( sceneObject.getCameraPosition() );
+
+        var thing = {
+            model: object,
+            pickables: [],
+        };
+
+        sceneObject.add( -1, thing );
+
         return puzzleObject;
     }
 

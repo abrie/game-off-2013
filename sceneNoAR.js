@@ -2,13 +2,23 @@
 
 define(['picker', 'three.min'], function(picker) {
     function View() {
-        var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 300;
+        var camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 10, 10000 );
+        camera.position.z = 100;
+        camera.position.y = 100;
+        camera.position.x = -200;
+        camera.lookAt( new THREE.Vector3(0,0,0) );
 
         var virtual = new THREE.Scene();
 
-        var renderer = new THREE.CanvasRenderer();
+        var renderer = new THREE.WebGLRenderer( {antialias:true} );
         renderer.setSize( window.innerWidth, window.innerHeight );
+
+        var light = new THREE.DirectionalLight( 0xFFFFFF );
+        light.position.x = camera.position.x;
+        light.position.y = camera.position.y;
+        light.position.z = camera.position.z;
+        light.lookAt( new THREE.Vector3(0,0,0) );
+        virtual.add( light );
 
         function add( object ) {
             virtual.add( object.model );
@@ -29,6 +39,10 @@ define(['picker', 'three.min'], function(picker) {
             return camera;
         }
 
+        function updateMatrixWorld() {
+            virtual.updateMatrixWorld();
+        }
+
         return {
             glCanvas: renderer.domElement,
             getCamera: getCamera, 
@@ -36,6 +50,7 @@ define(['picker', 'three.min'], function(picker) {
             update: update,
             add: add,
             remove: remove,
+            updateMatrixWorld: updateMatrixWorld,
         };
     }
 
@@ -68,8 +83,8 @@ define(['picker', 'three.min'], function(picker) {
         }
 
         var places = {
-            4: createPlace( 200, 0, 0),
-            32: createPlace( -200, 0, 0)
+            4: createPlace( 100, 0, 0),
+            32: createPlace( -100, 0, 0)
         };
 
         view.add( places[4] );
@@ -110,11 +125,16 @@ define(['picker', 'three.min'], function(picker) {
             return view.getCamera().position;
         }
 
+        function updateMatrixWorld() {
+            view.updateMatrixWorld();
+        }
+
         return {
             add: add,
             remove: remove,
             update: update,
             getCameraPosition: getCameraPosition,
+            updateMatrixWorld: updateMatrixWorld,
         };
     }
 
