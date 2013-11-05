@@ -78,6 +78,7 @@ define(["colors", "three.min"], function(colors) {
         }
 
         function add( obj ) {
+            // a rotation adjustment for the idiosyncratic AR camera
             obj.model.rotation.y = Math.PI;
             obj.model.position.z = 0;
             modelContainer.add( obj.model );
