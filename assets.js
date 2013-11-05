@@ -50,6 +50,13 @@ define(['video'], function(video) {
             height: 360,
             frameRate: 29.970628
         }), onProgress );
+
+        add( "clip2", new video.Video({
+            src: "assets/clip2.webm",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onProgress );
     }
 
     return {
