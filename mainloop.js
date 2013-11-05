@@ -8,6 +8,11 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
         requestAnimationFrame( animate );
         TWEEN.update();
         sceneObject.update();
+        step+=dir; 
+        if( step > 100  || step < -100) {
+            dir*=-1;
+        }
+
     }
 
     var holds = [];
@@ -21,8 +26,10 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
         requestAnimationFrame( animate );
     }
 
+    var step = 100.0;
+    var dir = -1;
     function createThing( ) {
-        var geometry = new THREE.CylinderGeometry( 5.0, 5.0, 100*6 );
+        var geometry = new THREE.CylinderGeometry( 5.0, 30.0, 100*6, 100 );
 
         var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
@@ -36,6 +43,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
         var material = new THREE.MeshNormalMaterial({
             color: 0xFFFFFF,
+            side: THREE.DoubleSide,
        });
 
         var mesh = new THREE.Mesh( geometry, material );
@@ -47,12 +55,13 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
             mesh.matrix.fromArray(m);
             var target = new THREE.Vector3();
             target.getPositionFromMatrix( mesh.matrix );
-            var eye = new THREE.Vector3(0,0,500);
-            mesh.matrix.lookAt( eye, target, mesh.up );
+            var eye = new THREE.Vector3(0,0,0);
+            eye.x -= step;
+            var up = mesh.up.clone();
+            mesh.matrix.lookAt( eye, target, up );
             mesh.matrixWorldNeedsUpdate = true;
         };
 
-        console.log( mesh.matrix );
         return mesh;
     }
 
