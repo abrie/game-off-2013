@@ -26,9 +26,6 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
         }
 
         function add( id, object ) {
-            // a rotation adjustment for the idiosyncratic AR camera
-            //object.model.rotation.y = Math.PI;
-
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
