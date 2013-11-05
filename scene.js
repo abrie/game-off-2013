@@ -1,8 +1,7 @@
 "use strict";
 
-define(['picker','canvas','assets','ardetector','arview','arobject'], function(picker,canvas,assets,ardetector,arview,arobject) {
-    function Scene() {
-        var video = assets.get("clip1");
+define(['picker','canvas','ardetector','arview','arobject'], function(picker,canvas,ardetector,arview,arobject) {
+    function Scene( video ) {
         var detectorCanvas = canvas.create( video.getDimensions() );
 
         var detector = ardetector.create( detectorCanvas );
@@ -32,7 +31,6 @@ define(['picker','canvas','assets','ardetector','arview','arobject'], function(p
             });
 
             view.add( object );
-
         }
 
         function addToAR( id, object ) {

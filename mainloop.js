@@ -1,5 +1,5 @@
 "use strict";
-define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
+define(['assets', 'scene', 'puzzle', 'tween.min', 'three.min'], function( assets, scene, puzzle ){
 
     var sceneObject;
 
@@ -11,8 +11,7 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
 
     var holds = [];
     function start() {
-        console.log("starting.");
-        sceneObject = new scene.Scene();
+        sceneObject = new scene.Scene( assets.get("clip1") );
 
         holds.push( makePuzzle( 4 ) );
         holds.push( makePuzzle( 32 ) );
@@ -21,7 +20,17 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
     }
 
     function createThing() {
-        var geometry = new THREE.SphereGeometry( 0.5,100,100 );
+        var geometry = new THREE.CylinderGeometry( 10.0, 1.0, 100 );
+
+	var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), Math.PI/2 );
+
+	var rMatrix = new THREE.Matrix4();
+	rMatrix.makeRotationFromQuaternion( quaternion );
+	geometry.applyMatrix( rMatrix );
+
+	var tMatrix = new THREE.Matrix4();
+	tMatrix.makeTranslation( 0, 0, -50);
+	geometry.applyMatrix( tMatrix );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -37,12 +46,9 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
         function calculateTime( position ) {
             return Math.sqrt( Math.pow(position.x, 2) + Math.pow(position.y, 2) + Math.pow(position.z, 2) );
         }
-    GLOBAL.test = function() {
+GLOBAL.test = function() {
         var position = holds[index++%holds.length].getHolePosition();
-        var thing = createThing();
-          
-        var object = new THREE.Object3D();
-        object.add(thing);
+        var object = createThing();
         object.position.x = position.x;
         object.position.y = position.y;
         object.position.z = position.z;
@@ -55,20 +61,21 @@ define(['scene', 'puzzle', 'tween.min', 'three.min'], function( scene, puzzle ){
         sceneObject.add( result );
 
         var vary = function() {
-            var v = 0.5;
+            var v = 0;
             return Math.random()*v/2-v;
         };
 
         var time = calculateTime( object.position )*3;
         var tx = vary();
         var ty = vary();
-        var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z } )
-            .to( {x:tx, y:ty, z:0 }, time )
+        var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z, r:0 } )
+            .to( {x:tx, y:ty, z:0, r:2*Math.PI }, time )
             .easing( TWEEN.Easing.Quintic.Out)
             .onUpdate( function () {
                     object.position.x = this.x; 
                     object.position.y = this.y;
                     object.position.z = this.z;
+		    object.rotation.x = this.r;
                     } )
             .onComplete( function() {
                 sceneObject.remove( result );
