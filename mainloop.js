@@ -62,22 +62,16 @@ GLOBAL.test = function() {
 
         sceneObject.add( result );
 
-        var vary = function() {
-            var v = 0;
-            return Math.random()*v/2-v;
-        };
-
-        var time = calculateTime( object.position )*3;
-        var tx = vary();
-        var ty = vary();
+        var targetPosition = sceneObject.getCameraPosition();
+        var timeToTarget = 2000;
         var tween = new TWEEN.Tween( { x:object.position.x, y:object.position.y, z:object.position.z, r:0 } )
-            .to( {x:tx, y:ty, z:0, r:2*Math.PI }, time )
+            .to( {x:targetPosition.x, y:targetPosition.y, z:targetPosition.z, r:2*Math.PI }, timeToTarget )
             .easing( TWEEN.Easing.Quintic.Out)
             .onUpdate( function () {
                     object.position.x = this.x; 
                     object.position.y = this.y;
                     object.position.z = this.z;
-		 object.rotation.x = this.r;
+                    object.rotation.x = this.r;
                     } )
             .onComplete( function() {
                 sceneObject.remove( result );
