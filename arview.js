@@ -47,7 +47,7 @@ define(["three.min"], function() {
         }
 
         function setProjectionMatrix(matrix) {
-            camera.projectionMatrix.setFromArray( matrix );
+            camera.projectionMatrix.fromArray( matrix );
         }
 
         return {
