@@ -1,5 +1,6 @@
 "use strict";
-define(['assets', 'scene', 'puzzle', 'tween.min', 'three.min'], function( assets, scene, puzzle ){
+
+define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], function( assets, scene, sceneNoAR, puzzle ){
 
     var sceneObject;
 
@@ -11,7 +12,8 @@ define(['assets', 'scene', 'puzzle', 'tween.min', 'three.min'], function( assets
 
     var holds = [];
     function start() {
-        sceneObject = new scene.Scene( assets.get("clip1") );
+        //sceneObject = new scene.Scene( assets.get("clip1") );
+        sceneObject = new sceneNoAR.Scene();
 
         holds.push( makePuzzle( 4 ) );
         holds.push( makePuzzle( 32 ) );
@@ -75,7 +77,7 @@ GLOBAL.test = function() {
                     object.position.x = this.x; 
                     object.position.y = this.y;
                     object.position.z = this.z;
-		    object.rotation.x = this.r;
+		 object.rotation.x = this.r;
                     } )
             .onComplete( function() {
                 sceneObject.remove( result );
@@ -88,7 +90,8 @@ GLOBAL.test = function() {
         var puzzleObject = new puzzle.Puzzle();
 
         // scene.add expectes an interface with .model and .pickables
-        sceneObject.addToAR( ar_id, puzzleObject );
+        //sceneObject.addToAR( ar_id, puzzleObject );
+        sceneObject.add( puzzleObject );
         return puzzleObject;
     }
 
