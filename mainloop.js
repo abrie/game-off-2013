@@ -12,7 +12,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
 
     var holds = [];
     function start() {
-        sceneObject = new scene.Scene( assets.get("clip1") );
+        sceneObject = new scene.Scene( assets.get("clip2") );
         //sceneObject = new sceneNoAR.Scene();
 
         holds.push( makePuzzle( 4 ) );
@@ -22,12 +22,12 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
     }
 
     function createThing( ) {
-        var geometry = new THREE.CylinderGeometry( 30.0, 30.0, 100 );
+        var geometry = new THREE.CylinderGeometry( 5.0, 5.0, 100*6 );
 
         var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
         var tMatrix = new THREE.Matrix4();
-        tMatrix.makeTranslation( 0, -200, 0);
+        tMatrix.makeTranslation( 0, -50*6, 0);
         geometry.applyMatrix( tMatrix );
 
         var rMatrix = new THREE.Matrix4();
@@ -47,10 +47,7 @@ define(['assets', 'scene', 'sceneNoAR', 'puzzle', 'tween.min', 'three.min'], fun
             mesh.matrix.fromArray(m);
             var target = new THREE.Vector3();
             target.getPositionFromMatrix( mesh.matrix );
-            target.x += r(20);
-            target.y += r(20);
-            target.z += r(20);
-            var eye = new THREE.Vector3(0,0,0);
+            var eye = new THREE.Vector3(0,0,500);
             mesh.matrix.lookAt( eye, target, mesh.up );
             mesh.matrixWorldNeedsUpdate = true;
         };
