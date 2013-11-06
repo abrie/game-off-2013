@@ -10,39 +10,20 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         scene.update();
     }
 
+    function Group( theScene, arId, thePuzzle, theStrawman ) {
+        theScene.add( arId, thePuzzle );
+        theScene.add( arId, theStrawman );
+    }
+
     var holds = [];
     function start() {
-        scene = new arscene.Scene( assets.get("clip2") );
+        scene = new arscene.Scene( document.body, assets.get("clip2") );
         //scene = new sceneNoAR.Scene();
 
-        holds.push( makePuzzle( 4 ) );
-        holds.push( makePuzzle( 32 ) );
+        holds.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Straw() ) );
+        holds.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Straw() ) );
 
         requestAnimationFrame( animate );
-    }
-
-    function addThing( pz ) {
-        var straw = new strawman.Straw(); 
-        scene.add( pz.AR_ID, straw );
-    }
-
-    GLOBAL.add = function() {
-        addThing( holds[0] );
-        addThing( holds[1] );
-    };
-
-    function makePuzzle( ar_id ) {
-        // puzzleObject exposes an interface with: .model and .pickables
-        var puzzleObject = new puzzle.Puzzle();
-
-        // DEVELOPMENT
-        puzzleObject.AR_ID = ar_id;
-
-        // scene.add expectes an interface with .model and .pickables
-        scene.add( ar_id, puzzleObject );
-
-
-        return puzzleObject;
     }
 
     return {
