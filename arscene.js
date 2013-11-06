@@ -30,11 +30,11 @@ define(['picker','canvas','ardetector','arview','pitobject'], function(picker,ca
                 objectPicker.registerPickTarget( mesh );
             });
 
-            var arObjects = markerObjects[id];
-            if( arObjects ) {
-                var index = arObjects.indexOf( object );
+            var objects = markerObjects[id];
+            if( objects ) {
+                var index = objects.indexOf( object );
                 if( index < 0) {
-                    arObjects.push( object );
+                    objects.push( object );
                     view.add( object );
                 }
             }
@@ -49,12 +49,12 @@ define(['picker','canvas','ardetector','arview','pitobject'], function(picker,ca
                 //TODO: unregistered pickable mesh
             });
 
-            var arObjects = markerObjects[id];
-            if( arObjects ) {
-                var index = arObjects.indexOf( object );
+            var objects = markerObjects[id];
+            if( objects ) {
+                var index = objects.indexOf( object );
                 if( index >= 0 ) {
-                    var arObject = arObjects.spice(index,1);
-                    view.remove( arObject );
+                    var objectToRemove = objects.spice(index,1);
+                    view.remove( objectToRemove );
                 }
             }
             else {
