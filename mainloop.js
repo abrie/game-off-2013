@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'scene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, scene, puzzle, strawman ){
+define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
 
     var sceneObject;
 
@@ -12,7 +12,7 @@ define(['assets', 'scene', 'puzzle', 'strawman', 'tween.min', 'three.min'], func
 
     var holds = [];
     function start() {
-        sceneObject = new scene.Scene( assets.get("clip2") );
+        sceneObject = new arscene.Scene( assets.get("clip2") );
         //sceneObject = new sceneNoAR.Scene();
 
         holds.push( makePuzzle( 4 ) );
