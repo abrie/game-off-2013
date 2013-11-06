@@ -23,7 +23,7 @@ define([], function() {
 
         function r(a) { return Math.random()*a-a/2; }
 
-        mesh.transform = function(m) {
+        function transform(m) {
             mesh.matrix.fromArray(m);
             var target = new THREE.Vector3();
             target.getPositionFromMatrix( mesh.matrix );
@@ -31,12 +31,16 @@ define([], function() {
             var up = mesh.up.clone();
             mesh.matrix.lookAt( eye, target, up );
             mesh.matrixWorldNeedsUpdate = true;
-        };
+        }
 
-        return mesh;
+        return {
+            model: mesh,
+            pickables: [],
+            transform: transform,
+        };
     }
 
     return {
         Straw:Straw,
-    }
+    };
 });

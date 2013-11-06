@@ -22,14 +22,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
     }
 
     function addThing( pz ) {
-        var model = new strawman.Straw(); 
-
-        var straw = {
-            model: model,
-            transform: model.transform,
-            pickables: [],
-        };
-
+        var straw = new strawman.Straw(); 
         scene.add( pz.AR_ID, straw );
     }
 
