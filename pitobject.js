@@ -50,7 +50,7 @@ define(["settings", "three.min"], function( settings ) {
         return mesh;
     }
 
-    function createMarkerObject(params) {
+    function PitObject(params) {
         var model = new THREE.Object3D();
         model.matrixAutoUpdate = false;
         model.add( createMarkerMesh( params.color ) );
@@ -75,6 +75,6 @@ define(["settings", "three.min"], function( settings ) {
     }
 
     return {
-        createMarkerObject: createMarkerObject,
+        PitObject: PitObject,
     };
 });

@@ -13,8 +13,8 @@ define(['picker','canvas','ardetector','arview','pitobject'], function(picker,ca
 
         // Create marker objects associated with the desired marker ID.
         var markerObjects = {
-            32: [pitobject.createMarkerObject({color:0x000000})], 
-            4: [pitobject.createMarkerObject({color:0x000000})],
+            32: [new pitobject.PitObject({color:0x000000})], 
+            4: [new pitobject.PitObject({color:0x000000})],
         };
 
         function update() {
