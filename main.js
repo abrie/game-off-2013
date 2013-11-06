@@ -6,8 +6,6 @@ requirejs.config({
 
 require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mainloop ) {
 
-    var element = document.getElementById("status");
-    element.innerHTML = "all modules loaded. now loading assets.";
     var loadScreen = new loadscreen.LoadScreen( document.body );
 
     function beginAfterDelay() {

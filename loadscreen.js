@@ -7,8 +7,10 @@ define([], function() {
         progressContainer.className = "centered";
         parent.appendChild( progressContainer );
 
+        var element = document.getElementById("status");
+        element.innerHTML = "loading assets...";
+
         function initialize( id ) {
-            console.log("init");
             var elementId = "preload_"+id;
             var element = getProgressElement( elementId );
             if( !element ) {
