@@ -19,10 +19,8 @@ if [ "$1" == "off" ]; then
     echo "disabling BW limit."
     exit
 else
-    # simulate slow connection <to specific hosts>
-    echo "enabling bw limit at ${speed}KByte/s"
     ipfw add 1 pipe 1 src-port 8081
     ipfw pipe 1 config delay 10ms bw ${speed}KByte/s
     ipfw add 1 pipe 2 src-port 8082
-    ipfw pipe 2 config delay 10ms bw ${speed}KByte/s
+    ipfw pipe 2 config delay 10ms bw $((speed/2))KByte/s
 fi
