@@ -2,12 +2,6 @@
 
 define(["colors", "settings", "three.min"], function(colors, settings) {
 
-    function createContainer() {
-        var model = new THREE.Object3D();
-        model.matrixAutoUpdate = false;
-        return model;
-    }
-
     function createMarkerMesh(color) {
         var geometry = new THREE.CubeGeometry( 
             settings.arMarkerSize,
@@ -57,32 +51,31 @@ define(["colors", "settings", "three.min"], function(colors, settings) {
     }
 
     function createMarkerObject(params) {
-        var modelContainer = createContainer();
+        var model = new THREE.Object3D();
+        model.matrixAutoUpdate = false;
+        model.add( createMarkerMesh( params.color ) );
 
-        var pitMesh = createMarkerMesh(params.color);
-        modelContainer.add( pitMesh );
-
-        var occluderContainer = createContainer();
-        var occluderMesh = createMarkerOccluderMesh();
-        occluderContainer.add( occluderMesh );
+        var occluder = new THREE.Object3D();
+        occluder.matrixAutoUpdate = false;
+        occluder.add( createMarkerOccluderMesh() );
 
         function transform(matrix) {
-            modelContainer.matrix.fromArray(matrix);
-            modelContainer.matrixWorldNeedsUpdate = true;
+            model.matrix.fromArray(matrix);
+            model.matrixWorldNeedsUpdate = true;
 
-            occluderContainer.matrix.fromArray(matrix);
-            occluderContainer.matrixWorldNeedsUpdate = true;
+            occluder.matrix.fromArray(matrix);
+            occluder.matrixWorldNeedsUpdate = true;
         }
 
         function add( obj ) {
             obj.model.position.z = 0;
-            modelContainer.add( obj.model );
+            model.add( obj.model );
         }
 
         return {
             transform: transform,
-            model: modelContainer,
-            occluder: occluderContainer,
+            model: model,
+            occluder: occluder,
             add: add,
         };
     }
