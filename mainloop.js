@@ -2,18 +2,18 @@
 
 define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
 
-    var sceneObject;
+    var scene;
 
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
-        sceneObject.update();
+        scene.update();
     }
 
     var holds = [];
     function start() {
-        sceneObject = new arscene.Scene( assets.get("clip2") );
-        //sceneObject = new sceneNoAR.Scene();
+        scene = new arscene.Scene( assets.get("clip2") );
+        //scene = new sceneNoAR.Scene();
 
         holds.push( makePuzzle( 4 ) );
         holds.push( makePuzzle( 32 ) );
@@ -30,7 +30,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
             pickables: [],
         };
 
-        sceneObject.add( pz.AR_ID, straw );
+        scene.add( pz.AR_ID, straw );
     }
 
     GLOBAL.add = function() {
@@ -46,7 +46,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         puzzleObject.AR_ID = ar_id;
 
         // scene.add expectes an interface with .model and .pickables
-        sceneObject.add( ar_id, puzzleObject );
+        scene.add( ar_id, puzzleObject );
 
 
         return puzzleObject;
