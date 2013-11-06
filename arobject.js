@@ -2,11 +2,6 @@
 
 define(["colors", "settings", "three.min"], function(colors, settings) {
 
-    THREE.Object3D.prototype.transformFromArray = function(m) {
-        this.matrix.fromArray(m);
-        this.matrixWorldNeedsUpdate = true;
-    };
-
     function createContainer() {
         var model = new THREE.Object3D();
         model.matrixAutoUpdate = false;
@@ -72,8 +67,11 @@ define(["colors", "settings", "three.min"], function(colors, settings) {
         occluderContainer.add( occluderMesh );
 
         function transform(matrix) {
-            modelContainer.transformFromArray( matrix );
-            occluderContainer.transformFromArray( matrix );
+            modelContainer.matrix.fromArray(matrix);
+            modelContainer.matrixWorldNeedsUpdate = true;
+
+            occluderContainer.matrix.fromArray(matrix);
+            occluderContainer.matrixWorldNeedsUpdate = true;
         }
 
         function add( obj ) {
