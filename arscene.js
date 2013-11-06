@@ -1,8 +1,8 @@
 "use strict";
 
-define(['picker','canvas','ardetector','arview','pitobject'], function(picker,canvas,ardetector,arview,pitobject) {
+define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(picker,scratchcanvas,ardetector,arview,pitobject) {
     function Scene( element, video ) {
-        var detectorCanvas = canvas.create( video.getDimensions() );
+        var detectorCanvas = scratchcanvas.create( video.getDimensions() );
         var detector = ardetector.create( detectorCanvas );
         var view = arview.create( video.getDimensions(), detectorCanvas );
         view.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
