@@ -25,6 +25,9 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
                 onMarkerDestroyed 
             );
             view.update();
+        }
+
+        function render() {
             view.render();
         }
 
@@ -123,6 +126,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             add: add,
             remove: remove,
             update: update,
+            render: render,
             getCameraPosition: getCameraPosition,
             getCamera: getCamera,
             updateMatrixWorld: updateMatrixWorld,

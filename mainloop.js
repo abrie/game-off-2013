@@ -8,6 +8,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         requestAnimationFrame( animate );
         TWEEN.update();
         scene.update();
+        scene.render();
     }
 
     function Group( theScene, arId, thePuzzle, theStrawman ) {
