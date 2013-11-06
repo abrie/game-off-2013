@@ -67,16 +67,10 @@ define(["colors", "settings", "three.min"], function(colors, settings) {
             occluder.matrixWorldNeedsUpdate = true;
         }
 
-        function add( obj ) {
-            obj.model.position.z = 0;
-            model.add( obj.model );
-        }
-
         return {
             transform: transform,
             model: model,
             occluder: occluder,
-            add: add,
         };
     }
 
