@@ -1,6 +1,6 @@
 "use strict";
 
-define(['picker','canvas','ardetector','arview','arobject'], function(picker,canvas,ardetector,arview,arobject) {
+define(['picker','canvas','ardetector','arview','pitobject'], function(picker,canvas,ardetector,arview,pitobject) {
     function Scene( video ) {
         var detectorCanvas = canvas.create( video.getDimensions() );
 
@@ -13,8 +13,8 @@ define(['picker','canvas','ardetector','arview','arobject'], function(picker,can
 
         // Create marker objects associated with the desired marker ID.
         var markerObjects = {
-            32: [arobject.createMarkerObject({color:0x000000})], 
-            4: [arobject.createMarkerObject({color:0x000000})],
+            32: [pitobject.createMarkerObject({color:0x000000})], 
+            4: [pitobject.createMarkerObject({color:0x000000})],
         };
 
         function update() {
