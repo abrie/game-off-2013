@@ -2,7 +2,7 @@
 
 define(["settings", "three.min"], function( settings ) {
 
-    function createMarkerMesh(color) {
+    function LinerMesh(color) {
         var geometry = new THREE.CubeGeometry( 
             settings.arMarkerSize,
             settings.arMarkerSize,
@@ -26,7 +26,7 @@ define(["settings", "three.min"], function( settings ) {
         return mesh;
     }
 
-    function createMarkerOccluderMesh() {
+    function OccluderMesh() {
         var geometry = new THREE.CubeGeometry( 
             settings.arMarkerSize + 0.1, 
             settings.arMarkerSize + 0.1, 
@@ -53,11 +53,11 @@ define(["settings", "three.min"], function( settings ) {
     function PitObject(params) {
         var model = new THREE.Object3D();
         model.matrixAutoUpdate = false;
-        model.add( createMarkerMesh( params.color ) );
+        model.add( new LinerMesh( params.color ) );
 
         var occluder = new THREE.Object3D();
         occluder.matrixAutoUpdate = false;
-        occluder.add( createMarkerOccluderMesh() );
+        occluder.add( new OccluderMesh() );
 
         function transform(matrix) {
             model.matrix.fromArray(matrix);
