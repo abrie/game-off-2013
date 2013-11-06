@@ -13,7 +13,8 @@ ipfw -q -f flush
 ipfw -q -f pipe flush
 
 speed=60
-[ ! -z $1 ] && speed=$1
+[ ! -z $1 ] && speed=$1 
+halfspeed=$((speed/2))
 
 if [ "$1" == "off" ]; then
     echo "disabling BW limit."
@@ -22,5 +23,5 @@ else
     ipfw add 1 pipe 1 src-port 8081
     ipfw pipe 1 config delay 10ms bw ${speed}KByte/s
     ipfw add 1 pipe 2 src-port 8082
-    ipfw pipe 2 config delay 10ms bw $((speed/2))KByte/s
+    ipfw pipe 2 config delay 10ms bw ${halfspeed}KByte/s
 fi
