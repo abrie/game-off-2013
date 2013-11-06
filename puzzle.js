@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colors, puzzlelogic, arobject) {
+define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colors, puzzlelogic, settings) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -57,7 +57,7 @@ define(['colors','puzzlelogic','arobject','three.min','tween.min'],function(colo
     }
 
     function Puzzle() {
-        var puzzleDim = 3, puzzleSize = arobject.getMarkerSize();
+        var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
         function addPickable( object, onPicked ) {
