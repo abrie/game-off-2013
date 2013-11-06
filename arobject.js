@@ -1,6 +1,6 @@
 "use strict";
 
-define(["colors", "settings", "three.min"], function(colors, settings) {
+define(["settings", "three.min"], function( settings ) {
 
     function createMarkerMesh(color) {
         var geometry = new THREE.CubeGeometry( 
