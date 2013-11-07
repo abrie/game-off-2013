@@ -40,17 +40,19 @@ define([], function() {
         
         var rel_pos = new THREE.Vector3();
         var m = new THREE.Matrix4();
-        var targetQuaternion;
+        var targetQuaternion, initialQuaternion;
         function lookAt( target ) {
             m.getInverse(model.matrix).multiply(target.matrix);
             rel_pos.getPositionFromMatrix(m);
             tracker.lookAt( rel_pos );
             targetQuaternion = new THREE.Quaternion().setFromEuler( tracker.rotation ); 
+            initialQuaternion = new THREE.Quaternion().setFromEuler( strawModel.rotation );
         }
 
+        var fraction = 0;
         function updateTracking() {
-            var currentQuaternion = new THREE.Quaternion().setFromEuler( strawModel.rotation );
-            strawModel.setRotationFromQuaternion( currentQuaternion.slerp( targetQuaternion, 0.01 ) ); 
+            strawModel.setRotationFromQuaternion( initialQuaternion.slerp( targetQuaternion, fraction ) ); 
+            fraction += 0.01;
         }
 
         return {
