@@ -18,7 +18,8 @@ define([], function() {
             side: THREE.DoubleSide,
        });
 
-        return new THREE.Mesh( geometry, material );
+        var mesh = new THREE.Mesh( geometry, material );
+        return mesh;
     }
 
     function Strawman() {
@@ -27,23 +28,42 @@ define([], function() {
 
         var strawModel = new Straw();
         model.add( strawModel );
+        strawModel.rotation.y = Math.PI;
+        //strawModel.updateMatrix();
+
+        var tracker = new THREE.Object3D();
+        model.add( tracker );
 
         function transform(m) {
             model.matrix.fromArray(m);
             model.matrixWorldNeedsUpdate = true;
         }
         
+        var diff = {};
+        var rel_pos = new THREE.Vector3();
+        var m = new THREE.Matrix4();
         function lookAt( target ) {
-            var m = new THREE.Matrix4().getInverse(model.matrix).multiply(target.matrix);
-            var rel_pos = new THREE.Vector3().getPositionFromMatrix(m, 'XYZ');
-            strawModel.lookAt( rel_pos );
+            m.getInverse(model.matrix).multiply(target.matrix);
+            rel_pos.getPositionFromMatrix(m, 'XYZ');
+            tracker.lookAt( rel_pos );
+        }
+
+        var rate = 0.01;
+        function updateTracking() {
+            diff.x = tracker.rotation.x - strawModel.rotation.x;
+            diff.y = tracker.rotation.y - strawModel.rotation.y;
+            diff.z = tracker.rotation.z - strawModel.rotation.z;
+            strawModel.rotation.x += diff.x/Math.abs(diff.x) * rate;
+            strawModel.rotation.y += diff.y/Math.abs(diff.y) * rate;
+            strawModel.rotation.z += diff.z/Math.abs(diff.z) * rate;
         }
 
         return {
             model: model,
             transform: transform,
             pickables: [],
-            lookAt: lookAt,
+            trackTarget: lookAt,
+            updateTracking: updateTracking,
         };
     }
 
