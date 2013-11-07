@@ -18,29 +18,36 @@ define([], function() {
             side: THREE.DoubleSide,
        });
 
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.matrixAutoUpdate = false;
+        return new THREE.Mesh( geometry, material );
+    }
 
-        function r(a) { return Math.random()*a-a/2; }
+    function Strawman() {
+        var model = new THREE.Object3D();
+        model.matrixAutoUpdate = false;
+
+        var strawModel = new Straw();
+        model.add( strawModel );
 
         function transform(m) {
-            mesh.matrix.fromArray(m);
-            var target = new THREE.Vector3();
-            target.getPositionFromMatrix( mesh.matrix );
-            var eye = new THREE.Vector3(0,0,0);
-            var up = mesh.up.clone();
-            mesh.matrix.lookAt( eye, target, up );
-            mesh.matrixWorldNeedsUpdate = true;
+            model.matrix.fromArray(m);
+            model.matrixWorldNeedsUpdate = true;
+        }
+        
+        function lookAt( target ) {
+            var m = new THREE.Matrix4().getInverse(model.matrix).multiply(target.matrix);
+            var rel_pos = new THREE.Vector3().getPositionFromMatrix(m, 'XYZ');
+            strawModel.lookAt( rel_pos );
         }
 
         return {
-            model: mesh,
-            pickables: [],
+            model: model,
             transform: transform,
+            pickables: [],
+            lookAt: lookAt,
         };
     }
 
     return {
-        Straw:Straw,
+        Strawman:Strawman,
     };
 });
