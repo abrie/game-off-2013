@@ -3,7 +3,8 @@ define([], function() {
     function Straw() {
         var geometry = new THREE.CylinderGeometry( 5.0, 30.0, 100*2, 100 );
 
-        var quaternion = new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
+        var quaternion = new THREE.Quaternion()
+            .setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
         var tMatrix = new THREE.Matrix4();
         tMatrix.makeTranslation( 0, -50*2, 0);
@@ -29,6 +30,7 @@ define([], function() {
         var strawModel = new Straw();
         model.add( strawModel );
         strawModel.rotation.y = Math.PI;
+        strawModel.rotation.x = Math.PI/4;
 
         var tracker = new THREE.Object3D();
         model.add( tracker );
@@ -40,19 +42,28 @@ define([], function() {
         
         var rel_pos = new THREE.Vector3();
         var m = new THREE.Matrix4();
-        var targetQuaternion, initialQuaternion;
+        var targetQuaternion, initialQuaternion,trackTween;
         function lookAt( target ) {
             m.getInverse(model.matrix).multiply(target.matrix);
             rel_pos.getPositionFromMatrix(m);
             tracker.lookAt( rel_pos );
-            targetQuaternion = new THREE.Quaternion().setFromEuler( tracker.rotation ); 
-            initialQuaternion = new THREE.Quaternion().setFromEuler( strawModel.rotation );
-        }
+            targetQuaternion = new THREE.Quaternion()
+                .setFromEuler( tracker.rotation ); 
+            initialQuaternion = new THREE.Quaternion()
+                .setFromEuler( strawModel.rotation );
 
-        var fraction = 0;
-        function updateTracking() {
-            strawModel.setRotationFromQuaternion( initialQuaternion.slerp( targetQuaternion, fraction ) ); 
-            fraction += 0.01;
+            trackTween = new TWEEN.Tween( { fraction:0.0 } )
+                .to( {fraction:0.05}, 5000 )
+                .easing( TWEEN.Easing.Bounce.Out)
+                .onUpdate( function () {
+                    strawModel.setRotationFromQuaternion( 
+                        initialQuaternion.slerp( 
+                            targetQuaternion, 
+                            this.fraction 
+                        )
+                    ); 
+                })
+            .start();
         }
 
         return {
@@ -60,7 +71,6 @@ define([], function() {
             transform: transform,
             pickables: [],
             trackTarget: lookAt,
-            updateTracking: updateTracking,
         };
     }
 

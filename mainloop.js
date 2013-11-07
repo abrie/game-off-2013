@@ -13,19 +13,12 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
             scene.update();
         }
         scene.render();
-        if( tracking ) {
-            groups.forEach( function(group) { 
-                group.strawman.updateTracking(); 
-            });
-        }
     }
 
-    var tracking = false;
     GLOBAL.track = function() {
         groups.forEach( function(group) { 
             group.strawman.trackTarget( playerObject ); 
         });
-        tracking = true;
     };
 
     function Group( theScene, arId, thePuzzle, theStrawman ) {
@@ -39,7 +32,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
     var playerObject = new THREE.Object3D();
     var groups = [];
     function start() {
-        scene = new arscene.Scene( document.body, assets.get("clip1") );
+        scene = new arscene.Scene( document.body, assets.get("clip2") );
 
         groups.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
         groups.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
