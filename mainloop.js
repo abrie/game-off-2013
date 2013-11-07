@@ -21,6 +21,24 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         });
     };
 
+    GLOBAL.withdraw = function() {
+        groups.forEach( function(group) { 
+            group.strawman.withdraw(); 
+        });
+    };
+
+    GLOBAL.insert = function() {
+        groups.forEach( function(group) { 
+            group.strawman.insert(); 
+        });
+    };
+
+    GLOBAL.ready = function() {
+        groups.forEach( function(group) { 
+            group.strawman.ready(); 
+        });
+    };
+
     function Group( theScene, arId, thePuzzle, theStrawman ) {
         theScene.add( arId, thePuzzle );
         theScene.add( arId, theStrawman );

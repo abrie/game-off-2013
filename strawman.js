@@ -30,7 +30,11 @@ define([], function() {
         var strawModel = new Straw();
         model.add( strawModel );
         strawModel.rotation.y = Math.PI;
+        var uprightQuaternion = new THREE.Quaternion()
+            .setFromEuler( strawModel.rotation );
         strawModel.rotation.x = Math.PI/4;
+        var readyQuaternion = new THREE.Quaternion()
+            .setFromEuler( strawModel.rotation );
 
         var tracker = new THREE.Object3D();
         model.add( tracker );
@@ -42,18 +46,17 @@ define([], function() {
         
         var rel_pos = new THREE.Vector3();
         var m = new THREE.Matrix4();
-        var targetQuaternion, initialQuaternion,trackTween;
         function lookAt( target ) {
             m.getInverse(model.matrix).multiply(target.matrix);
             rel_pos.getPositionFromMatrix(m);
             tracker.lookAt( rel_pos );
-            targetQuaternion = new THREE.Quaternion()
+            var targetQuaternion = new THREE.Quaternion()
                 .setFromEuler( tracker.rotation ); 
-            initialQuaternion = new THREE.Quaternion()
+            var initialQuaternion = new THREE.Quaternion()
                 .setFromEuler( strawModel.rotation );
 
-            trackTween = new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:0.05}, 5000 )
+            var trackTween = new TWEEN.Tween( { fraction:0.0 } )
+                .to( {fraction:1.0}, 1000 )
                 .easing( TWEEN.Easing.Bounce.Out)
                 .onUpdate( function () {
                     strawModel.setRotationFromQuaternion( 
@@ -62,8 +65,65 @@ define([], function() {
                             this.fraction 
                         )
                     ); 
-                })
-            .start();
+                });
+
+            trackTween.start();
+        }
+
+        function withdraw() {
+            var thisQuaternion = new THREE.Quaternion()
+                .setFromEuler( strawModel.rotation );
+
+            var readyTween = new TWEEN.Tween( { fraction:0.0 } )
+                .to( {fraction:1.0}, 1000 )
+                .easing( TWEEN.Easing.Linear.None)
+                .onUpdate( function () {
+                    strawModel.setRotationFromQuaternion( 
+                        thisQuaternion.slerp( 
+                            uprightQuaternion, 
+                            this.fraction 
+                        )
+                    ); 
+                });
+
+            var withdrawTween = new TWEEN.Tween( {z:0} )
+                .to( {z:200}, 1000 )
+                .easing( TWEEN.Easing.Linear.None )
+                .onUpdate( function() {
+                    strawModel.position.z = this.z;
+                });
+
+                readyTween.chain( withdrawTween ).start();
+        }
+
+        function ready() {
+            var thisQuaternion = new THREE.Quaternion()
+                .setFromEuler( strawModel.rotation );
+
+            var readyTween = new TWEEN.Tween( { fraction:0.0 } )
+                .to( {fraction:1.0}, 1000 )
+                .easing( TWEEN.Easing.Linear.None)
+                .onUpdate( function () {
+                    strawModel.setRotationFromQuaternion( 
+                        thisQuaternion.slerp( 
+                            readyQuaternion, 
+                            this.fraction 
+                        )
+                    ); 
+                });
+
+                readyTween.start();
+        }
+
+        function insert() {
+            var insertTween = new TWEEN.Tween( {z:200} )
+                .to( {z:0}, 1000 )
+                .easing( TWEEN.Easing.Linear.None )
+                .onUpdate( function() {
+                    strawModel.position.z = this.z;
+                });
+
+                insertTween.start();
         }
 
         return {
@@ -71,6 +131,9 @@ define([], function() {
             transform: transform,
             pickables: [],
             trackTarget: lookAt,
+            withdraw:withdraw,
+            insert:insert,
+            ready:ready,
         };
     }
 
