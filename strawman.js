@@ -29,7 +29,6 @@ define([], function() {
         var strawModel = new Straw();
         model.add( strawModel );
         strawModel.rotation.y = Math.PI;
-        //strawModel.updateMatrix();
 
         var tracker = new THREE.Object3D();
         model.add( tracker );
@@ -39,23 +38,19 @@ define([], function() {
             model.matrixWorldNeedsUpdate = true;
         }
         
-        var diff = {};
         var rel_pos = new THREE.Vector3();
         var m = new THREE.Matrix4();
+        var targetQuaternion;
         function lookAt( target ) {
             m.getInverse(model.matrix).multiply(target.matrix);
-            rel_pos.getPositionFromMatrix(m, 'XYZ');
+            rel_pos.getPositionFromMatrix(m);
             tracker.lookAt( rel_pos );
+            targetQuaternion = new THREE.Quaternion().setFromEuler( tracker.rotation ); 
         }
 
-        var rate = 0.01;
         function updateTracking() {
-            diff.x = tracker.rotation.x - strawModel.rotation.x;
-            diff.y = tracker.rotation.y - strawModel.rotation.y;
-            diff.z = tracker.rotation.z - strawModel.rotation.z;
-            strawModel.rotation.x += diff.x/Math.abs(diff.x) * rate;
-            strawModel.rotation.y += diff.y/Math.abs(diff.y) * rate;
-            strawModel.rotation.z += diff.z/Math.abs(diff.z) * rate;
+            var currentQuaternion = new THREE.Quaternion().setFromEuler( strawModel.rotation );
+            strawModel.setRotationFromQuaternion( currentQuaternion.slerp( targetQuaternion, 0.01 ) ); 
         }
 
         return {
