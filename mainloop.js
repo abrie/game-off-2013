@@ -3,24 +3,30 @@
 define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
 
     var scene;
+    var updateFrequency = 10; 
+    var updateCount = 0;
 
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
-        scene.update();
+        if( updateCount++ % updateFrequency === 0 ){
+            scene.update();
+        }
         scene.render();
         if( tracking ) {
-            p.strawman.updateTracking();
-            q.strawman.updateTracking();
+            groups.forEach( function(group) { 
+                group.strawman.updateTracking(); 
+            });
         }
     }
 
     var tracking = false;
     GLOBAL.track = function() {
-        p.strawman.trackTarget( playerObject );
-        q.strawman.trackTarget( playerObject );
+        groups.forEach( function(group) { 
+            group.strawman.trackTarget( playerObject ); 
+        });
         tracking = true;
-    }
+    };
 
     function Group( theScene, arId, thePuzzle, theStrawman ) {
         theScene.add( arId, thePuzzle );
@@ -31,12 +37,12 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
     }
 
     var playerObject = new THREE.Object3D();
-    var p,q;
+    var groups = [];
     function start() {
-        scene = new arscene.Scene( document.body, assets.get("clip2") );
+        scene = new arscene.Scene( document.body, assets.get("clip1") );
 
-        p = new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() );
-        q = new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() );
+        groups.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
+        groups.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
 
         requestAnimationFrame( animate );
     }
