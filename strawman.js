@@ -3,18 +3,19 @@ define([], function() {
     function Straw() {
 
         var points = new THREE.SplineCurve3([
+          new THREE.Vector3(0, 100*2,90),
+          new THREE.Vector3(0, 100*2, 0),
           new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, 100*2,0),
         ]);
 
         // points, ?, radius, facets, ? ?
-        var geometry = new THREE.TubeGeometry(points, 6,12,16, false, false);
+        var geometry = new THREE.TubeGeometry(points, 12,12,16, false, false);
 
         var quaternion = new THREE.Quaternion()
             .setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
         var tMatrix = new THREE.Matrix4();
-        tMatrix.makeTranslation( 0, -100*2, 0);
+        tMatrix.makeTranslation( 0, -210, 0);
         geometry.applyMatrix( tMatrix );
 
         var rMatrix = new THREE.Matrix4();
@@ -39,7 +40,7 @@ define([], function() {
         strawModel.rotation.y = Math.PI;
         var uprightQuaternion = new THREE.Quaternion()
             .setFromEuler( strawModel.rotation );
-        strawModel.rotation.x = Math.PI/4;
+        //strawModel.rotation.x = Math.PI/4;
         var readyQuaternion = new THREE.Quaternion()
             .setFromEuler( strawModel.rotation );
 
