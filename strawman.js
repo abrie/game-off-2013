@@ -1,13 +1,20 @@
 "use strict";
 define([], function() {
     function Straw() {
-        var geometry = new THREE.CylinderGeometry( 5.0, 30.0, 100*2, 100 );
+
+        var points = new THREE.SplineCurve3([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(0, 100*2,0),
+        ]);
+
+        // points, ?, radius, facets, ? ?
+        var geometry = new THREE.TubeGeometry(points, 6,12,16, false, false);
 
         var quaternion = new THREE.Quaternion()
             .setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
 
         var tMatrix = new THREE.Matrix4();
-        tMatrix.makeTranslation( 0, -50*2, 0);
+        tMatrix.makeTranslation( 0, -100*2, 0);
         geometry.applyMatrix( tMatrix );
 
         var rMatrix = new THREE.Matrix4();
