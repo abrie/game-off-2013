@@ -21,10 +21,14 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'thr
         });
     };
 
+    function v(s) {
+        return Math.random()*s - s/2;
+    }
+
     GLOBAL.fire = function() {
         groups.forEach( function(group) { 
             var source = group.strawman.getStrawTip(); 
-            var target = new THREE.Vector3(0,0,0);
+            var target = new THREE.Vector3(v(100),v(100),300);
 
             var projectile = new spitball.Spitball( source, target );
             console.log(projectile);
