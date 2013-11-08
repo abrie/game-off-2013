@@ -2,7 +2,11 @@
 define(['settings', 'tween.min'], function(settings) {
     function Spitball(source, target) {
         var ballGeometry = new THREE.SphereGeometry( settings.ballRadius );
-        var ballMaterial = new THREE.MeshBasicMaterial( {color:0x00FF00} );
+        var ballMaterial = new THREE.MeshBasicMaterial( {
+            color:0x00FF00, 
+            transparent:true, 
+            opacity:0.45
+        });
         var ballMesh = new THREE.Mesh( ballGeometry, ballMaterial );
         ballMesh.position = source;
 
