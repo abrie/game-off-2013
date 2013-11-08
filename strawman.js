@@ -42,7 +42,7 @@ define([], function() {
 
         var points = new THREE.SplineCurve3([
             new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(0, -launcherLength/3, 0),
+            new THREE.Vector3(0, -launcherLength, 0),
                    ]);
            
         // points, ?, radius, facets, ? ?
@@ -60,18 +60,24 @@ define([], function() {
                             new THREE.Vector3( 1, 0, 0), 
                             -Math.PI/2 )));
 
+        geometry.applyMatrix( 
+             new THREE.Matrix4()
+                .makeTranslation( 0, 0, -strawRadius*2 ) );
+
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
             side: THREE.DoubleSide,
         });
 
         var mesh = new THREE.Mesh( geometry, material );
+        mesh.position.z = strawRadius*1.5;
         var container = new THREE.Object3D();
         container.add(mesh);
 
         var jointGeometry = new THREE.SphereGeometry( strawRadius, 50 );
         var jointMaterial = new THREE.MeshNormalMaterial({color:0xFFFFFF});
         var jointMesh = new THREE.Mesh( jointGeometry, jointMaterial );
+        jointMesh.position.z = strawRadius*2;
         container.add(jointMesh);
 
         return container;
