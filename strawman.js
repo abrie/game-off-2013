@@ -4,7 +4,7 @@ define([], function() {
     function Straw() {
 
         var points = new THREE.SplineCurve3([
-                     new THREE.Vector3(0, 0, 0),
+                     new THREE.Vector3(0, strawLength/2, 0),
                      new THREE.Vector3(0, -strawLength, 0),
                    ]);
            
@@ -81,7 +81,7 @@ define([], function() {
             trackTween.start();
         }
 
-        function withdraw() {
+        function straighten() {
             var thisQuaternion = new THREE.Quaternion()
                 .setFromEuler( strawModel.rotation );
 
@@ -96,15 +96,17 @@ define([], function() {
                         )
                     ); 
                 });
+        }
 
-            var withdrawTween = new TWEEN.Tween( {z:0} )
-                .to( { z:strawLength }, 250 )
+        function withdraw() {
+            var withdrawTween = new TWEEN.Tween( {z:strawModel.position.z} )
+                .to( { z:strawLength }, 150 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
                 });
 
-                readyTween.chain( withdrawTween ).start();
+            return withdrawTween;
         }
 
         function ready() {
@@ -138,8 +140,13 @@ define([], function() {
         }
 
         function moveStraw( position ) {
-            strawModel.position.x = position.x;
-            strawModel.position.y = position.y;
+            var t = withdraw();
+            t.onComplete( function() {
+                strawModel.position.x = position.x;
+                strawModel.position.y = position.y;
+                insert();
+             });
+             t.start();
         }
 
         return {
