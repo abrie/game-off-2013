@@ -41,6 +41,10 @@ define([],function() {
             if( arr[j].setIndex ) {
                 arr[j].setIndex(j);
             }
+
+            if( onSwap ) {
+                onSwap();
+            }
         }
 
         function isHoleAdjacent( center ) {
@@ -65,10 +69,17 @@ define([],function() {
             });
         }
 
+        var onSwap;
+        function setOnSwap( callback ) {
+            onSwap = callback;
+        }
+
         return {
             get:get,
+            hole:hole,
             doAction:doAction,
             isSolved:isSolved,
+            setOnSwap:setOnSwap,
         };
     }
 

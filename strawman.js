@@ -137,6 +137,11 @@ define([], function() {
                 insertTween.start();
         }
 
+        function moveStraw( position ) {
+            strawModel.position.x = position.x;
+            strawModel.position.y = position.y;
+        }
+
         return {
             model: model,
             transform: transform,
@@ -145,6 +150,7 @@ define([], function() {
             withdraw:withdraw,
             insert:insert,
             ready:ready,
+            moveStraw:moveStraw,
         };
     }
 
