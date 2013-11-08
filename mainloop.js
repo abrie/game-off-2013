@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
+define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, spitball ){
 
     var scene;
     var updateFrequency = 10; 
@@ -21,21 +21,15 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         });
     };
 
-    GLOBAL.withdraw = function() {
+    GLOBAL.fire = function() {
         groups.forEach( function(group) { 
-            group.strawman.withdraw(); 
-        });
-    };
+            var source = group.strawman.getStrawTip(); 
+            var target = new THREE.Vector3(0,0,0);
 
-    GLOBAL.insert = function() {
-        groups.forEach( function(group) { 
-            group.strawman.insert(); 
-        });
-    };
-
-    GLOBAL.ready = function() {
-        groups.forEach( function(group) { 
-            group.strawman.ready(); 
+            var projectile = new spitball.Spitball( source, target );
+            console.log(projectile);
+            scene.add( -1, projectile );
+            projectile.launch();
         });
     };
 

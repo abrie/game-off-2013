@@ -1,6 +1,8 @@
 "use strict";
 define([], function() {
     var strawLength = 100;
+    var strawRadius = 12;
+
     function Straw() {
 
         var points = new THREE.SplineCurve3([
@@ -9,7 +11,7 @@ define([], function() {
                    ]);
            
         // points, ?, radius, facets, ? ?
-        var geometry = new THREE.TubeGeometry(points, 12,12,16, false, false);
+        var geometry = new THREE.TubeGeometry(points, 12,strawRadius,16, false, false);
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
@@ -42,6 +44,10 @@ define([], function() {
         var strawModel = new Straw();
         model.add( strawModel );
         strawModel.rotation.y = Math.PI;
+
+        var strawTip = new THREE.Object3D();
+        strawTip.position.z = strawLength;
+        strawModel.add( strawTip );
 
         var uprightQuaternion = new THREE.Quaternion()
             .setFromEuler( strawModel.rotation );
@@ -151,6 +157,11 @@ define([], function() {
              t.start();
         }
 
+        function getStrawTip() {
+            var position = new THREE.Vector3().getPositionFromMatrix( strawTip.matrixWorld );
+            return position;
+        }
+
         return {
             model: model,
             transform: transform,
@@ -160,6 +171,7 @@ define([], function() {
             insert:insert,
             ready:ready,
             moveStraw:moveStraw,
+            getStrawTip:getStrawTip,
         };
     }
 
