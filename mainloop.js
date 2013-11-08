@@ -17,7 +17,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'thr
 
     GLOBAL.track = function() {
         groups.forEach( function(group) { 
-            group.strawman.trackTarget( playerObject ); 
+            group.strawman.setTarget( playerObject ); 
         });
     };
 

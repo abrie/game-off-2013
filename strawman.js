@@ -65,7 +65,7 @@ define([], function() {
         
         var rel_pos = new THREE.Vector3();
         var m = new THREE.Matrix4();
-        function lookAt( target ) {
+        function setTarget( target ) {
             m.getInverse(model.matrix).multiply(target.matrix);
             rel_pos.getPositionFromMatrix(m);
             tracker.lookAt( rel_pos );
@@ -166,7 +166,7 @@ define([], function() {
             model: model,
             transform: transform,
             pickables: [],
-            trackTarget: lookAt,
+            setTarget: setTarget,
             withdraw:withdraw,
             insert:insert,
             ready:ready,
