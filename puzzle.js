@@ -241,8 +241,10 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
         }
 
         function getHolePosition() {
-            var vector = new THREE.Vector3();
-            vector.getPositionFromMatrix( container.matrixWorld );
+            var holeIndex = logic.hole();
+            var x = puzzleCoordinate( holeIndex % puzzleDim ); 
+            var y = puzzleCoordinate( Math.floor( holeIndex / puzzleDim ) );
+            var vector = new THREE.Vector3( x, y, 0 );
             return vector;
         }
 
@@ -251,13 +253,18 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
         function transform(m) {
             container.matrix.fromArray(m);
             container.matrixWorldNeedsUpdate = true;
-        };
+        }
+
+        function setOnSwap( callback ) {
+            logic.setOnSwap( callback );
+        }
 
         return {
             getHolePosition: getHolePosition,
             model: container,
             transform: transform,
             pickables: pickables,
+            setOnSwap: setOnSwap, 
         };
     }
 

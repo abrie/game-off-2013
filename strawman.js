@@ -1,34 +1,38 @@
 "use strict";
 define([], function() {
+    var strawLength = 100;
     function Straw() {
 
         var points = new THREE.SplineCurve3([
-          new THREE.Vector3(0, 100*2,90),
-          new THREE.Vector3(0, 100*2, 0),
-          new THREE.Vector3(0, 0, 0),
-        ]);
-
+            new THREE.Vector3(0, strawLength/2, 0),
+            new THREE.Vector3(0, -strawLength, 0),
+                   ]);
+           
         // points, ?, radius, facets, ? ?
         var geometry = new THREE.TubeGeometry(points, 12,12,16, false, false);
 
-        var quaternion = new THREE.Quaternion()
-            .setFromAxisAngle( new THREE.Vector3(1,0,0), -Math.PI/2 );
+        geometry.applyMatrix( 
+             new THREE.Matrix4()
+                .makeTranslation( 0, 0, 0 ) );
 
-        var tMatrix = new THREE.Matrix4();
-        tMatrix.makeTranslation( 0, -210, 0);
-        geometry.applyMatrix( tMatrix );
-
-        var rMatrix = new THREE.Matrix4();
-        rMatrix.makeRotationFromQuaternion( quaternion );
-        geometry.applyMatrix( rMatrix );
+        geometry.applyMatrix( 
+             new THREE.Matrix4()
+                .makeRotationFromQuaternion(
+                    new THREE.Quaternion()
+                        .setFromAxisAngle( 
+                            new THREE.Vector3( 1, 0, 0), 
+                            -Math.PI/2 )));
 
         var material = new THREE.MeshNormalMaterial({
             color: 0xFFFFFF,
             side: THREE.DoubleSide,
-       });
+        });
 
         var mesh = new THREE.Mesh( geometry, material );
-        return mesh;
+        var container = new THREE.Object3D();
+        container.add(mesh);
+
+        return container;
     }
 
     function Strawman() {
@@ -38,9 +42,10 @@ define([], function() {
         var strawModel = new Straw();
         model.add( strawModel );
         strawModel.rotation.y = Math.PI;
+
         var uprightQuaternion = new THREE.Quaternion()
             .setFromEuler( strawModel.rotation );
-        //strawModel.rotation.x = Math.PI/4;
+
         var readyQuaternion = new THREE.Quaternion()
             .setFromEuler( strawModel.rotation );
 
@@ -64,7 +69,7 @@ define([], function() {
                 .setFromEuler( strawModel.rotation );
 
             var trackTween = new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:1.0}, 1000 )
+                .to( {fraction:1.0}, 250 )
                 .easing( TWEEN.Easing.Bounce.Out)
                 .onUpdate( function () {
                     strawModel.setRotationFromQuaternion( 
@@ -78,12 +83,12 @@ define([], function() {
             trackTween.start();
         }
 
-        function withdraw() {
+        function straighten() {
             var thisQuaternion = new THREE.Quaternion()
                 .setFromEuler( strawModel.rotation );
 
             var readyTween = new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:1.0}, 1000 )
+                .to( {fraction:1.0}, 250 )
                 .easing( TWEEN.Easing.Linear.None)
                 .onUpdate( function () {
                     strawModel.setRotationFromQuaternion( 
@@ -93,15 +98,17 @@ define([], function() {
                         )
                     ); 
                 });
+        }
 
-            var withdrawTween = new TWEEN.Tween( {z:0} )
-                .to( {z:200}, 1000 )
+        function withdraw() {
+            var withdrawTween = new TWEEN.Tween( {z:strawModel.position.z} )
+                .to( { z:strawLength }, 150 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
                 });
 
-                readyTween.chain( withdrawTween ).start();
+            return withdrawTween;
         }
 
         function ready() {
@@ -109,7 +116,7 @@ define([], function() {
                 .setFromEuler( strawModel.rotation );
 
             var readyTween = new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:1.0}, 1000 )
+                .to( {fraction:1.0}, 250 )
                 .easing( TWEEN.Easing.Linear.None)
                 .onUpdate( function () {
                     strawModel.setRotationFromQuaternion( 
@@ -124,14 +131,24 @@ define([], function() {
         }
 
         function insert() {
-            var insertTween = new TWEEN.Tween( {z:200} )
-                .to( {z:0}, 1000 )
+            var insertTween = new TWEEN.Tween( {z:strawLength} )
+                .to( {z:0}, 250 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
                 });
 
                 insertTween.start();
+        }
+
+        function moveStraw( position ) {
+            var t = withdraw();
+            t.onComplete( function() {
+                strawModel.position.x = position.x;
+                strawModel.position.y = position.y;
+                insert();
+             });
+             t.start();
         }
 
         return {
@@ -142,6 +159,7 @@ define([], function() {
             withdraw:withdraw,
             insert:insert,
             ready:ready,
+            moveStraw:moveStraw,
         };
     }
 
