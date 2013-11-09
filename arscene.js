@@ -106,30 +106,11 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             }
         }
 
-        function getCameraPosition() {
-            var position = view.getCamera().position.clone();
-            position.z = -position.z;
-            position.x = -position.x;
-            position.y = -position.y;
-            return position;
-        }
-
-        function updateMatrixWorld() {
-            view.updateMatrixWorld();
-        }
-
-        function getCamera() {
-            return view.getCamera();
-        }
-
         return {
             add: add,
             remove: remove,
             update: update,
             render: render,
-            getCameraPosition: getCameraPosition,
-            getCamera: getCamera,
-            updateMatrixWorld: updateMatrixWorld,
         };
     }
 

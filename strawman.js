@@ -115,14 +115,14 @@ define(['settings','spitball'], function(settings, spitball) {
         var targetPosition = new THREE.Vector3();
         var m = new THREE.Matrix4();
         var errorVector;
-        function setTarget( target, time ) {
+        function setTarget( target ) {
             var cloned = target.clone();
             errorVector = new THREE.Vector3( errorTerm(25), errorTerm(25), errorTerm(25) );
             cloned.position.add( errorVector );
             cloned.updateMatrix();
             m.getInverse(model.matrix).multiply(cloned.matrix);
             targetPosition.getPositionFromMatrix(m);
-            lookAtTarget( time ? time : 250*30 ).start();
+            lookAtTarget().start();
         }
 
         function lookAtTarget( time ) {
@@ -133,7 +133,7 @@ define(['settings','spitball'], function(settings, spitball) {
                 .setFromEuler( launcherModel.rotation );
 
             return new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:1.0}, time )
+                .to( {fraction:1.0}, time ? time : 250*30 )
                 .easing( TWEEN.Easing.Bounce.Out)
                 .onUpdate( function () {
                     launcherModel.setRotationFromQuaternion( 
@@ -143,10 +143,6 @@ define(['settings','spitball'], function(settings, spitball) {
                         )
                     ); 
                 });
-        }
-
-        function v(s) {
-            return Math.random()*s - s/2;
         }
 
         function fire() {
@@ -214,8 +210,6 @@ define(['settings','spitball'], function(settings, spitball) {
             pickables: [],
             setTarget: setTarget,
             fire: fire,
-            withdraw:withdraw,
-            insert:insert,
             move:move,
         };
     }

@@ -15,7 +15,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         scene.render();
     }
 
-    GLOBAL.track = function() {
+    GLOBAL.target = function() {
         groups.forEach( function(group) { 
             group.strawman.setTarget( playerObject ); 
         });
