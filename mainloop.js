@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, spitball ){
+define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
 
     var scene;
     var updateFrequency = 10; 
@@ -21,17 +21,9 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'thr
         });
     };
 
-    function v(s) {
-        return Math.random()*s - s/2;
-    }
-
     GLOBAL.fire = function() {
         groups.forEach( function(group) { 
-            var source = group.strawman.getStrawTip(); 
-            var target = new THREE.Vector3(v(100),v(100),300);
-
-            var projectile = new spitball.Spitball( source, target );
-            console.log(projectile);
+            var projectile = group.strawman.fire();
             scene.add( -1, projectile );
             projectile.launch();
         });
@@ -52,7 +44,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'spitball', 'tween.min', 'thr
     var playerObject = new THREE.Object3D();
     var groups = [];
     function start() {
-        scene = new arscene.Scene( document.body, assets.get("clip2") );
+        scene = new arscene.Scene( document.body, assets.get("clip1") );
 
         groups.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
         groups.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );

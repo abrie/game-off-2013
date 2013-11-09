@@ -1,5 +1,5 @@
 "use strict";
-define(['settings'], function(settings) {
+define(['settings','spitball'], function(settings, spitball) {
     function Straw() {
 
         var points = new THREE.SplineCurve3([
@@ -111,10 +111,16 @@ define(['settings'], function(settings) {
             model.matrixWorldNeedsUpdate = true;
         }
         
+        function errorTerm(a) { return Math.random()*a - a/2; }
         var targetPosition = new THREE.Vector3();
         var m = new THREE.Matrix4();
+        var errorVector;
         function setTarget( target, time ) {
-            m.getInverse(model.matrix).multiply(target.matrix);
+            var cloned = target.clone();
+            errorVector = new THREE.Vector3( errorTerm(50), errorTerm(50), errorTerm(50) );
+            cloned.position.add( errorVector );
+            cloned.updateMatrix();
+            m.getInverse(model.matrix).multiply(cloned.matrix);
             targetPosition.getPositionFromMatrix(m);
             lookAtTarget( time ? time : 250*30 ).start();
         }
@@ -137,6 +143,14 @@ define(['settings'], function(settings) {
                         )
                     ); 
                 });
+        }
+
+        function v(s) {
+            return Math.random()*s - s/2;
+        }
+
+        function fire() {
+            return new spitball.Spitball( getStrawTip(), errorVector );
         }
 
         function withdraw() {
@@ -199,10 +213,10 @@ define(['settings'], function(settings) {
             transform: transform,
             pickables: [],
             setTarget: setTarget,
+            fire: fire,
             withdraw:withdraw,
             insert:insert,
             moveStraw:moveStraw,
-            getStrawTip:getStrawTip,
         };
     }
 
