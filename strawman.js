@@ -191,7 +191,7 @@ define(['settings','spitball'], function(settings, spitball) {
                 });
         }
 
-        function moveStraw( position ) {
+        function move( position ) {
             var t = withdraw();
             t.onComplete( function() {
                 strawModel.position.x = position.x;
@@ -216,7 +216,7 @@ define(['settings','spitball'], function(settings, spitball) {
             fire: fire,
             withdraw:withdraw,
             insert:insert,
-            moveStraw:moveStraw,
+            move:move,
         };
     }
 

@@ -32,7 +32,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
 
     function Group( theScene, arId, thePuzzle, theStrawman ) {
         thePuzzle.setOnSwap( function() { 
-            theStrawman.moveStraw( thePuzzle.getHolePosition() );
+            theStrawman.move( thePuzzle.getHolePosition() );
         });
 
         theScene.add( thePuzzle, arId );
