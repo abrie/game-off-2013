@@ -58,7 +58,7 @@ define(['settings'], function(settings) {
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
-                .makeTranslation( 0, 0, -settings.strawRadius*2 ) );
+                .makeTranslation( 0, 0, 0 ) );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -66,14 +66,18 @@ define(['settings'], function(settings) {
         });
 
         var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.z = settings.strawRadius*1.5;
         var container = new THREE.Object3D();
         container.add( mesh );
+
+        var capGeometry = new THREE.SphereGeometry( settings.launcherRadius*1.05, 25 );
+        var capMaterial = new THREE.MeshPhongMaterial( { color:0xFFFFFF, side:THREE.DoubleSide } );
+        var capMesh = new THREE.Mesh( capGeometry, capMaterial );
+        container.add( capMesh );
 
         var eyeGeometry = new THREE.SphereGeometry( settings.launcherRadius, 50 );
         var eyeMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
         var eyeMesh = new THREE.Mesh( eyeGeometry, eyeMaterial );
-        eyeMesh.position.z = settings.launcherLength-settings.launcherRadius;
+        eyeMesh.position.z = settings.launcherLength*0.9;
         container.add( eyeMesh );
 
         return container;
