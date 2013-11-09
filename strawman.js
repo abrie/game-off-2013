@@ -1,18 +1,14 @@
 "use strict";
-define([], function() {
-    var strawLength = 100;
-    var launcherLength = strawLength/3;
-    var strawRadius = 12;
-
+define(['settings'], function(settings) {
     function Straw() {
 
         var points = new THREE.SplineCurve3([
-            new THREE.Vector3(0, strawLength/2, 0),
-            new THREE.Vector3(0, -strawLength, 0),
+            new THREE.Vector3(0, settings.strawLength/2, 0),
+            new THREE.Vector3(0, -settings.strawLength, 0),
                    ]);
            
         // points, ?, radius, facets, ? ?
-        var geometry = new THREE.TubeGeometry(points, 12,strawRadius,16, false, false);
+        var geometry = new THREE.TubeGeometry(points, 12,settings.strawRadius,16, false, false);
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
@@ -42,11 +38,11 @@ define([], function() {
 
         var points = new THREE.SplineCurve3([
             new THREE.Vector3(0, 0, 0),
-            new THREE.Vector3(0, -launcherLength, 0),
+            new THREE.Vector3(0, -settings.launcherLength, 0),
                    ]);
            
         // points, ?, radius, facets, ? ?
-        var geometry = new THREE.TubeGeometry( points, 12, strawRadius, 16, false, false);
+        var geometry = new THREE.TubeGeometry( points, 12, settings.strawRadius, 16, false, false);
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
@@ -62,7 +58,7 @@ define([], function() {
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
-                .makeTranslation( 0, 0, -strawRadius*2 ) );
+                .makeTranslation( 0, 0, -settings.strawRadius*2 ) );
 
         var material = new THREE.MeshPhongMaterial({
             color: 0xFFFFFF,
@@ -70,14 +66,14 @@ define([], function() {
         });
 
         var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.z = strawRadius*1.5;
+        mesh.position.z = settings.strawRadius*1.5;
         var container = new THREE.Object3D();
         container.add( mesh );
 
-        var jointGeometry = new THREE.SphereGeometry( strawRadius, 50 );
+        var jointGeometry = new THREE.SphereGeometry( settings.strawRadius, 50 );
         var jointMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
         var jointMesh = new THREE.Mesh( jointGeometry, jointMaterial );
-        jointMesh.position.z = strawRadius*2;
+        jointMesh.position.z = settings.strawRadius*2;
         container.add( jointMesh );
 
         return container;
@@ -94,13 +90,13 @@ define([], function() {
         var launcherModel = new Launcher();
         model.add( launcherModel );
         launcherModel.rotation.y = -Math.PI;
-        launcherModel.position.z = -strawLength;
+        launcherModel.position.z = -settings.strawLength;
 
         var tracker = new THREE.Object3D();
         launcherModel.add( tracker );
 
         var strawTip = new THREE.Object3D();
-        strawTip.position.z = launcherLength;
+        strawTip.position.z = settings.launcherLength;
         launcherModel.add( strawTip );
 
         var uprightQuaternion = new THREE.Quaternion()
@@ -143,7 +139,7 @@ define([], function() {
             var currentQuaternion = new THREE.Quaternion()
                 .setFromEuler( launcherModel.rotation ); 
             return new TWEEN.Tween( {z:strawModel.position.z, lz:launcherModel.position.z, fraction:0.0 } )
-                .to( { z:strawLength+launcherLength, lz:launcherLength, fraction:1.0 }, 150 )
+                .to( { z:settings.strawLength+settings.launcherLength, lz:settings.launcherLength, fraction:1.0 }, 150 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
@@ -159,7 +155,7 @@ define([], function() {
 
         function insert() {
             return new TWEEN.Tween( {z:strawModel.position.z, lz:launcherModel.position.z } )
-                .to( { z:0, lz:-strawLength }, 150 )
+                .to( { z:0, lz:-settings.strawLength }, 150 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
