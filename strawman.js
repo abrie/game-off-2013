@@ -117,7 +117,7 @@ define(['settings','spitball'], function(settings, spitball) {
         var errorVector;
         function setTarget( target, time ) {
             var cloned = target.clone();
-            errorVector = new THREE.Vector3( errorTerm(50), errorTerm(50), errorTerm(50) );
+            errorVector = new THREE.Vector3( errorTerm(25), errorTerm(25), errorTerm(25) );
             cloned.position.add( errorVector );
             cloned.updateMatrix();
             m.getInverse(model.matrix).multiply(cloned.matrix);
