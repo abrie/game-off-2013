@@ -9,9 +9,9 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
-        if( updateCount++ % updateFrequency === 0 ){
+        //if( updateCount++ % updateFrequency === 0 ){
             scene.update();
-        }
+        //}
         scene.render();
     }
 
@@ -26,6 +26,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
             var projectile = group.strawman.fire();
             scene.add( -1, projectile );
             projectile.launch();
+            group.strawman.setTarget( playerObject );
         });
     };
 
