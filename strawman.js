@@ -46,7 +46,7 @@ define([], function() {
                    ]);
            
         // points, ?, radius, facets, ? ?
-        var geometry = new THREE.TubeGeometry(points, 12,strawRadius,16, false, false);
+        var geometry = new THREE.TubeGeometry( points, 12, strawRadius, 16, false, false);
 
         geometry.applyMatrix( 
              new THREE.Matrix4()
@@ -72,13 +72,13 @@ define([], function() {
         var mesh = new THREE.Mesh( geometry, material );
         mesh.position.z = strawRadius*1.5;
         var container = new THREE.Object3D();
-        container.add(mesh);
+        container.add( mesh );
 
         var jointGeometry = new THREE.SphereGeometry( strawRadius, 50 );
-        var jointMaterial = new THREE.MeshNormalMaterial({color:0xFFFFFF});
+        var jointMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
         var jointMesh = new THREE.Mesh( jointGeometry, jointMaterial );
         jointMesh.position.z = strawRadius*2;
-        container.add(jointMesh);
+        container.add( jointMesh );
 
         return container;
     }
@@ -104,30 +104,30 @@ define([], function() {
         launcherModel.add( strawTip );
 
         var uprightQuaternion = new THREE.Quaternion()
-            .setFromEuler( strawModel.rotation );
-
-        var readyQuaternion = new THREE.Quaternion()
-            .setFromEuler( strawModel.rotation );
-
+            .setFromEuler( launcherModel.rotation );
 
         function transform(m) {
             model.matrix.fromArray(m);
             model.matrixWorldNeedsUpdate = true;
         }
         
-        var rel_pos = new THREE.Vector3();
+        var targetPosition = new THREE.Vector3();
         var m = new THREE.Matrix4();
-        function setTarget( target ) {
+        function setTarget( target, time ) {
             m.getInverse(model.matrix).multiply(target.matrix);
-            rel_pos.getPositionFromMatrix(m);
-            tracker.lookAt( rel_pos );
+            targetPosition.getPositionFromMatrix(m);
+            lookAtTarget( time ? time : 250*30 ).start();
+        }
+
+        function lookAtTarget( time ) {
+            tracker.lookAt( targetPosition );
             var targetQuaternion = new THREE.Quaternion()
                 .setFromEuler( tracker.rotation ); 
             var initialQuaternion = new THREE.Quaternion()
                 .setFromEuler( launcherModel.rotation );
 
-            var trackTween = new TWEEN.Tween( { fraction:0.0 } )
-                .to( {fraction:1.0}, 250*30 )
+            return new TWEEN.Tween( { fraction:0.0 } )
+                .to( {fraction:1.0}, time )
                 .easing( TWEEN.Easing.Bounce.Out)
                 .onUpdate( function () {
                     launcherModel.setRotationFromQuaternion( 
@@ -137,17 +137,23 @@ define([], function() {
                         )
                     ); 
                 });
-
-            trackTween.start();
         }
 
         function withdraw() {
-            return new TWEEN.Tween( {z:strawModel.position.z, lz:launcherModel.position.z } )
-                .to( { z:strawLength+launcherLength, lz:launcherLength }, 150 )
+            var currentQuaternion = new THREE.Quaternion()
+                .setFromEuler( launcherModel.rotation ); 
+            return new TWEEN.Tween( {z:strawModel.position.z, lz:launcherModel.position.z, fraction:0.0 } )
+                .to( { z:strawLength+launcherLength, lz:launcherLength, fraction:1.0 }, 150 )
                 .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
                     launcherModel.position.z = this.lz;
+                    launcherModel.setRotationFromQuaternion( 
+                        currentQuaternion.slerp( 
+                            uprightQuaternion, 
+                            this.fraction 
+                        )
+                    ); 
                 });
         }
 
@@ -182,7 +188,6 @@ define([], function() {
              });
              t.start();
         }
-
 
         function getStrawTip() {
             var position = new THREE.Vector3().getPositionFromMatrix( strawTip.matrixWorld );
