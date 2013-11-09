@@ -70,11 +70,11 @@ define(['settings'], function(settings) {
         var container = new THREE.Object3D();
         container.add( mesh );
 
-        var jointGeometry = new THREE.SphereGeometry( settings.strawRadius, 50 );
-        var jointMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
-        var jointMesh = new THREE.Mesh( jointGeometry, jointMaterial );
-        jointMesh.position.z = settings.strawRadius*2;
-        container.add( jointMesh );
+        var eyeGeometry = new THREE.SphereGeometry( settings.launcherRadius, 50 );
+        var eyeMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
+        var eyeMesh = new THREE.Mesh( eyeGeometry, eyeMaterial );
+        eyeMesh.position.z = settings.launcherLength-settings.launcherRadius;
+        container.add( eyeMesh );
 
         return container;
     }
