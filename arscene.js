@@ -31,12 +31,12 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             view.render();
         }
 
-        function add( id, object ) {
+        function add( object, arId ) {
             object.pickables.forEach( function(mesh) {
                 objectPicker.registerPickTarget( mesh );
             });
 
-            var objects = markerObjects[id];
+            var objects = markerObjects[arId];
             if( objects ) {
                 var index = objects.indexOf( object );
                 if( index < 0) {
@@ -50,12 +50,12 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             }
         }
 
-        function remove( id, object ) {
+        function remove( object, arId ) {
             object.pickables.forEach( function(mesh) {
                 //TODO: unregistered pickable mesh
             });
 
-            var objects = markerObjects[id];
+            var objects = markerObjects[arId];
             if( objects ) {
                 var index = objects.indexOf( object );
                 if( index >= 0 ) {

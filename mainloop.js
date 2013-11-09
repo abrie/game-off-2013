@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ){
+define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ) {
 
     var scene;
     var updateFrequency = 10; 
@@ -24,7 +24,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
     GLOBAL.fire = function() {
         groups.forEach( function(group) { 
             var projectile = group.strawman.fire();
-            scene.add( -1, projectile );
+            scene.add( projectile );
             projectile.launch();
             group.strawman.setTarget( playerObject );
         });
@@ -35,8 +35,8 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
             theStrawman.moveStraw( thePuzzle.getHolePosition() );
         });
 
-        theScene.add( arId, thePuzzle );
-        theScene.add( arId, theStrawman );
+        theScene.add( thePuzzle, arId );
+        theScene.add( theStrawman, arId );
         return {
             strawman:theStrawman,
         };
