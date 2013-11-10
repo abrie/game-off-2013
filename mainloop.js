@@ -42,6 +42,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
 
         theScene.add( thePuzzle, arId );
         theScene.add( theStrawman, arId );
+
         return {
             strawman:theStrawman,
         };
@@ -53,7 +54,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         imageSource = new arscene.ImageSource( {width:480, height:360} );
         imageSource.setVideo( assets.get("clip2") );
 
-        scene = new arscene.Scene( document.body, imageSource );
+        scene = new arscene.Scene( document.body, imageSource, new arscene.MarkerSet() );
 
         groups.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
         groups.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
