@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject ) {
+define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject, ui ) {
 
     var imageSource = new arscene.ImageSource( {width:480, height:360} );
     var scene;
@@ -51,18 +51,37 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
         return view;
     }
 
-    var filters = {};
+    var filters = [];
+    var filterIndex = 0;
+
     function start() {
         scene = new arscene.Scene( document.body, imageSource );
         imageSource.setVideo( assets.get("clip2") );
 
-        filters.a = new FilterA();
-        filters.b = new FilterB();
+        filters.push( new FilterA() );
+        filters.push( new FilterB() );
 
-        scene.setView( filters.a );
+        scene.setView( filters[filterIndex] );
 
         requestAnimationFrame( animate );
     }
+
+    function previousFilter() {
+        if(--filterIndex<0) {
+            filterIndex = filters.length-1;
+        }
+       scene.setView( filters[filterIndex] ); 
+    }
+
+    function nextFilter() {
+        if(++filterIndex>=filters.length) {
+            filterIndex = 0;
+        }
+       scene.setView( filters[filterIndex] ); 
+    }
+
+    ui.addFilterPreviousListener( previousFilter );
+    ui.addFilterNextListener( nextFilter );
 
     return {
         start: start,
