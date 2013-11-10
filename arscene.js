@@ -25,13 +25,14 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
     function MarkerSet() {
         // Create marker objects associated with the desired marker ID.
-        var markerObjects = {
-            32: [ new pitobject.PitObject({color:0x00FF00}) ], 
-            4: [ new pitobject.PitObject({color:0x00FF00}) ],
-        };
+        var markerObjects = {};
 
         function add( arId, object ) {
             var objects = markerObjects[arId];
+            if( !objects ) {
+                objects = [];
+                markerObjects[arId] = objects;
+            }
             if( objects ) {
                 var index = objects.indexOf( object );
                 if( index < 0) {

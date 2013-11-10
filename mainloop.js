@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ) {
+define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject ) {
 
     var scene, imageSource;
     var updateFrequency = 10; 
@@ -33,13 +33,15 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
 
     GLOBAL.set = function(name) {
         imageSource.setVideo( assets.get(name) );
-    }
+    };
 
     function Group( markerSet, arId, thePuzzle, theStrawman ) {
         thePuzzle.setOnSwap( function() { 
             theStrawman.move( thePuzzle.getHolePosition() );
         });
 
+        var thePit = new pitobject.PitObject({color:0x00FF00}); 
+        markerSet.add( arId, thePit );
         markerSet.add( arId, thePuzzle );
         markerSet.add( arId, theStrawman );
 
