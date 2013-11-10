@@ -41,9 +41,6 @@ define(["three.min"], function() {
         // Create an occluder scene
         var occluder = new THREE.Scene();
 
-        // Create a shared camera
-        var camera = new THREE.Camera();
-
         var light = new THREE.DirectionalLight( 0xFFFFFF );
         light.position.x = 0;
         light.position.y = 0;
@@ -69,17 +66,11 @@ define(["three.min"], function() {
             }
         }
 
-        function setProjectionMatrix( matrix ) {
-            camera.projectionMatrix.fromArray( matrix );
-        }
-
         return {
             scene:scene,
             occluder:occluder,
-            camera:camera,
             add:add,
             remove:remove,
-            setProjectionMatrix:setProjectionMatrix,
         };
     };
 
@@ -112,13 +103,13 @@ define(["three.min"], function() {
             renderer.context.colorMask(false,false,false,false);
 
             // Render the occluder scene
-            renderer.render( virtual.occluder, virtual.camera);
+            renderer.render( virtual.occluder, virtualCamera);
 
             // Reactivate color buffer rendering
             renderer.context.colorMask(true,true,true,true);
 
             // Render the augmented components on top of the reality scene.
-            renderer.render( virtual.scene, virtual.camera );
+            renderer.render( virtual.scene, virtualCamera );
         }
 
         function update() {
@@ -126,12 +117,13 @@ define(["three.min"], function() {
             reality.update();
         }
 
+        var virtualCamera = new THREE.Camera();
         function setCameraMatrix( matrix ) {
-            virtual.setProjectionMatrix( matrix );
+            virtualCamera.projectionMatrix.fromArray( matrix );
         }
 
         function getCamera() {
-            return virtual.camera;
+            return virtualCamera;
         }
 
         return {
