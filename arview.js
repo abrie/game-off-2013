@@ -50,17 +50,12 @@ define(["three.min"], function() {
             camera.projectionMatrix.fromArray( matrix );
         }
 
-        function updateMatrixWorld() {
-            scene.updateMatrixWorld();
-        }
-
         return {
             scene:scene,
             camera:camera,
             add:add,
             remove:remove,
             setProjectionMatrix:setProjectionMatrix,
-            updateMatrixWorld:updateMatrixWorld,
         };
     };
 
@@ -142,10 +137,6 @@ define(["three.min"], function() {
             }
         }
 
-        function updateMatrixWorld() {
-            virtual.updateMatrixWorld();
-        }
-
         return {
             add: add,
             remove: remove,
@@ -154,7 +145,6 @@ define(["three.min"], function() {
             glCanvas: glCanvas,
             setCameraMatrix: setCameraMatrix,
             getCamera: getCamera,
-            updateMatrixWorld: updateMatrixWorld
         };
     };
 
