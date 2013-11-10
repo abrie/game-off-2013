@@ -33,12 +33,11 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
         // Create marker objects associated with the desired marker ID.
         var markerObjects = {
-            32: [ new pitobject.PitObject({color:0x000000}) ], 
-            4: [ new pitobject.PitObject({color:0x000000}) ],
+            32: [ new pitobject.PitObject({color:0x00FF00}) ], 
+            4: [ new pitobject.PitObject({color:0x00FF00}) ],
         };
 
         function update() {
-            imageSource.update()
             detector.detect( 
                 onMarkerCreated, 
                 onMarkerUpdated, 
