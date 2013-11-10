@@ -2,6 +2,45 @@
 
 define(["three.min"], function() {
 
+    function Objects() {
+        // Create marker objects associated with the desired marker ID.
+        var markerObjects = {};
+
+        function add( arId, object ) {
+            var objects = markerObjects[arId];
+            if( !objects ) {
+                objects = [];
+                markerObjects[arId] = objects;
+            }
+            if( objects ) {
+                var index = objects.indexOf( object );
+                if( index < 0) {
+                    objects.push( object );
+                }
+            }
+        }
+
+        function remove( arId, object ) {
+            var objects = markerObjects[arId];
+            if( objects ) {
+                var index = objects.indexOf( object );
+                if( index >= 0 ) {
+                    objects.splice(index,1);
+                }
+            }
+        }
+
+        function get( arId ) {
+            return markerObjects[arId];
+        }
+
+        return {
+            get:get,
+            add:add,
+            remove:remove,
+        };
+    }
+
     var Reality = function(sourceCanvas){
         // Create a default camera and scene.
         var camera = new THREE.Camera();
@@ -139,6 +178,7 @@ define(["three.min"], function() {
     return {
         Renderer: Renderer,
         Scene: Scene,
+        Objects: Objects,
     };
 
 });

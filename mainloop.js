@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'imagesource', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject, ui, imagesource ) {
+define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'three.min'], function( assets, arscene, ui, imagesource, filtermode ) {
 
     var source = new imagesource.VideoSource( {width:480, height:360} );
     var scene;
@@ -13,36 +13,6 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'imagesour
         scene.render();
     }
 
-    function FilterA() {
-        var view = new arscene.View();
-
-        var pitObject = new pitobject.PitObject({color:0x00FF00});
-        var puzzleObject = new puzzle.Puzzle();
-        var strawmanObject = new strawman.Strawman();
-
-        view.objects.add( 4, new pitobject.PitObject({color:0xAF1200}) );
-        view.objects.add( 32, pitObject );
-        view.objects.add( 32, puzzleObject );
-        view.objects.add( 32, strawmanObject );
-
-        return view;
-    }
-
-    function FilterB() {
-        var view = new arscene.View();
-
-        var pitObject = new pitobject.PitObject({color:0x00FF00});
-        var puzzleObject = new puzzle.Puzzle();
-        var strawmanObject = new strawman.Strawman();
-
-        view.objects.add( 4, pitObject );
-        view.objects.add( 32, new pitobject.PitObject({color:0x1F10FF}) );
-        view.objects.add( 4, puzzleObject );
-        view.objects.add( 4, strawmanObject );
-
-        return view;
-    }
-
     var filters = [];
     var filterIndex = 0;
 
@@ -52,8 +22,8 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'imagesour
     function start() {
         scene = new arscene.Scene( document.body, source );
 
-        filters.push( new FilterA() );
-        filters.push( new FilterB() );
+        filters.push( new filtermode.FilterA() );
+        filters.push( new filtermode.FilterB() );
 
         sources.push( assets.get("clip1") );
         sources.push( assets.get("clip2") );
