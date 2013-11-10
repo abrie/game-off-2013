@@ -3,16 +3,12 @@
 define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject ) {
 
     var scene, imageSource;
-    var updateFrequency = 10; 
-    var updateCount = 0;
 
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
-        //if( updateCount++ % updateFrequency === 0 ){
-            imageSource.update();
-            scene.update();
-        //}
+        imageSource.update();
+        scene.update();
         scene.render();
     }
 
@@ -35,19 +31,15 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
         imageSource.setVideo( assets.get(name) );
     };
 
-    GLOBAL.swap = function() {
-        scene.setMarkerSet( markerSet );
-    }
-
-    function Group( markerSet, arId, thePuzzle, theStrawman ) {
+    function Group( view, arId, thePuzzle, theStrawman ) {
         thePuzzle.setOnSwap( function() { 
             theStrawman.move( thePuzzle.getHolePosition() );
         });
 
         var thePit = new pitobject.PitObject({color:0x00FF00}); 
-        markerSet.add( arId, thePit );
-        markerSet.add( arId, thePuzzle );
-        markerSet.add( arId, theStrawman );
+        view.markers.add( arId, thePit );
+        view.markers.add( arId, thePuzzle );
+        view.markers.add( arId, theStrawman );
 
         return {
             strawman:theStrawman,
@@ -56,17 +48,18 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
 
     var playerObject = new THREE.Object3D();
     var groups = [];
-    var markerSet;
+    var view;
     function start() {
         imageSource = new arscene.ImageSource( {width:480, height:360} );
         imageSource.setVideo( assets.get("clip2") );
 
-        markerSet = new arscene.MarkerSet();
+        view = new arscene.View();
 
-        scene = new arscene.Scene( document.body, imageSource, markerSet );
+        scene = new arscene.Scene( document.body, imageSource );
+        scene.setView( view );
 
-        groups.push( new Group( markerSet, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
-        groups.push( new Group( markerSet, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
+        groups.push( new Group( view, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
+        groups.push( new Group( view, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
 
         requestAnimationFrame( animate );
     }
