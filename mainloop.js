@@ -2,7 +2,8 @@
 
 define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject ) {
 
-    var scene, imageSource;
+    var imageSource = new arscene.ImageSource( {width:480, height:360} );
+    var scene;
 
     function animate() {
         requestAnimationFrame( animate );
@@ -12,57 +13,53 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
         scene.render();
     }
 
-    GLOBAL.target = function() {
-        groups.forEach( function(group) { 
-            group.strawman.setTarget( playerObject ); 
-        });
-    };
-
-    GLOBAL.fire = function() {
-        groups.forEach( function(group) { 
-            var projectile = group.strawman.fire();
-            scene.add( projectile );
-            projectile.launch();
-            group.strawman.setTarget( playerObject );
-        });
-    };
-
-    GLOBAL.set = function(name) {
+    GLOBAL.setVideo = function(name) {
         imageSource.setVideo( assets.get(name) );
     };
 
-    function Group( view, arId ) {
+    GLOBAL.setFilter = function(name) {
+        scene.setView( filters[name] );
+    };
+
+    function FilterA() {
+        var view = new arscene.View();
+
         var pitObject = new pitobject.PitObject({color:0x00FF00});
         var puzzleObject = new puzzle.Puzzle();
         var strawmanObject = new strawman.Strawman();
 
-        puzzleObject.setOnSwap( function() { 
-            strawmanObject.move( puzzleObject.getHolePosition() );
-        });
+        view.objects.add( 4, new pitobject.PitObject({color:0xAF1200}) );
+        view.objects.add( 32, pitObject );
+        view.objects.add( 32, puzzleObject );
+        view.objects.add( 32, strawmanObject );
 
-        view.objects.add( arId, pitObject );
-        view.objects.add( arId, puzzleObject );
-        view.objects.add( arId, strawmanObject );
-
-        return {
-            strawman: strawmanObject,
-        };
+        return view;
     }
 
-    var playerObject = new THREE.Object3D();
-    var groups = [];
-    var view;
+    function FilterB() {
+        var view = new arscene.View();
+
+        var pitObject = new pitobject.PitObject({color:0x00FF00});
+        var puzzleObject = new puzzle.Puzzle();
+        var strawmanObject = new strawman.Strawman();
+
+        view.objects.add( 4, pitObject );
+        view.objects.add( 32, new pitobject.PitObject({color:0x1F10FF}) );
+        view.objects.add( 4, puzzleObject );
+        view.objects.add( 4, strawmanObject );
+
+        return view;
+    }
+
+    var filters = {};
     function start() {
-        imageSource = new arscene.ImageSource( {width:480, height:360} );
+        scene = new arscene.Scene( document.body, imageSource );
         imageSource.setVideo( assets.get("clip2") );
 
-        view = new arscene.View();
+        filters.a = new FilterA();
+        filters.b = new FilterB();
 
-        groups.push( new Group( view, 32) ); 
-        groups.push( new Group( view, 4) );
-
-        scene = new arscene.Scene( document.body, imageSource );
-        scene.setView( view );
+        scene.setView( filters.a );
 
         requestAnimationFrame( animate );
     }
