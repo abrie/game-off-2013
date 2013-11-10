@@ -1,30 +1,6 @@
 "use strict";
 
-define(['picker','scratchcanvas','ardetector','arview' ], function(picker,scratchcanvas,ardetector,arview ) {
-
-    function ImageSource( dimensions ) {
-        var canvas = scratchcanvas.create( dimensions );
-        var video;
-        var dir = 1;
-
-        function update() {
-            if( video.seek( 1 ) ) {
-                video.restart();
-            }
-            canvas.update( video );
-        }
-
-        function setVideo( v ) {
-            video = v;
-        }
-
-        return {
-            setVideo:setVideo,
-            scratchcanvas:canvas,
-            update:update,
-            dimensions:dimensions
-        };
-    }
+define(['picker','ardetector','arview' ], function(picker,ardetector,arview ) {
 
     function MarkerSet() {
         // Create marker objects associated with the desired marker ID.
@@ -156,7 +132,6 @@ define(['picker','scratchcanvas','ardetector','arview' ], function(picker,scratc
 
     return {
         Scene:Scene,
-        ImageSource:ImageSource,
         View:View,
     };
 });
