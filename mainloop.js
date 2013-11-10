@@ -35,6 +35,10 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
         imageSource.setVideo( assets.get(name) );
     };
 
+    GLOBAL.swap = function() {
+        scene.setMarkerSet( markerSet );
+    }
+
     function Group( markerSet, arId, thePuzzle, theStrawman ) {
         thePuzzle.setOnSwap( function() { 
             theStrawman.move( thePuzzle.getHolePosition() );
@@ -52,11 +56,12 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
 
     var playerObject = new THREE.Object3D();
     var groups = [];
+    var markerSet;
     function start() {
         imageSource = new arscene.ImageSource( {width:480, height:360} );
         imageSource.setVideo( assets.get("clip2") );
 
-        var markerSet = new arscene.MarkerSet();
+        markerSet = new arscene.MarkerSet();
 
         scene = new arscene.Scene( document.body, imageSource, markerSet );
 

@@ -92,8 +92,13 @@ define(['JSARToolKit.min'],function() {
             }
         };
 
+        function reset() {
+            markers = {};
+        }
+
         return {
             detect: detect,
+            reset: reset,
             getCameraMatrix: getCameraMatrix,
         };
     };

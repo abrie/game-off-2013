@@ -62,13 +62,17 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
         };
     }
 
-    function Scene( element, imageSource, markers ) {
+    function Scene( element, imageSource, initialMarkers ) {
         var detector = ardetector.create( imageSource.scratchcanvas );
-        var view = arview.create( imageSource.dimensions, imageSource.scratchcanvas );
-        view.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
-        element.appendChild( view.glCanvas );
+        var scene = new arview.Scene();
+        var renderer = new arview.Renderer( imageSource.dimensions, imageSource.scratchcanvas );
+        renderer.setScene( scene );
+        renderer.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
+        element.appendChild( renderer.glCanvas );
 
-        var objectPicker = new picker.Picker( view.getCamera(), view.glCanvas );
+        var objectPicker = new picker.Picker( renderer.getCamera(), renderer.glCanvas );
+
+        var markers = initialMarkers;
 
         function update() {
             detector.detect( 
@@ -76,21 +80,27 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
                 onMarkerUpdated, 
                 onMarkerDestroyed 
             );
-            view.update();
+            renderer.update();
+        }
+
+        function setMarkerSet( newMarkerSet ) {
+            markers = newMarkerSet;
+            renderer.reset();
+            detector.reset();
         }
 
         function render() {
-            view.render();
+            renderer.render();
         }
 
         function add( object ) {
             objectPicker.register( object.pickables );
-            view.add( object );
+            scene.add( object );
         }
 
         function remove( object ) {
             objectPicker.unregister( object.pickables );
-            view.remove( object );
+            scene.remove( object );
         }
 
         // This function is called when a marker is initally detected on the stream
@@ -133,6 +143,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             remove: remove,
             update: update,
             render: render,
+            setMarkerSet: setMarkerSet,
         };
     }
 

@@ -35,23 +35,47 @@ define(["three.min"], function() {
     };
 
     var Scene = function() {
+        // Create an augmented scene
         var scene = new THREE.Scene();
+
+        // Create an occluder scene
+        var occluder = new THREE.Scene();
+
+        // Create a shared camera
         var camera = new THREE.Camera();
 
-        function add(object) {
-            scene.add(object);
+        var light = new THREE.DirectionalLight( 0xFFFFFF );
+        light.position.x = 0;
+        light.position.y = 0;
+        light.position.z = 9000;
+        light.lookAt( scene.position );
+        scene.add( light );
+
+        function add( object ) {
+            if( object.model ) {
+                scene.add( object.model );
+            }
+            if( object.occluder ) {
+                occluder.add( object.occluder );
+            }
         }
 
-        function remove(object) {
-            scene.remove(object);
+        function remove( object ) {
+            if( object.model ) {
+                scene.remove( object.model );
+            }
+            if( object.occluder ) {
+                occluder.remove( object.occluder );
+            }
         }
 
-        function setProjectionMatrix(matrix) {
+        function setProjectionMatrix( matrix ) {
             camera.projectionMatrix.fromArray( matrix );
         }
 
         return {
             scene:scene,
+            occluder:occluder,
             camera:camera,
             add:add,
             remove:remove,
@@ -59,7 +83,7 @@ define(["three.min"], function() {
         };
     };
 
-    var create = function(dimensions, sourceCanvas) {
+    var Renderer = function(dimensions, sourceCanvas) {
         // Create a canvas which will be used for WebGL
         var glCanvas = document.createElement('canvas');
 
@@ -75,18 +99,10 @@ define(["three.min"], function() {
         // Create a reality scene
         var reality = new Reality(sourceCanvas);
 
-        // Create an augmented scene
-        var virtual = new Scene();
-
-        // Create an occluder scene
-        var occluder = new Scene();
-
-        var light = new THREE.DirectionalLight( 0xFFFFFF );
-        light.position.x = 0;
-        light.position.y = 0;
-        light.position.z = 9000;
-        light.lookAt( virtual.scene.position );
-        virtual.scene.add( light );
+        var virtual;
+        function setScene( scene ) {
+            virtual = scene;
+        }
 
         function render() {
             // Render the reality scene
@@ -96,13 +112,13 @@ define(["three.min"], function() {
             renderer.context.colorMask(false,false,false,false);
 
             // Render the occluder scene
-            renderer.render( occluder.scene, occluder.camera);
+            renderer.render( virtual.occluder, virtual.camera);
 
             // Reactivate color buffer rendering
             renderer.context.colorMask(true,true,true,true);
 
             // Render the augmented components on top of the reality scene.
-            renderer.render(virtual.scene, virtual.camera);
+            renderer.render( virtual.scene, virtual.camera );
         }
 
         function update() {
@@ -112,34 +128,14 @@ define(["three.min"], function() {
 
         function setCameraMatrix( matrix ) {
             virtual.setProjectionMatrix( matrix );
-            occluder.setProjectionMatrix( matrix );
         }
 
         function getCamera() {
             return virtual.camera;
         }
 
-        function add( object ) {
-            if( object.model ) {
-                virtual.add( object.model );
-            }
-            if( object.occluder ) {
-                occluder.add( object.occluder );
-            }
-        }
-
-        function remove( object ) {
-            if( object.model ) {
-                virtual.remove( object.model );
-            }
-            if( object.occluder ) {
-                occluder.remove( object.occluder );
-            }
-        }
-
         return {
-            add: add,
-            remove: remove,
+            setScene: setScene,
             update: update,
             render: render,
             glCanvas: glCanvas,
@@ -149,7 +145,8 @@ define(["three.min"], function() {
     };
 
     return {
-        create: create,
+        Renderer: Renderer,
+        Scene: Scene,
     };
 
 });
