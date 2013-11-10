@@ -2,24 +2,16 @@
 
 define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject, ui ) {
 
-    var imageSource = new arscene.ImageSource( {width:480, height:360} );
+    var source = new arscene.ImageSource( {width:480, height:360} );
     var scene;
 
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
-        imageSource.update();
+        source.update();
         scene.update();
         scene.render();
     }
-
-    GLOBAL.setVideo = function(name) {
-        imageSource.setVideo( assets.get(name) );
-    };
-
-    GLOBAL.setFilter = function(name) {
-        scene.setView( filters[name] );
-    };
 
     function FilterA() {
         var view = new arscene.View();
@@ -54,14 +46,20 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'tween.min
     var filters = [];
     var filterIndex = 0;
 
+    var sources = [];
+    var sourceIndex = 0;
+
     function start() {
-        scene = new arscene.Scene( document.body, imageSource );
-        imageSource.setVideo( assets.get("clip2") );
+        scene = new arscene.Scene( document.body, source );
 
         filters.push( new FilterA() );
         filters.push( new FilterB() );
 
+        sources.push( assets.get("clip1") );
+        sources.push( assets.get("clip2") );
+
         scene.setView( filters[filterIndex] );
+        source.setVideo( sources[sourceIndex] );
 
         requestAnimationFrame( animate );
     }
@@ -77,11 +75,30 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'tween.min
         if(++filterIndex>=filters.length) {
             filterIndex = 0;
         }
-       scene.setView( filters[filterIndex] ); 
+
+        scene.setView( filters[filterIndex] ); 
+    }
+
+    function previousSource() {
+        if(--sourceIndex<0) {
+            sourceIndex = sources.length-1;
+        }
+
+        source.setVideo( sources[sourceIndex] ); 
+    }
+
+    function nextSource() {
+        if(++sourceIndex>=sources.length) {
+            sourceIndex = 0;
+        }
+
+        source.setVideo( sources[sourceIndex] ); 
     }
 
     ui.addFilterPreviousListener( previousFilter );
     ui.addFilterNextListener( nextFilter );
+    ui.addSourcePreviousListener( previousSource );
+    ui.addSourceNextListener( nextSource );
 
     return {
         start: start,
