@@ -29,12 +29,14 @@ define(["three.min"],function() {
         }
 
         var registered = [];
-        function registerPickTarget( mesh ) {
-            registered.push( mesh );
-        }
+        function register( list ) {
+            list.forEach( function(mesh) {
+                registered.push( mesh );
+            });
+        }    
 
         return {
-            registerPickTarget:registerPickTarget,
+            register:register,
         };
     }
 

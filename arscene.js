@@ -51,9 +51,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
         }
 
         function add( object, arId ) {
-            object.pickables.forEach( function(mesh) {
-                objectPicker.registerPickTarget( mesh );
-            });
+            objectPicker.register( object.pickables );
 
             var objects = markerObjects[arId];
             if( objects ) {
@@ -70,9 +68,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
         }
 
         function remove( object, arId ) {
-            object.pickables.forEach( function(mesh) {
-                //TODO: unregistered pickable mesh
-            });
+            objectPicker.unregister( object.pickables );
 
             var objects = markerObjects[arId];
             if( objects ) {
