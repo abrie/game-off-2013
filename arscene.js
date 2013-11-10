@@ -5,9 +5,12 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
     function ImageSource( dimensions ) {
         var canvas = scratchcanvas.create( dimensions );
         var video;
+        var dir = 1;
 
         function update() {
-            video.seek(1);
+            if( video.seek( 1 ) ) {
+                video.restart();
+            }
             canvas.update( video );
         }
 

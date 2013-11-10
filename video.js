@@ -58,6 +58,10 @@ define([],function() {
             );
         }
 
+        function restart() {
+            video.currentTime = 0;
+        }
+
         function frameToTime( frame ) {
             return frame / params.frameRate + 0.00001;
         }
@@ -65,6 +69,7 @@ define([],function() {
         function seek( delta ) {
             var time = frameToTime( getCurrentFrame() + delta );
             video.currentTime = time;
+            return video.currentTime >= (video.duration - 1 );
         }
 
         var getDimensions = function() {
@@ -99,6 +104,7 @@ define([],function() {
             seek:seek,
             onLoaded: onLoaded,
             isLoaded: isLoaded,
+            restart: restart,
             onProgress: onProgress,
             copyToContext:copyToContext,
             getDimensions:getDimensions,
