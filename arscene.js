@@ -89,13 +89,13 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             var objects = markerObjects[marker.id];
             if( objects ) {
                 objects.forEach( function(object){
-                    if( object.transform ) {
-                        object.transform( marker.matrix );
-                        view.add( object );
-                    }
-                    else {
+                    if( !object.transform ) {
                         console.log("DEVELOPMENT: found an object attached to an AR marker but without transform() method.");
                         console.log( object );
+                    }
+                    else {
+                        object.transform( marker.matrix );
+                        add( object );
                     }
                 });
             }
@@ -115,9 +115,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
         function onMarkerDestroyed(marker) {
             var objects = markerObjects[marker.id]; 
             if( objects ) {
-                objects.forEach( function(object) {
-                    view.remove( object );
-                });
+                objects.forEach( remove ); 
             }
         }
 

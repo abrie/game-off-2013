@@ -70,6 +70,7 @@ define(["settings", "three.min"], function( settings ) {
         return {
             transform: transform,
             model: model,
+            pickables: [],
             occluder: occluder,
         };
     }

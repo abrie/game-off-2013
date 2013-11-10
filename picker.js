@@ -35,8 +35,18 @@ define(["three.min"],function() {
             });
         }    
 
+        function unregister( list ) {
+            list.forEach( function(mesh) { 
+                var index = registered.indexOf( mesh );
+                if( index >= 0) {
+                    registered.splice(index,1);
+                }
+            });
+        }
+
         return {
             register:register,
+            unregister:unregister,
         };
     }
 
