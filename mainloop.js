@@ -2,7 +2,6 @@
 
 define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman ) {
 
-    var imageSource;
     var scene;
     var updateFrequency = 10; 
     var updateCount = 0;
@@ -11,7 +10,7 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
         requestAnimationFrame( animate );
         TWEEN.update();
         //if( updateCount++ % updateFrequency === 0 ){
-            imageSource.update();
+            imageSources[0].update();
             scene.update();
         //}
         scene.render();
@@ -46,9 +45,12 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'tween.min', 'three.min'], fu
 
     var playerObject = new THREE.Object3D();
     var groups = [];
+    var imageSources = [];
     function start() {
-        imageSource = new arscene.ImageSource( assets.get("clip1") );
-        scene = new arscene.Scene( document.body, imageSource );
+        imageSources.push( new arscene.ImageSource( assets.get("clip1") ) );
+        imageSources.push( new arscene.ImageSource( assets.get("clip2") ) );
+
+        scene = new arscene.Scene( document.body, imageSources[0] );
 
         groups.push( new Group( scene, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
         groups.push( new Group( scene, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
