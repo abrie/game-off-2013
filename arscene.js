@@ -82,21 +82,12 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
             view.render();
         }
 
-        function add( object, arId ) {
-            if( arId ) {
-                markers.add( arId, object);
-            }
-
+        function add( object ) {
             objectPicker.register( object.pickables );
             view.add( object );
-
         }
 
-        function remove( object, arId ) {
-            if( arId ) {
-                markers.remove( arId, object );
-            }
-
+        function remove( object ) {
             objectPicker.unregister( object.pickables );
             view.remove( object );
         }
