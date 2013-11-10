@@ -2,7 +2,7 @@
 
 define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'ui', 'imagesource', 'tween.min', 'three.min'], function( assets, arscene, puzzle, strawman, pitobject, ui, imagesource ) {
 
-    var source = new imagesource.ImageSource( {width:480, height:360} );
+    var source = new imagesource.VideoSource( {width:480, height:360} );
     var scene;
 
     function animate() {

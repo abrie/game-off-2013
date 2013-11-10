@@ -1,6 +1,6 @@
 "use strict";
 define(['scratchcanvas'],function(scratchcanvas) {
-    function ImageSource( dimensions ) {
+    function VideoSource( dimensions ) {
         var canvas = scratchcanvas.create( dimensions );
         var video;
         var dir = 1;
@@ -25,6 +25,6 @@ define(['scratchcanvas'],function(scratchcanvas) {
     }
 
     return {
-        ImageSource:ImageSource
+        VideoSource:VideoSource
     }
 });
