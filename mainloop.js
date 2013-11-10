@@ -31,18 +31,21 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
         imageSource.setVideo( assets.get(name) );
     };
 
-    function Group( view, arId, thePuzzle, theStrawman ) {
-        thePuzzle.setOnSwap( function() { 
-            theStrawman.move( thePuzzle.getHolePosition() );
+    function Group( view, arId ) {
+        var pitObject = new pitobject.PitObject({color:0x00FF00});
+        var puzzleObject = new puzzle.Puzzle();
+        var strawmanObject = new strawman.Strawman();
+
+        puzzleObject.setOnSwap( function() { 
+            strawmanObject.move( puzzleObject.getHolePosition() );
         });
 
-        var thePit = new pitobject.PitObject({color:0x00FF00}); 
-        view.markers.add( arId, thePit );
-        view.markers.add( arId, thePuzzle );
-        view.markers.add( arId, theStrawman );
+        view.objects.add( arId, pitObject );
+        view.objects.add( arId, puzzleObject );
+        view.objects.add( arId, strawmanObject );
 
         return {
-            strawman:theStrawman,
+            strawman: strawmanObject,
         };
     }
 
@@ -55,11 +58,11 @@ define(['assets', 'arscene', 'puzzle', 'strawman', 'pitobject', 'tween.min', 'th
 
         view = new arscene.View();
 
+        groups.push( new Group( view, 32) ); 
+        groups.push( new Group( view, 4) );
+
         scene = new arscene.Scene( document.body, imageSource );
         scene.setView( view );
-
-        groups.push( new Group( view, 32, new puzzle.Puzzle(), new strawman.Strawman() ) ); 
-        groups.push( new Group( view, 4, new puzzle.Puzzle(), new strawman.Strawman() ) );
 
         requestAnimationFrame( animate );
     }

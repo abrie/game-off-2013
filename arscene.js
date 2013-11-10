@@ -64,7 +64,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
     function View() {
         return {
-            markers: new MarkerSet(),
+            objects: new MarkerSet(),
             scene: new arview.Scene(),
         };
     }
@@ -109,7 +109,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
         // This function is called when a marker is initally detected on the stream
         function onMarkerCreated( marker ) {
-            var objects = view.markers.get( marker.id );
+            var objects = view.objects.get( marker.id );
             if( objects ) {
                 objects.forEach( function(object){
                     if( !object.transform ) {
@@ -126,7 +126,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
         // This function is called when an existing marker is repositioned
         function onMarkerUpdated(marker) {
-            var objects = view.markers.get( marker.id );
+            var objects = view.objects.get( marker.id );
             if( objects ) {
                 objects.forEach( function( object ) {
                     object.transform( marker.matrix );
@@ -136,7 +136,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
         // This function is called when a marker disappears from the stream.
         function onMarkerDestroyed(marker) {
-            var objects = view.markers.get( marker.id ); 
+            var objects = view.objects.get( marker.id ); 
             if( objects ) {
                 objects.forEach( remove ); 
             }
