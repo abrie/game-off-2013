@@ -1,6 +1,6 @@
 "use strict";
 
-define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(picker,scratchcanvas,ardetector,arview,pitobject) {
+define(['picker','scratchcanvas','ardetector','arview' ], function(picker,scratchcanvas,ardetector,arview ) {
 
     function ImageSource( dimensions ) {
         var canvas = scratchcanvas.create( dimensions );
