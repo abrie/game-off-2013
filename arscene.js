@@ -1,10 +1,24 @@
 "use strict";
 
 define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(picker,scratchcanvas,ardetector,arview,pitobject) {
-    function Scene( element, video ) {
-        var detectorCanvas = scratchcanvas.create( video.getDimensions() );
-        var detector = ardetector.create( detectorCanvas );
-        var view = arview.create( video.getDimensions(), detectorCanvas );
+    function ImageSource( video ) {
+        var canvas = scratchcanvas.create( video.getDimensions() );
+
+        function update() {
+            video.seek(1);
+            canvas.update( video );
+        }
+
+        return {
+            scratchcanvas:canvas,
+            update:update,
+            getDimensions:video.getDimensions
+        };
+    }
+
+    function Scene( element, imageSource ) {
+        var detector = ardetector.create( imageSource.scratchcanvas );
+        var view = arview.create( imageSource.getDimensions(), imageSource.scratchcanvas );
         view.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
         element.appendChild( view.glCanvas );
 
@@ -17,8 +31,7 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
         };
 
         function update() {
-            video.seek(1);
-            detectorCanvas.update( video );
+            imageSource.update()
             detector.detect( 
                 onMarkerCreated, 
                 onMarkerUpdated, 
@@ -116,5 +129,6 @@ define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(pi
 
     return {
         Scene:Scene,
+        ImageSource:ImageSource,
     };
 });
