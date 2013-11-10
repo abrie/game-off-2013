@@ -1,24 +1,31 @@
 "use strict";
 
 define(['picker','scratchcanvas','ardetector','arview','pitobject'], function(picker,scratchcanvas,ardetector,arview,pitobject) {
-    function ImageSource( video ) {
-        var canvas = scratchcanvas.create( video.getDimensions() );
+
+    function ImageSource( dimensions ) {
+        var canvas = scratchcanvas.create( dimensions );
+        var video;
 
         function update() {
             video.seek(1);
             canvas.update( video );
         }
 
+        function setVideo( v ) {
+            video = v;
+        }
+
         return {
+            setVideo:setVideo,
             scratchcanvas:canvas,
             update:update,
-            getDimensions:video.getDimensions
+            dimensions:dimensions
         };
     }
 
     function Scene( element, imageSource ) {
         var detector = ardetector.create( imageSource.scratchcanvas );
-        var view = arview.create( imageSource.getDimensions(), imageSource.scratchcanvas );
+        var view = arview.create( imageSource.dimensions, imageSource.scratchcanvas );
         view.setCameraMatrix( detector.getCameraMatrix( 5, 10000 ) );
         element.appendChild( view.glCanvas );
 
