@@ -211,6 +211,7 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
 
         var pieces = generatePieces();
         var logic = new puzzlelogic.PuzzleLogic( pieces );
+        logic.scramble(2);
         var container = new Container();
 
         pieces.forEach( function(piece) {

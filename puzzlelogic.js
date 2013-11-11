@@ -30,6 +30,15 @@ define([],function() {
             return result;
         }
 
+        function scramble( depth ) {
+            for(var index = 0; index < depth; index++) {
+                var adjacents = getAdjacentIndicies( hole() );
+                var adjacent = adjacents[Math.floor( Math.random()*adjacents.length )];
+                console.log(adjacent);
+                swapIndicies( adjacent, hole() );
+            }
+        }
+
         function swapIndicies( i, j ) {
             var sw = arr[i];
             arr[i] = arr[j];
@@ -80,6 +89,7 @@ define([],function() {
             doAction:doAction,
             isSolved:isSolved,
             setOnSwap:setOnSwap,
+            scramble:scramble,
         };
     }
 
