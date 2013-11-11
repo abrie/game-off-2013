@@ -31,10 +31,15 @@ define([],function() {
         }
 
         function scramble( depth ) {
+            var previousHole = hole();
             for(var index = 0; index < depth; index++) {
                 var adjacents = getAdjacentIndicies( hole() );
-                var adjacent = adjacents[Math.floor( Math.random()*adjacents.length )];
-                console.log(adjacent);
+                var adjacent;
+                do {
+                    adjacent = adjacents[Math.floor( Math.random()*adjacents.length )];
+                } while( adjacent === previousHole );
+
+                previousHole = hole();
                 swapIndicies( adjacent, hole() );
             }
         }
