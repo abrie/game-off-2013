@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="index.css"/>
     <script>GLOBAL={}; //DEVELOPMENT</script>
-</head>
-<body>
-    <div id="logo"><img src="assets/logo.png" alt="logo"></div>
-    <div id="status">loading code modules</div>
     <script>
         // https://github.com/yeoman/yeoman/issues/1051#issuecomment-24849876
         window.require = { waitSeconds: 120 };
     </script>
     <script data-main="main" src="require.min.js"></script>
+</head>
+<body>
+    <div id="logo"><img src="assets/logo.png" alt="logo"></div>
+    <div id="status">loading code modules</div>
+    <div id="scene"></div>
 </body>
 </html>

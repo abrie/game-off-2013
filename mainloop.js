@@ -20,7 +20,12 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
     var sourceIndex = 0;
 
     function start() {
-        scene = new arscene.Scene( document.body, source );
+        scene = new arscene.Scene( document.getElementById("scene"), source );
+
+        ui.addFilterPreviousListener( previousFilter );
+        ui.addFilterNextListener( nextFilter );
+        ui.addSourcePreviousListener( previousSource );
+        ui.addSourceNextListener( nextSource );
 
         filters.push( new filtermode.FilterA() );
         filters.push( new filtermode.FilterB() );
@@ -65,10 +70,6 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
         source.setVideo( sources[sourceIndex] ); 
     }
 
-    ui.addFilterPreviousListener( previousFilter );
-    ui.addFilterNextListener( nextFilter );
-    ui.addSourcePreviousListener( previousSource );
-    ui.addSourceNextListener( nextSource );
 
     return {
         start: start,
