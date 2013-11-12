@@ -17,45 +17,6 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
 
         return mesh;
     }
-
-    function Hammer( params ) {
-        var points = [];
-        var shape;
-
-        if( params.type === "corner" ) {
-            points.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
-            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            points.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
-            shape = new THREE.Shape( points );
-        }
-        else if( params.type === "edge" ) {
-            points.push( new THREE.Vector2 ( 0, -params.height/2) );
-            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            points.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
-            shape = new THREE.Shape( points );
-        }
-
-        var extrusionSettings = {
-            amount: -params.depth/2,
-            curveSegments: 3,
-            bevelThickness: 4, bevelSize: 2, bevelEnabled: false,
-            material: 0, extrudeMaterial: 1
-        };
-
-        var geometry = new THREE.ExtrudeGeometry( shape, extrusionSettings );
-
-        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00, side:THREE.DoubleSide } );
-        var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800, side:THREE.DoubleSide } );
-        var materialArray = [ materialFront, materialSide ];
-        var material = new THREE.MeshFaceMaterial(materialArray);
-
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.set(0,0,0);
-        mesh.rotation.z = params.rotation;
-
-        return mesh;
-    }
-
     function Puzzle() {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
@@ -73,7 +34,49 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePiece( color, hammerParams ) {
+        function CityBlock( params ) {
+            var block = new THREE.Object3D();
+            var w = params.width/2;
+            var h = params.height/2;
+            var cx = w/2;
+            var cy = h/2;
+            for( var x = 0; x < 2; x++ ) {
+                for( var y = 0; y < 2; y++ ) {
+                    var depth = Math.floor( Math.random()*3+1 ) * 25;
+                    var g = new THREE.CubeGeometry( w-1, h-1, depth );
+                    var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
+                    var mesh = new THREE.Mesh( g, m );
+                    mesh.position.x = w*x-cx;
+                    mesh.position.y = h*y-cy;
+                    mesh.position.z = -depth/2;
+                    block.add( mesh );
+                    if( Math.random()*100 > 50 ) {
+                        var g = new THREE.CylinderGeometry( 1, 5, 25 );
+                        var m = new THREE.MeshPhongMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
+                        g.applyMatrix( 
+                             new THREE.Matrix4()
+                                .makeTranslation( 10, 0, 0 ) );
+
+                        g.applyMatrix( 
+                             new THREE.Matrix4()
+                                .makeRotationFromQuaternion(
+                                    new THREE.Quaternion()
+                                        .setFromAxisAngle( 
+                                            new THREE.Vector3( 1, 0, 0), 
+                                            -Math.PI/2 )));
+                        var mesh = new THREE.Mesh(g,m);
+                        mesh.position.x = w*x-w-cx;
+                        mesh.position.y = h*y-h-cy;
+                        mesh.position.z = -depth-25/2;
+                        block.add( mesh );
+                    }
+                }
+            }
+
+            return block;
+        }
+
+        function PuzzlePiece( color ) {
             var index = undefined;
             var solvedIndex = undefined;
 
@@ -86,20 +89,11 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
             var tile = new Tile( tileParams );
             tile.isPickable = true;
 
-            var params = {
-                color: colors.palette[1],
-                width: tileParams.width-0.1,
-                height:tileParams.height-0.1,
-                depth: tileParams.depth-0.1,
-                type: hammerParams.type,
-                rotation: hammerParams.rotation,
-            };
-            var hammer = new Hammer( params );
-            hammer.position.z = 0;
+            var cityBlock = new CityBlock( tileParams );
 
             var model = new THREE.Object3D();
             model.add( tile );
-            model.add( hammer );
+            model.add( cityBlock );
 
             function setIndex(i) {
                 index = i;
@@ -138,34 +132,9 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
                 return solvedIndex === index;
             }
 
-            var hammerTween = undefined;
-            function raiseHammer() {
-                if( hammerTween ) { hammerTween.stop(); }
-                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:-8 }, 500 )
-                    .easing( TWEEN.Easing.Exponential.In )
-                    .onUpdate( function () {
-                            hammer.position.z = this.z;
-                            } )
-                .start();
-            }
-
-            function lowerHammer() {
-                if( hammerTween ) { hammerTween.stop(); }
-                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:-0.1 }, 500 )
-                    .easing( TWEEN.Easing.Exponential.Out )
-                    .onUpdate( function () {
-                            hammer.position.z = this.z;
-                            } )
-                .start();
-            }
-
             return {
                 setSolvedIndex:setSolvedIndex,
                 getSolvedIndex:getSolvedIndex,
-                raiseHammer:raiseHammer,
-                lowerHammer:lowerHammer,
                 isSolved:isSolved,
                 setIndex:setIndex,
                 getIndex:getIndex,
@@ -173,18 +142,6 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
             };
         }
         
-        var types = [
-            {type:"corner", rotation:Math.PI},
-            {type:"edge", rotation:Math.PI},
-            {type:"corner", rotation:-Math.PI/2},
-            {type:"edge", rotation:Math.PI/2},
-            {type:"hole", rotation:0},
-            {type:"edge", rotation:-Math.PI/2},
-            {type:"corner", rotation:Math.PI/2},
-            {type:"edge", rotation:0},
-            {type:"corner", rotation:0}
-        ];
-
         function generatePieces() {
             var result = [];
             for( var index = 0; index < puzzleDim*puzzleDim; index++ ) {
@@ -193,7 +150,7 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
                 }
                 else {
                     var color = colors.palette[3];
-                    var newPiece = new PuzzlePiece( color, types[index] );
+                    var newPiece = new PuzzlePiece( color );
                     newPiece.setSolvedIndex( index );
                     newPiece.setIndex( index );
                     result.push( newPiece );
@@ -211,7 +168,7 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
 
         var pieces = generatePieces();
         var logic = new puzzlelogic.PuzzleLogic( pieces );
-        logic.scramble(3);
+        //logic.scramble(3);
         var container = new Container();
 
         pieces.forEach( function(piece) {
@@ -226,18 +183,6 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
 
         function checkSolved() {
             if( logic.isSolved() ) {
-                pieces.forEach( function(piece) {
-                    if( piece ) {
-                        piece.raiseHammer();
-                    }
-                });
-            }
-            else {
-                pieces.forEach( function(piece) {
-                    if( piece ) {
-                        piece.lowerHammer();
-                    }
-                });
             }
         }
 

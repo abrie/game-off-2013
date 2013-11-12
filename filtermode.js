@@ -1,5 +1,5 @@
 "use strict";
-define(['arscene', 'puzzle', 'strawman', 'pitobject'], function(arscene, puzzle, strawman, pitobject ) {
+define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city ) {
     function FilterA() {
         var view = new arscene.View();
 
@@ -19,7 +19,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject'], function(arscene, puzzle,
         var view = new arscene.View();
 
         var pitObject = new pitobject.PitObject({color:0x00FF00});
-        var puzzleObject = new puzzle.Puzzle();
+        var puzzleObject = new city.Puzzle();
         var strawmanObject = new strawman.Strawman();
 
         view.objects.add( 4, pitObject );
