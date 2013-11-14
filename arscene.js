@@ -4,6 +4,7 @@ define(['picker','ardetector','arview' ], function(picker,ardetector,arview ) {
 
     function View() {
         return {
+            pickables: new arview.Pickables(),
             objects: new arview.Objects(),
             scene: new arview.Scene(),
         };
@@ -20,6 +21,7 @@ define(['picker','ardetector','arview' ], function(picker,ardetector,arview ) {
         var view;
         function setView( newView ) {
             view = newView;
+            objectPicker.setList( view.pickables.registered );
             renderer.setScene( view.scene );
             detector.reset();
         }
@@ -38,12 +40,12 @@ define(['picker','ardetector','arview' ], function(picker,ardetector,arview ) {
         }
 
         function add( object ) {
-            objectPicker.register( object.pickables );
+            view.pickables.register( object.pickables );
             view.scene.add( object );
         }
 
         function remove( object ) {
-            objectPicker.unregister( object.pickables );
+            view.pickables.unregister( object.pickables );
             view.scene.remove( object );
         }
 

@@ -29,24 +29,12 @@ define(["three.min"],function() {
         }
 
         var registered = [];
-        function register( list ) {
-            list.forEach( function(mesh) {
-                registered.push( mesh );
-            });
-        }    
-
-        function unregister( list ) {
-            list.forEach( function(mesh) { 
-                var index = registered.indexOf( mesh );
-                if( index >= 0) {
-                    registered.splice(index,1);
-                }
-            });
+        function setList( list ) {
+            registered = list;
         }
 
         return {
-            register:register,
-            unregister:unregister,
+            setList:setList,
         };
     }
 

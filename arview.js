@@ -2,6 +2,30 @@
 
 define(["three.min"], function() {
 
+    function Pickables() {
+        var registered = [];
+        function register( list ) {
+            list.forEach( function(mesh) {
+                registered.push( mesh );
+            });
+        }    
+
+        function unregister( list ) {
+            list.forEach( function(mesh) { 
+                var index = registered.indexOf( mesh );
+                if( index >= 0) {
+                    registered.splice(index,1);
+                }
+            });
+        }
+
+        return {
+            registered:registered,
+            register:register,
+            unregister:unregister
+        };
+    }
+
     function Objects() {
         // Create marker objects associated with the desired marker ID.
         var markerObjects = {};
@@ -179,6 +203,7 @@ define(["three.min"], function() {
         Renderer: Renderer,
         Scene: Scene,
         Objects: Objects,
+        Pickables: Pickables,
     };
 
 });
