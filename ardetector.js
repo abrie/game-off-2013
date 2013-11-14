@@ -64,6 +64,9 @@ define(['JSARToolKit.min'],function() {
 
         var markers = {};
         var detect = function( onCreate, onUpdate, onDestroy ) {
+            if( !sourceCanvas.getElement().changed ) {
+                return;
+            }
             var markerCount = JSARDetector.detectMarkerLite(JSARRaster, 70); 
             var marker;
             for( var index = 0; index < markerCount; index++ ) {
