@@ -103,8 +103,8 @@ define(['settings','spitball'], function(settings, spitball) {
         strawTip.position.z = settings.launcherLength;
         launcherModel.add( strawTip );
 
-        strawModel.position.z = settings.strawLength+settings.launcherLength;
-        launcherModel.position.z = settings.launcherLength;
+        strawModel.position.z = settings.strawLength+settings.launcherLength-20;
+        launcherModel.position.z = settings.launcherLength-20;
 
         var uprightQuaternion = new THREE.Quaternion()
             .setFromEuler( launcherModel.rotation );

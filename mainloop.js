@@ -13,7 +13,6 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
         scene.render();
     }
 
-    var filters = [];
     var filterIndex = 0;
 
     var sources = [];
@@ -38,13 +37,13 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
 
     function previousFilter() {
         if(--filterIndex<0) {
-            filterIndex = filters.length-1;
+            filterIndex = filtermode.filters.length-1;
         }
-       scene.setView( filtermode.filters[filterIndex].view ); 
+        scene.setView( filtermode.filters[filterIndex].view ); 
     }
 
     function nextFilter() {
-        if(++filterIndex>=filters.length) {
+        if(++filterIndex>=filtermode.filters.length) {
             filterIndex = 0;
         }
 
