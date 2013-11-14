@@ -2,7 +2,7 @@
 define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city ) {
 
     var strawmanObject = new strawman.Strawman();
-    var filters = [ new FilterA(), new FilterB() ];
+    var filters = [ new Filter(), new Filter() ];
 
     function pieceMoved() {
         removeStrawman();
@@ -11,30 +11,28 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         addStrawman( randomFilter, randomIndex );
     }
 
-    filters[0].puzzles.forEach( function(object) {
-        object.object.setOnSwap( pieceMoved );
-    });
-
     var currentIdIndex = undefined;
     var currentFilterIndex = undefined;
 
     function addStrawman( filterIndex, idIndex ) {
-        var p = filters[filterIndex].get(idIndex);
-        filters[filterIndex].view.objects.add( p.id, strawmanObject );
-        strawmanObject.move( p.object.getHolePosition() );
+        console.log("add:",filterIndex,idIndex);
+        var filter = filters[filterIndex];
+        var thing = filter.get(idIndex);
+        filter.view.objects.add( thing.id, strawmanObject );
+        strawmanObject.move( thing.object.getHolePosition() );
         currentFilterIndex = filterIndex;
         currentIdIndex = idIndex;
-        console.log( filterIndex, idIndex );
     }
 
     function removeStrawman() {
-        var p = filters[currentFilterIndex].get(currentIdIndex);
-        filters[currentFilterIndex].view.objects.remove( p.id, strawmanObject );
+        var filter = filters[currentFilterIndex];
+        var thing = filter.get(currentIdIndex);
+        filter.view.objects.remove( thing.id, strawmanObject );
     }
 
-    addStrawman(1,0);
+    addStrawman(0,0);
 
-    function FilterA() {
+    function Filter() {
         var view = new arscene.View();
         var puzzles = [{id:4, object: new puzzle.Puzzle()}, {id:32, object: new puzzle.Puzzle()}];
 
@@ -46,31 +44,15 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         function get( index ) {
             return puzzles[index];
         }
+
+        puzzles.forEach( function(o) {
+            o.object.setOnSwap( pieceMoved );
+        });
 
         return {
             view:view,
             puzzles:puzzles,
             get:get
-        };
-    }
-
-    function FilterB() {
-        var view = new arscene.View();
-        var puzzles = [{id:4, object: new puzzle.Puzzle()}, {id:32, object: new puzzle.Puzzle()}];
-
-        puzzles.forEach( function(p) {
-            view.objects.add( p.id, new pitobject.PitObject({color:0x000000}) );
-            view.objects.add( p.id, p.object );
-        });
-
-        function get( index ) {
-            return puzzles[index];
-        }
-
-        return {
-            view:view,
-            puzzles:puzzles,
-            get:get,
         };
     }
 
