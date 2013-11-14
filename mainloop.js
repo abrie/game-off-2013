@@ -27,13 +27,10 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
         ui.addSourcePreviousListener( previousSource );
         ui.addSourceNextListener( nextSource );
 
-        filters.push( new filtermode.FilterA() );
-        filters.push( new filtermode.FilterB() );
-
         sources.push( assets.get("clip1") );
         sources.push( assets.get("clip2") );
 
-        scene.setView( filters[filterIndex] );
+        scene.setView( filtermode.filters[filterIndex].view );
         source.setVideo( sources[sourceIndex] );
 
         requestAnimationFrame( animate );
@@ -43,7 +40,7 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
         if(--filterIndex<0) {
             filterIndex = filters.length-1;
         }
-       scene.setView( filters[filterIndex] ); 
+       scene.setView( filtermode.filters[filterIndex].view ); 
     }
 
     function nextFilter() {
@@ -51,7 +48,7 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
             filterIndex = 0;
         }
 
-        scene.setView( filters[filterIndex] ); 
+        scene.setView( filtermode.filters[filterIndex].view ); 
     }
 
     function previousSource() {
@@ -69,7 +66,6 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
 
         source.setVideo( sources[sourceIndex] ); 
     }
-
 
     return {
         start: start,

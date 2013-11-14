@@ -103,6 +103,9 @@ define(['settings','spitball'], function(settings, spitball) {
         strawTip.position.z = settings.launcherLength;
         launcherModel.add( strawTip );
 
+        strawModel.position.z = settings.strawLength+settings.launcherLength;
+        launcherModel.position.z = settings.launcherLength;
+
         var uprightQuaternion = new THREE.Quaternion()
             .setFromEuler( launcherModel.rotation );
 
@@ -188,15 +191,10 @@ define(['settings','spitball'], function(settings, spitball) {
         }
 
         function move( position ) {
-            var t = withdraw();
-            t.onComplete( function() {
-                strawModel.position.x = position.x;
-                strawModel.position.y = position.y;
-                launcherModel.position.x = position.x;
-                launcherModel.position.y = position.y;
-                insert().chain( spin() ).start();
-             });
-             t.start();
+            strawModel.position.x = position.x;
+            strawModel.position.y = position.y;
+            launcherModel.position.x = position.x;
+            launcherModel.position.y = position.y;
         }
 
         function getStrawTip() {
@@ -211,6 +209,8 @@ define(['settings','spitball'], function(settings, spitball) {
             setTarget: setTarget,
             fire: fire,
             move:move,
+            insert:insert,
+            withdraw: withdraw,
         };
     }
 
