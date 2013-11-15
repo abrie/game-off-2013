@@ -15,7 +15,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
     filters.forEach( function(filter) {
         filter.onSwap = function(o) {
-            pieceMoved();
+            moveStrawman();
         };
     });
 
@@ -23,7 +23,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         return Math.floor( Math.random()*max );
     }
 
-    function pieceMoved() {
+    function moveStrawman() {
         removeStrawman();
         var filter = filters[random(2)];
         addStrawman( filter, filter.getRandomPuzzle() );
@@ -31,7 +31,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
     function addStrawman( filter, thing ) {
         filter.add( thing.id, sm.object );
-        sm.object.move( thing.object.getHolePosition() );
+        sm.object.setPosition( thing.object.getHolePosition() );
         sm.thing = thing;
         sm.filter = filter;
     }

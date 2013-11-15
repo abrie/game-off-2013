@@ -190,7 +190,7 @@ define(['settings','spitball'], function(settings, spitball) {
                 });
         }
 
-        function move( position ) {
+        function setPosition( position ) {
             strawModel.position.x = position.x;
             strawModel.position.y = position.y;
             launcherModel.position.x = position.x;
@@ -208,7 +208,7 @@ define(['settings','spitball'], function(settings, spitball) {
             pickables: [],
             setTarget: setTarget,
             fire: fire,
-            move:move,
+            setPosition:setPosition,
             insert:insert,
             withdraw: withdraw,
         };
