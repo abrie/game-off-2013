@@ -1,8 +1,11 @@
 "use strict";
-define(['filtermode','strawman'], function( filtermode, strawman ) {
+define(['filtermode','strawman','assets'], function( filtermode, strawman, assets ) {
     function Level() {
         var filterIndex = 0;
         var filters = [ new filtermode.Filter(), new filtermode.Filter() ];
+
+        var sourceIndex = 0;
+        var sources = [ assets.get("clip1"), assets.get("clip2") ];
 
         function random(max) {
             return Math.floor( Math.random()*max );
@@ -80,10 +83,33 @@ define(['filtermode','strawman'], function( filtermode, strawman ) {
             return filters[filterIndex];
         }
 
+        function previousSource() {
+            if(--sourceIndex<0) {
+                sourceIndex = sources.length-1;
+            }
+
+            return sources[sourceIndex]; 
+        }
+
+        function nextSource() {
+            if(++sourceIndex>=sources.length) {
+                sourceIndex = 0;
+            }
+
+            return sources[sourceIndex]; 
+        }
+
+        function currentSource() {
+            return sources[sourceIndex];
+        }
+
         return {
             currentFilter:currentFilter,
             previousFilter:previousFilter,
-            nextFilter:nextFilter
+            nextFilter:nextFilter,
+            currentSource:currentSource,
+            nextSource:nextSource,
+            previousSource:previousSource,
         };
     }
 

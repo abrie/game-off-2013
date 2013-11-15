@@ -2,7 +2,7 @@
 
 define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], function( assets, arscene, ui, imagesource, level ) {
 
-    var source = new imagesource.VideoSource( {width:480, height:360} );
+    var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene;
     var currentLevel;
 
@@ -14,9 +14,6 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.m
         scene.render();
     }
 
-    var sources = [];
-    var sourceIndex = 0;
-
     function start() {
         currentLevel = new level.Level();
         scene = new arscene.Scene( document.getElementById("scene"), source );
@@ -26,11 +23,9 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.m
         ui.addSourcePreviousListener( previousSource );
         ui.addSourceNextListener( nextSource );
 
-        sources.push( assets.get("clip1") );
-        sources.push( assets.get("clip2") );
 
         scene.setView( currentLevel.currentFilter().view );
-        source.setVideo( sources[sourceIndex] );
+        source.setVideo( currentLevel.currentSource() );
 
         requestAnimationFrame( animate );
     }
@@ -44,19 +39,11 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.m
     }
 
     function previousSource() {
-        if(--sourceIndex<0) {
-            sourceIndex = sources.length-1;
-        }
-
-        source.setVideo( sources[sourceIndex] ); 
+        source.setVideo( currentLevel.previousSource() ); 
     }
 
     function nextSource() {
-        if(++sourceIndex>=sources.length) {
-            sourceIndex = 0;
-        }
-
-        source.setVideo( sources[sourceIndex] ); 
+        source.setVideo( currentLevel.nextSource() );
     }
 
     return {
