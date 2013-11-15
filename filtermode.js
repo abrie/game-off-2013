@@ -36,11 +36,11 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
 
         var result = {
             getRandomPuzzle:getRandomPuzzle,
-            add:add,
-            view:view,
+            puzzles:puzzles,
             onSwap:undefined,
             remove:remove,
-            puzzles:puzzles,
+            view:view,
+            add:add,
         };
 
         return result;
@@ -50,4 +50,3 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         Filter:Filter,
     };
 });
-

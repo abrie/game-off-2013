@@ -1,5 +1,6 @@
 "use strict";
 define(['filtermode','strawman'], function( filtermode, strawman ) {
+    var filterIndex = 0;
     var filters = [ new filtermode.Filter(), new filtermode.Filter() ];
 
     function random(max) {
@@ -58,7 +59,29 @@ define(['filtermode','strawman'], function( filtermode, strawman ) {
     addStrawman( filters[1], filters[1].getRandomPuzzle() );
     moveStrawman();
 
+    function previousFilter() {
+        if( --filterIndex < 0 ) {
+            filterIndex = filters.length-1;
+        }
+
+        return filters[filterIndex];
+    }
+
+    function nextFilter() {
+        if( ++filterIndex >= filters.length ) {
+            filterIndex = 0;
+        }
+
+        return filters[filterIndex];
+    }
+
+    function currentFilter() {
+        return filters[filterIndex];
+    }
+
     return {
-        filters:filters,
+        currentFilter:currentFilter,
+        previousFilter:previousFilter,
+        nextFilter:nextFilter
     };
 });

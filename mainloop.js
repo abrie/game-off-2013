@@ -29,25 +29,18 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.m
         sources.push( assets.get("clip1") );
         sources.push( assets.get("clip2") );
 
-        scene.setView( level.filters[filterIndex].view );
+        scene.setView( level.currentFilter().view );
         source.setVideo( sources[sourceIndex] );
 
         requestAnimationFrame( animate );
     }
 
     function previousFilter() {
-        if( --filterIndex < 0 ) {
-            filterIndex = level.filters.length-1;
-        }
-        scene.setView( level.filters[filterIndex].view ); 
+        scene.setView( level.previousFilter().view ); 
     }
 
     function nextFilter() {
-        if( ++filterIndex >= level.filters.length ) {
-            filterIndex = 0;
-        }
-
-        scene.setView( level.filters[filterIndex].view ); 
+        scene.setView( level.nextFilter().view ); 
     }
 
     function previousSource() {
