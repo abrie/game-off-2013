@@ -8,22 +8,17 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
             object:new strawman.Strawman(),
             thing:undefined,
             filter:undefined,
+            isSame: function( f, t ) {
+                return f === this.filter && t === this.thing;
+            }
         };
     }
 
     var sm = new SM();
 
-    function isSamePuzzle( f, o, sm ) {
-        if( f === sm.filter ) {
-            if( o === sm.thing )
-                return true;
-        }
-        return false;
-    }
-
     filters.forEach( function(filter) {
         filter.onSwap = function(f, o) {
-            if( isSamePuzzle(f, o, sm) ) {
+            if( sm.isSame( f, o ) ) {
                 moveStrawman();
             }
             else {
