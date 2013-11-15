@@ -13,11 +13,21 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
     var sm = new SM();
 
+    function isSamePuzzle( f, o, sm ) {
+        if( f === sm.filter ) {
+            if( o === sm.thing )
+                return true;
+        }
+        return false;
+    }
+
     filters.forEach( function(filter) {
         filter.onSwap = function(f, o) {
-            if( f === sm.filter ) {
-                if( o === sm.thing )
-                    moveStrawman();
+            if( isSamePuzzle(f, o, sm) ) {
+                moveStrawman();
+            }
+            else {
+                sm.object.spin().start();
             }
         };
     });
@@ -27,9 +37,11 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     }
 
     function moveStrawman() {
-        removeStrawman();
-        var filter = filters[random(2)];
-        addStrawman( filter, filter.getRandomPuzzle() );
+        sm.object.withdraw().onComplete( function() {
+            removeStrawman();
+            var filter = filters[random(2)];
+            addStrawman( filter, filter.getRandomPuzzle() );
+        }).chain( sm.object.insert().chain( sm.object.spin() ) ).start(); 
     }
 
     function addStrawman( filter, thing ) {

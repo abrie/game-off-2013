@@ -208,6 +208,7 @@ define(['settings','spitball'], function(settings, spitball) {
             pickables: [],
             setTarget: setTarget,
             fire: fire,
+            spin: spin,
             setPosition:setPosition,
             insert:insert,
             withdraw: withdraw,
