@@ -17,8 +17,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     function addStrawman( filterIndex, idIndex ) {
         var filter = filters[filterIndex];
         var thing = filter.get(idIndex);
-        filter.view.objects.add( thing.id, strawmanObject );
-        filter.view.scene.add( strawmanObject );
+        filter.add( thing.id, strawmanObject );
         strawmanObject.move( thing.object.getHolePosition() );
         currentFilterIndex = filterIndex;
         currentIdIndex = idIndex;
@@ -27,8 +26,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     function removeStrawman() {
         var filter = filters[currentFilterIndex];
         var thing = filter.get(currentIdIndex);
-        filter.view.objects.remove( thing.id, strawmanObject );
-        filter.view.scene.remove( strawmanObject );
+        filter.remove( thing.id, strawmanObject );
     }
 
     addStrawman(1,0);
@@ -46,14 +44,26 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
             return puzzles[index];
         }
 
+        function add( id, object ) {
+            view.objects.add( id, object );
+            view.scene.add( object );
+        }
+
+        function remove( id, object ) {
+            view.objects.remove( id, object );
+            view.scene.remove( object );
+        }
+
         puzzles.forEach( function(o) {
             o.object.setOnSwap( pieceMoved );
         });
 
         return {
+            get:get,
+            add:add,
             view:view,
+            remove:remove,
             puzzles:puzzles,
-            get:get
         };
     }
 
