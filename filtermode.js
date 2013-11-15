@@ -1,63 +1,9 @@
 "use strict";
-define(['arscene', 'puzzle', 'strawman', 'pitobject' ], function( arscene, puzzle, strawman, pitobject ) {
-
-    var filters = [ new Filter(), new Filter() ];
-
-    function SM() {
-        return {
-            object:new strawman.Strawman(),
-            thing:undefined,
-            filter:undefined,
-            shouldDisplace: function( f, t ) {
-                return f === this.filter && t === this.thing;
-            }
-        };
-    }
-
-    var sm = new SM();
-
-    function onInteraction(f, o) {
-        if( sm.shouldDisplace( f, o ) ) {
-            moveStrawman();
-        }
-        else {
-            spinStrawman();
-        }
-    }
-
-    filters.forEach( function(filter) {
-        filter.onSwap = onInteraction; 
-    });
+define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject ) {
 
     function random(max) {
         return Math.floor( Math.random()*max );
     }
-
-    function spinStrawman() {
-        sm.object.spin().start();
-    }
-
-    function moveStrawman() {
-        sm.object.withdraw().onComplete( function() {
-            removeStrawman();
-            var filter = filters[random(2)];
-            addStrawman( filter, filter.getRandomPuzzle() );
-        }).chain( sm.object.insert().chain( sm.object.spin() ) ).start(); 
-    }
-
-    function addStrawman( filter, thing ) {
-        filter.add( thing.id, sm.object );
-        sm.object.setPosition( thing.object.getHolePosition() );
-        sm.thing = thing;
-        sm.filter = filter;
-    }
-
-    function removeStrawman() {
-        sm.filter.remove( sm.thing.id, sm.object );
-    }
-
-    addStrawman( filters[1], filters[1].getRandomPuzzle() );
-    moveStrawman();
 
     function Filter() {
         var view = new arscene.View();
@@ -101,7 +47,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject' ], function( arscene, puzzl
     }
 
     return {
-        filters:filters,
+        Filter:Filter,
     };
 });
 

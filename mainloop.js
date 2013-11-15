@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'three.min'], function( assets, arscene, ui, imagesource, filtermode ) {
+define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], function( assets, arscene, ui, imagesource, level ) {
 
     var source = new imagesource.VideoSource( {width:480, height:360} );
     var scene;
@@ -29,25 +29,25 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'filtermode', 'tween.min', 'th
         sources.push( assets.get("clip1") );
         sources.push( assets.get("clip2") );
 
-        scene.setView( filtermode.filters[filterIndex].view );
+        scene.setView( level.filters[filterIndex].view );
         source.setVideo( sources[sourceIndex] );
 
         requestAnimationFrame( animate );
     }
 
     function previousFilter() {
-        if(--filterIndex<0) {
-            filterIndex = filtermode.filters.length-1;
+        if( --filterIndex < 0 ) {
+            filterIndex = level.filters.length-1;
         }
-        scene.setView( filtermode.filters[filterIndex].view ); 
+        scene.setView( level.filters[filterIndex].view ); 
     }
 
     function nextFilter() {
-        if(++filterIndex>=filtermode.filters.length) {
+        if( ++filterIndex >= level.filters.length ) {
             filterIndex = 0;
         }
 
-        scene.setView( filtermode.filters[filterIndex].view ); 
+        scene.setView( level.filters[filterIndex].view ); 
     }
 
     function previousSource() {
