@@ -16,19 +16,25 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
     var sm = new SM();
 
+    function onInteraction(f, o) {
+        if( sm.isSame( f, o ) ) {
+            moveStrawman();
+        }
+        else {
+            spinStrawman();
+        }
+    }
+
     filters.forEach( function(filter) {
-        filter.onSwap = function(f, o) {
-            if( sm.isSame( f, o ) ) {
-                moveStrawman();
-            }
-            else {
-                sm.object.spin().start();
-            }
-        };
+        filter.onSwap = onInteraction; 
     });
 
     function random(max) {
         return Math.floor( Math.random()*max );
+    }
+
+    function spinStrawman() {
+        sm.object.spin().start();
     }
 
     function moveStrawman() {
