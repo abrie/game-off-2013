@@ -15,10 +15,10 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     var currentFilterIndex = undefined;
 
     function addStrawman( filterIndex, idIndex ) {
-        console.log("add:",filterIndex,idIndex);
         var filter = filters[filterIndex];
         var thing = filter.get(idIndex);
         filter.view.objects.add( thing.id, strawmanObject );
+        filter.view.scene.add( strawmanObject );
         strawmanObject.move( thing.object.getHolePosition() );
         currentFilterIndex = filterIndex;
         currentIdIndex = idIndex;
@@ -28,9 +28,10 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         var filter = filters[currentFilterIndex];
         var thing = filter.get(currentIdIndex);
         filter.view.objects.remove( thing.id, strawmanObject );
+        filter.view.scene.remove( strawmanObject );
     }
 
-    addStrawman(0,0);
+    addStrawman(1,0);
 
     function Filter() {
         var view = new arscene.View();

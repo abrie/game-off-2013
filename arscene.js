@@ -24,6 +24,7 @@ define(['picker','ardetector','arview' ], function(picker,ardetector,arview ) {
             objectPicker.setList( view.pickables.registered );
             renderer.setScene( view.scene );
             detector.reset();
+            update();
         }
 
         function update() {
