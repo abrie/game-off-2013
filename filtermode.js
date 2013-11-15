@@ -1,5 +1,5 @@
 "use strict";
-define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city) {
+define(['arscene', 'puzzle', 'strawman', 'pitobject' ], function( arscene, puzzle, strawman, pitobject ) {
 
     var filters = [ new Filter(), new Filter() ];
 
