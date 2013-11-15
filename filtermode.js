@@ -13,6 +13,12 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
     var sm = new SM();
 
+    filters.forEach( function(filter) {
+        filter.onSwap = function(o) {
+            pieceMoved();
+        };
+    });
+
     function pieceMoved() {
         removeStrawman();
         var randomFilter = Math.floor( Math.random()*2 ); 
@@ -61,16 +67,21 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         }
 
         puzzles.forEach( function(o) {
-            o.object.setOnSwap( pieceMoved );
+            o.object.setOnSwap( function() {
+                result.onSwap( o );
+            } );
         });
 
-        return {
+        var result = {
             get:get,
             add:add,
             view:view,
+            onSwap:undefined,
             remove:remove,
             puzzles:puzzles,
         };
+
+        return result;
     }
 
     return {
