@@ -57,6 +57,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     }
 
     addStrawman( filters[1], filters[1].getRandomPuzzle() );
+    moveStrawman();
 
     function Filter() {
         var view = new arscene.View();
