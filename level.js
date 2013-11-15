@@ -37,6 +37,13 @@ define(['filtermode','strawman','assets'], function( filtermode, strawman, asset
             filter.onSwap = onInteraction; 
         });
 
+        var updateCount = 0; 
+        var triggerFrequency = 30;
+        function update() {
+            if( updateCount++ % triggerFrequency === 0 )
+                sm.object.spin().start();
+        }
+
         function spinStrawman() {
             sm.object.spin().start();
         }
@@ -104,6 +111,7 @@ define(['filtermode','strawman','assets'], function( filtermode, strawman, asset
         }
 
         return {
+            update:update,
             currentFilter:currentFilter,
             previousFilter:previousFilter,
             nextFilter:nextFilter,

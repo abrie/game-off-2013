@@ -10,6 +10,7 @@ define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.m
         requestAnimationFrame( animate );
         TWEEN.update();
         source.update();
+        currentLevel.update();
         scene.update();
         scene.render();
     }
