@@ -1,8 +1,17 @@
 "use strict";
 define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city ) {
 
-    var strawmanObject = new strawman.Strawman();
     var filters = [ new Filter(), new Filter() ];
+
+    function SM() {
+        return {
+            object:new strawman.Strawman(),
+            idIndex:undefined,
+            filterIndex:undefined,
+        };
+    }
+
+    var sm = new SM();
 
     function pieceMoved() {
         removeStrawman();
@@ -11,22 +20,19 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         addStrawman( randomFilter, randomIndex );
     }
 
-    var currentIdIndex = undefined;
-    var currentFilterIndex = undefined;
-
     function addStrawman( filterIndex, idIndex ) {
         var filter = filters[filterIndex];
         var thing = filter.get(idIndex);
-        filter.add( thing.id, strawmanObject );
-        strawmanObject.move( thing.object.getHolePosition() );
-        currentFilterIndex = filterIndex;
-        currentIdIndex = idIndex;
+        filter.add( thing.id, sm.object );
+        sm.object.move( thing.object.getHolePosition() );
+        sm.idIndex = idIndex;
+        sm.filterIndex = filterIndex;
     }
 
     function removeStrawman() {
-        var filter = filters[currentFilterIndex];
-        var thing = filter.get(currentIdIndex);
-        filter.remove( thing.id, strawmanObject );
+        var filter = filters[ sm.filterIndex ];
+        var thing = filter.get( sm.idIndex );
+        filter.remove( thing.id, sm.object );
     }
 
     addStrawman(1,0);
