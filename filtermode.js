@@ -14,8 +14,11 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     var sm = new SM();
 
     filters.forEach( function(filter) {
-        filter.onSwap = function(o) {
-            moveStrawman();
+        filter.onSwap = function(f, o) {
+            if( f === sm.filter ) {
+                if( o === sm.thing )
+                    moveStrawman();
+            }
         };
     });
 
@@ -67,7 +70,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
 
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
-                result.onSwap( o );
+                result.onSwap( result, o );
             } );
         });
 
