@@ -8,7 +8,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
             object:new strawman.Strawman(),
             thing:undefined,
             filter:undefined,
-            isSame: function( f, t ) {
+            shouldDisplace: function( f, t ) {
                 return f === this.filter && t === this.thing;
             }
         };
@@ -17,7 +17,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
     var sm = new SM();
 
     function onInteraction(f, o) {
-        if( sm.isSame( f, o ) ) {
+        if( sm.shouldDisplace( f, o ) ) {
             moveStrawman();
         }
         else {
