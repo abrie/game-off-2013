@@ -1,13 +1,13 @@
 "use strict";
-define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city ) {
+define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene, puzzle, strawman, pitobject,city) {
 
     var filters = [ new Filter(), new Filter() ];
 
     function SM() {
         return {
             object:new strawman.Strawman(),
-            idIndex:undefined,
-            filterIndex:undefined,
+            thing:undefined,
+            filter:undefined,
         };
     }
 
@@ -19,29 +19,28 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         };
     });
 
-    function pieceMoved() {
-        removeStrawman();
-        var randomFilter = Math.floor( Math.random()*2 ); 
-        var randomIndex = Math.floor( Math.random()*2 );
-        addStrawman( randomFilter, randomIndex );
+    function random(max) {
+        return Math.floor( Math.random()*max );
     }
 
-    function addStrawman( filterIndex, idIndex ) {
-        var filter = filters[filterIndex];
-        var thing = filter.get(idIndex);
+    function pieceMoved() {
+        removeStrawman();
+        var filter = filters[random(2)];
+        addStrawman( filter, filter.getRandomPuzzle() );
+    }
+
+    function addStrawman( filter, thing ) {
         filter.add( thing.id, sm.object );
         sm.object.move( thing.object.getHolePosition() );
-        sm.idIndex = idIndex;
-        sm.filterIndex = filterIndex;
+        sm.thing = thing;
+        sm.filter = filter;
     }
 
     function removeStrawman() {
-        var filter = filters[ sm.filterIndex ];
-        var thing = filter.get( sm.idIndex );
-        filter.remove( thing.id, sm.object );
+        sm.filter.remove( sm.thing.id, sm.object );
     }
 
-    addStrawman(1,0);
+    addStrawman( filters[1], filters[1].getRandomPuzzle() );
 
     function Filter() {
         var view = new arscene.View();
@@ -51,10 +50,6 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
             view.objects.add( p.id, new pitobject.PitObject({color:0x000000}) );
             view.objects.add( p.id, p.object );
         });
-
-        function get( index ) {
-            return puzzles[index];
-        }
 
         function add( id, object ) {
             view.objects.add( id, object );
@@ -66,6 +61,10 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
             view.scene.remove( object );
         }
 
+        function getRandomPuzzle() {
+            return puzzles[random(puzzles.length)];
+        }
+
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
                 result.onSwap( o );
@@ -73,7 +72,7 @@ define(['arscene', 'puzzle', 'strawman', 'pitobject', 'city'], function(arscene,
         });
 
         var result = {
-            get:get,
+            getRandomPuzzle:getRandomPuzzle,
             add:add,
             view:view,
             onSwap:undefined,
