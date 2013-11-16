@@ -65,8 +65,8 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
                                             new THREE.Vector3( 1, 0, 0), 
                                             -Math.PI/2 )));
                         var mesh = new THREE.Mesh(g,m);
-                        mesh.position.x = w*x-w-cx;
-                        mesh.position.y = h*y-h-cy;
+                        mesh.position.x = w*x-cx;
+                        mesh.position.y = h*y-cy;
                         mesh.position.z = -depth-25/2;
                         block.add( mesh );
                     }

@@ -5,9 +5,9 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         return Math.floor( Math.random()*max );
     }
 
-    function Filter() {
+    function Filter( generator ) {
         var view = new arscene.View();
-        var puzzles = [{id:4, object: new puzzle.Puzzle()}, {id:32, object: new puzzle.Puzzle()}];
+        var puzzles = [{id:4, object: new generator()}, {id:32, object: new generator()}];
 
         puzzles.forEach( function(p) {
             view.objects.add( p.id, new pitobject.PitObject({color:0x000000}) );
