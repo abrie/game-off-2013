@@ -172,8 +172,8 @@ define(['settings','spitball'], function(settings, spitball) {
 
         function insert() {
             return new TWEEN.Tween( {z:strawModel.position.z, lz:launcherModel.position.z } )
-                .to( { z:0, lz:-settings.strawLength }, 150 )
-                .easing( TWEEN.Easing.Linear.None )
+                .to( { z:0, lz:-settings.strawLength }, 1500 )
+                .easing( TWEEN.Easing.Elastic.Out )
                 .onUpdate( function() {
                     strawModel.position.z = this.z;
                     launcherModel.position.z = this.lz;
