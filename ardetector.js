@@ -1,7 +1,6 @@
-/* global NyARRgbRaster_Canvas2D, FLARParam, FLARMultiIdMarkerDetector, NyARTransMatResult */
 "use strict";
 
-define(['JSARToolKit.min'],function() {
+define(['settings','JSARToolKit.min'],function(settings) {
     var create = function(sourceCanvas) {
         var JSARRaster = new NyARRgbRaster_Canvas2D(sourceCanvas.getElement());
         var JSARParameters = new FLARParam(sourceCanvas.getWidth(), sourceCanvas.getHeight());
@@ -67,7 +66,7 @@ define(['JSARToolKit.min'],function() {
             if( !sourceCanvas.getElement().changed ) {
                 return;
             }
-            var markerCount = JSARDetector.detectMarkerLite(JSARRaster, 70); 
+            var markerCount = JSARDetector.detectMarkerLite(JSARRaster, settings.arThreshold); 
             var marker;
             for( var index = 0; index < markerCount; index++ ) {
                 var id = getMarkerNumber(index);

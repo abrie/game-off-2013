@@ -1,6 +1,7 @@
 "use strict";
 define([], function() {
     return {
+        arThreshold: 190,
         arMarkerSize: 150,
         strawLength: 100,
         launcherLength: 100/3,
