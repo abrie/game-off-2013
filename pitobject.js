@@ -2,12 +2,12 @@
 
 define(["settings", "three.min"], function( settings ) {
 
-    var depth = settings.arMarkerSize*3;
     function LinerMesh(color) {
+        var linerDepth = settings.arMarkerSize;
         var geometry = new THREE.CubeGeometry( 
             settings.arMarkerSize,
             settings.arMarkerSize,
-            depth
+            linerDepth
         );
 
         var materials = [
@@ -22,16 +22,17 @@ define(["settings", "three.min"], function( settings ) {
         geometry.faces[ 11 ].materialIndex = 1;
 
         var mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
-        mesh.position.z = depth/2;
+        mesh.position.z = linerDepth/2;
 
         return mesh;
     }
 
     function OccluderMesh() {
+        var occluderDepth = settings.arMarkerSize*3;
         var geometry = new THREE.CubeGeometry( 
             settings.arMarkerSize + 0.1, 
             settings.arMarkerSize + 0.1, 
-            depth + 0.1 
+            occluderDepth 
         );
 
         var materials = [
@@ -46,7 +47,7 @@ define(["settings", "three.min"], function( settings ) {
         geometry.faces[ 11 ].materialIndex = 1;
 
         var mesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial( materials ) );
-        mesh.position.z = (depth+0.1)/2;
+        mesh.position.z = occluderDepth/2;
 
         return mesh;
     }
