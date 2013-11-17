@@ -10,7 +10,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         var puzzles = [{id:4, object: new generator()}, {id:32, object: new generator()}];
 
         puzzles.forEach( function(p) {
-            view.objects.add( p.id, new pitobject.PitObject({color:0x000000}) );
+            view.objects.add( p.id, new pitobject.PitObject( { color:0x000000 } ) );
             view.objects.add( p.id, p.object );
         });
 
