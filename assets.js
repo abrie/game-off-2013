@@ -47,14 +47,14 @@ define(['video'], function(video) {
         onAllLoaded = onComplete;
 
         add( "clip1", new video.Video({
-            src: "assets/clip1.webm",
+            src: "assets/clip1.m4v",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip2", new video.Video({
-            src: "assets/clip2.webm",
+            src: "assets/clip2.m4v",
             width: 480,
             height: 360,
             frameRate: 29.970628
