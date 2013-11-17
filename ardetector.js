@@ -52,12 +52,11 @@ define(['settings','JSARToolKit.min'],function(settings) {
             return result;
         };
 
-        var persistTime = 10;
         var newMarker = function(id, matrix) {
             return {
                 id: id,
                 matrix: matrix,
-                age: persistTime,
+                age: settings.arMarkerPersist,
             };
         };
 
@@ -78,7 +77,7 @@ define(['settings','JSARToolKit.min'],function(settings) {
                 }
                 else {
                     marker.matrix = getTransformMatrix(index);
-                    marker.age = persistTime;
+                    marker.age = settings.arMarkerPersist;
                     onUpdate( marker );
                 }
             }
