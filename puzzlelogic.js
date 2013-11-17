@@ -11,6 +11,12 @@ define([],function() {
             return arr.indexOf( false );
         }
 
+        function randomAdjacentToHole() {
+            var adjacents = getAdjacentIndicies( hole() );
+            var random = Math.floor( Math.random() * adjacents.length );
+            return adjacents[ random ];
+        }
+
         function getAdjacentIndicies( center ) {
             var result = [];
 
@@ -73,6 +79,7 @@ define([],function() {
 
         function doAction( center ) {
             if( isHoleAdjacent( center ) ) {
+                console.log("action:",center,hole());
                 swapIndicies( center, hole() );
             }
         }
@@ -91,6 +98,7 @@ define([],function() {
         return {
             get:get,
             hole:hole,
+            randomAdjacentToHole:randomAdjacentToHole,
             doAction:doAction,
             isSolved:isSolved,
             setOnSwap:setOnSwap,

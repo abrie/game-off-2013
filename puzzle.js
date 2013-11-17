@@ -249,6 +249,19 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
             return vector;
         }
 
+        function getAdjacentPosition() {
+            var index = logic.randomAdjacentToHole();
+            var x = puzzleCoordinate( index % puzzleDim ); 
+            var y = puzzleCoordinate( Math.floor( index / puzzleDim ) );
+            var vector = new THREE.Vector3( x, y, 0 );
+            return vector;
+        }
+
+        function bump() {
+            var index = logic.randomAdjacentToHole();
+            logic.doAction( index );
+        }
+
         checkSolved();
 
         function transform(m) {
@@ -262,6 +275,8 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
 
         return {
             getHolePosition: getHolePosition,
+            getAdjacentPosition: getAdjacentPosition,
+            bump: bump,
             model: container,
             transform: transform,
             pickables: pickables,

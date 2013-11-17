@@ -24,7 +24,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
             view.scene.remove( object );
         }
 
-        function getRandomPuzzle() {
+        function getRandomThing() {
             return puzzles[random(puzzles.length)];
         }
 
@@ -35,7 +35,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         });
 
         var result = {
-            getRandomPuzzle:getRandomPuzzle,
+            getRandomThing:getRandomThing,
             puzzles:puzzles,
             onSwap:undefined,
             remove:remove,

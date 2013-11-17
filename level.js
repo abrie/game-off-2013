@@ -16,6 +16,9 @@ define(['filtermode','strawman','assets','puzzle','city'], function( filtermode,
                 object:new strawman.Strawman(),
                 thing:undefined,
                 filter:undefined,
+                spinTween:undefined,
+                moveTween:undefined,
+                withdrawn:true,
                 shouldDisplace: function( f, t ) {
                     return f === this.filter && t === this.thing;
                 }
@@ -25,8 +28,8 @@ define(['filtermode','strawman','assets','puzzle','city'], function( filtermode,
         var sm = new SM();
 
         function onInteraction(f, o) {
-            if( sm.shouldDisplace( f, o ) ) {
-                moveStrawman();
+            if( sm.shouldDisplace( f, o )  ) {
+                withdrawStrawman();
             }
             else {
                 spinStrawman();
@@ -38,29 +41,58 @@ define(['filtermode','strawman','assets','puzzle','city'], function( filtermode,
         });
 
         var updateCount = 0; 
-        var triggerFrequency = 30;
+        var spinFrequency = 100;
+        var bumpFrequency = 30; 
         function update() {
-            if( updateCount++ % triggerFrequency === 0 )
-                sm.object.spin().start();
+            if( updateCount++ % bumpFrequency === 0 ) {
+                bumpStrawman();
+            }
+            else if( updateCount % spinFrequency === 0 ) {
+                spinStrawman();
+            }
         }
 
         function spinStrawman() {
-            sm.object.spin().start();
+            sm.spinTween = sm.object.spin();
+            sm.spinTween.start();
         }
 
-        function moveStrawman() {
-            sm.object.withdraw().onComplete( function() {
+        function withdrawStrawman() {
+            if( sm.spinTween ) {
+                sm.spinTween.stop();
+            }
+            sm.moveTween = sm.object.withdraw();
+            sm.moveTween.onComplete( function() {
                 removeStrawman();
-                var filter = filters[ random(2) ];
-                addStrawman( filter, filter.getRandomPuzzle() );
-                var insertTween = sm.object.insert().chain( sm.object.spin() );
-                insertTween.start();
-            }).start(); 
+                sm.withdrawn = true;
+            }); 
+            sm.moveTween.start();
         }
 
-        function addStrawman( filter, thing ) {
+        function bumpStrawman() {
+            if( !sm.withdrawn ) {
+                return;
+            }
+            if( sm.moveTween ) {
+                sm.moveTween.stop();
+            }
+            var filter, thing;
+            do {
+                filter = filters[ random(2) ];
+                thing = filter.getRandomThing();
+            } while( filter === sm.filter && thing === sm.thing );
+
+            thing.object.bump();
+            addStrawman( filter, thing, thing.object.getHolePosition() );
+            sm.moveTween = sm.object.insert();
+            sm.moveTween.onComplete = function() { sm.moveTween = false; };
+            sm.withdrawn = false;
+            sm.moveTween.start();
+        }
+
+        function addStrawman( filter, thing, position ) {
             filter.add( thing.id, sm.object );
-            sm.object.setPosition( thing.object.getHolePosition() );
+            sm.object.setPosition( position );
             sm.thing = thing;
             sm.filter = filter;
         }
@@ -68,9 +100,6 @@ define(['filtermode','strawman','assets','puzzle','city'], function( filtermode,
         function removeStrawman() {
             sm.filter.remove( sm.thing.id, sm.object );
         }
-
-        addStrawman( filters[1], filters[1].getRandomPuzzle() );
-        moveStrawman();
 
         function previousFilter() {
             if( --filterIndex < 0 ) {
