@@ -3,6 +3,9 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
     function Level() {
         var filterIndex = 0;
         var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
+        filters.forEach( function(filter) {
+            filter.onSwap = onInteraction; 
+        });
 
         var sourceIndex = 0;
         var sources = [ assets.get("clip1"), assets.get("clip2") ];
@@ -10,17 +13,13 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
         var sm = new strawman.Strawman();
 
         function onInteraction(f, o) {
-            if( sm.shouldDisplace( f, o )  ) {
+            if( sm.shouldDisplace( f, o ) ) {
                 withdrawStrawman();
             }
             else {
                 spinStrawman();
             }
         }
-
-        filters.forEach( function(filter) {
-            filter.onSwap = onInteraction; 
-        });
 
         var updateCount = 0; 
         function update() {
