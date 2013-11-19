@@ -48,3 +48,15 @@ progress.assetProgress {
     border: 1px solid black;
     border-radius: 5px;
 }
+
+#scene {
+    width: 480px;
+    height: 360px;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top:0; left:0; bottom:0; right:0;
+    background: #BBAE93;
+    border: 1px solid black;
+    border-radius: 5px;
+}

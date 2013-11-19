@@ -9,8 +9,9 @@ define(["three.min"],function() {
 
         function onDocumentMouseDown( event ) 
         {
-            var x = event.clientX - element.offsetLeft;
-            var y = event.clientY - element.offsetTop;
+            var x = event.clientX - element.offsetLeft - element.parentElement.offsetLeft;
+            var y = event.clientY - element.offsetTop - element.parentElement.offsetTop;
+            console.log(x,y);
             mouse.x = x / element.width * 2 - 1;
             mouse.y = -y / element.height * 2 + 1;
             detect();
