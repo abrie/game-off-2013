@@ -1,5 +1,5 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility'], function( filtermode, strawman, assets, puzzle, utility ) {
+define(['filtermode','strawman','assets','puzzle','utility','settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
     function Level() {
         var filterIndex = 0;
         var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
@@ -23,13 +23,11 @@ define(['filtermode','strawman','assets','puzzle','utility'], function( filtermo
         });
 
         var updateCount = 0; 
-        var spinFrequency = 100;
-        var bumpFrequency = 30; 
         function update() {
-            if( updateCount++ % bumpFrequency === 0 ) {
+            if( updateCount++ % settings.bumpFrequency === 0 ) {
                 bumpStrawman();
             }
-            else if( updateCount % spinFrequency === 0 ) {
+            else if( updateCount % settings.spinFrequency === 0 ) {
                 spinStrawman();
             }
         }

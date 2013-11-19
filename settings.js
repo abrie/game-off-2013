@@ -8,6 +8,8 @@ define([], function() {
         launcherLength: 100/3,
         launcherRadius: 12,
         strawRadius: 12,
-        ballRadius: 10 
+        ballRadius: 10, 
+        spinFrequency: 100,
+        bumpFrequency: 30, 
     };
 });
