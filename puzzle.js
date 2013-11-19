@@ -220,13 +220,17 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
         function update() {
             if( solvedTime !== false ) {
                 solvedTime+=1;
-                console.log("solve time:", solvedTime);
+                if( solvedTime >= 30 ) {
+                    result.onProductProduced();
+                    solvedTime = 0;
+                }
             }
         }
 
-        return {
+        var result = {
             getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
+            onProductProduced: undefined,
             bump: bump,
             model: container,
             update: update,
@@ -234,6 +238,8 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             pickables: pickables,
             setOnSwap: setOnSwap, 
         };
+
+        return result;
     }
 
     function Hammer() {

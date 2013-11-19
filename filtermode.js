@@ -9,9 +9,16 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         var view = new arscene.View();
         var puzzles = [{id:4, object: new generator()}, {id:32, object: new generator()}];
 
+        function ProductionDelegate( thing ) {
+            return function() {
+                result.onProductProduced( thing );
+            };
+        }
+
         puzzles.forEach( function(p) {
             view.objects.add( p.id, new pitobject.PitObject( { color:0x000000 } ) );
             view.objects.add( p.id, p.object );
+            p.object.onProductProduced = new ProductionDelegate( p ); 
         });
 
         function add( id, object ) {
@@ -42,6 +49,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
 
         var result = {
             getRandomThing:getRandomThing,
+            onProductProduced:undefined,
             puzzles:puzzles,
             onSwap:undefined,
             remove:remove,

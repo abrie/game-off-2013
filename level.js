@@ -5,6 +5,7 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
         var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
         filters.forEach( function(filter) {
             filter.onSwap = onInteraction; 
+            filter.onProductProduced = onProductProduced;
         });
 
         var sourceIndex = 0;
@@ -19,6 +20,10 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
             else {
                 spinStrawman();
             }
+        }
+
+        function onProductProduced( thing ) {
+            console.log("production:", thing);
         }
 
         var updateCount = 0; 
