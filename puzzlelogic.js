@@ -79,7 +79,6 @@ define([],function() {
 
         function doAction( center ) {
             if( isHoleAdjacent( center ) ) {
-                console.log("action:",center,hole());
                 swapIndicies( center, hole() );
             }
         }
