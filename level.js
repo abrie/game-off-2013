@@ -1,8 +1,8 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','city'], function( filtermode, strawman, assets, puzzle, city ) {
+define(['filtermode','strawman','assets','puzzle'], function( filtermode, strawman, assets, puzzle ) {
     function Level() {
         var filterIndex = 0;
-        var filters = [ new filtermode.Filter( puzzle.Puzzle ), new filtermode.Filter( city.Puzzle ) ];
+        var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
 
         var sourceIndex = 0;
         var sources = [ assets.get("clip1"), assets.get("clip2") ];
@@ -73,9 +73,7 @@ define(['filtermode','strawman','assets','puzzle','city'], function( filtermode,
             if( !sm.withdrawn ) {
                 return;
             }
-            if( sm.moveTween ) {
-                sm.moveTween.stop();
-            }
+
             var filter, thing;
             do {
                 filter = filters[ random(2) ];

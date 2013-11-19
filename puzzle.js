@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colors, puzzlelogic, settings) {
+define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],function(colors, puzzlelogic, settings, factory) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -18,45 +18,7 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
         return mesh;
     }
 
-    function Hammer( params ) {
-        var points = [];
-        var shape;
-
-        if( params.type === "corner" ) {
-            points.push( new THREE.Vector2 ( -params.width/2, -params.height/2) );
-            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            points.push( new THREE.Vector2 ( params.width/2, -params.height/2 ) );
-            shape = new THREE.Shape( points );
-        }
-        else if( params.type === "edge" ) {
-            points.push( new THREE.Vector2 ( 0, -params.height/2) );
-            points.push( new THREE.Vector2 ( -params.width/2, params.height/2 ) );
-            points.push( new THREE.Vector2 ( params.width/2, params.height/2 ) );
-            shape = new THREE.Shape( points );
-        }
-
-        var extrusionSettings = {
-            amount: -params.depth/2,
-            curveSegments: 3,
-            bevelThickness: 4, bevelSize: 2, bevelEnabled: false,
-            material: 0, extrudeMaterial: 1
-        };
-
-        var geometry = new THREE.ExtrudeGeometry( shape, extrusionSettings );
-
-        var materialFront = new THREE.MeshBasicMaterial( { color: 0xffff00, side:THREE.DoubleSide } );
-        var materialSide = new THREE.MeshBasicMaterial( { color: 0xff8800, side:THREE.DoubleSide } );
-        var materialArray = [ materialFront, materialSide ];
-        var material = new THREE.MeshFaceMaterial(materialArray);
-
-        var mesh = new THREE.Mesh( geometry, material );
-        mesh.position.set(0,0,0);
-        mesh.rotation.z = params.rotation;
-
-        return mesh;
-    }
-
-    function Puzzle() {
+    function Puzzle( FactoryType ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -94,19 +56,19 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
                 type: hammerParams.type,
                 rotation: hammerParams.rotation,
             };
-            var hammer = new Hammer( params );
-            hammer.position.z = 0;
+
+            var hammer = new FactoryType( params );
 
             var model = new THREE.Object3D();
             model.add( tile );
-            model.add( hammer );
+            model.add( hammer.model );
 
             function setIndex(i) {
                 index = i;
                 movePiece();
             }
 
-            var moveTween = undefined;
+            var moveTween;
             function movePiece() {
                 if( moveTween ) { moveTween.stop(); }
                 var newx = puzzleCoordinate( index % puzzleDim ); 
@@ -138,34 +100,19 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
                 return solvedIndex === index;
             }
 
-            var hammerTween = undefined;
-            function raiseHammer() {
-                if( hammerTween ) { hammerTween.stop(); }
-                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:-8 }, 500 )
-                    .easing( TWEEN.Easing.Exponential.In )
-                    .onUpdate( function () {
-                            hammer.position.z = this.z;
-                            } )
-                .start();
+            function activate() {
+                hammer.activate();
             }
 
-            function lowerHammer() {
-                if( hammerTween ) { hammerTween.stop(); }
-                hammerTween = new TWEEN.Tween( { z:hammer.position.z } )
-                    .to( { z:-0.1 }, 500 )
-                    .easing( TWEEN.Easing.Exponential.Out )
-                    .onUpdate( function () {
-                            hammer.position.z = this.z;
-                            } )
-                .start();
+            function deactivate() {
+                hammer.deactivate();
             }
 
             return {
                 setSolvedIndex:setSolvedIndex,
                 getSolvedIndex:getSolvedIndex,
-                raiseHammer:raiseHammer,
-                lowerHammer:lowerHammer,
+                activate:activate,
+                deactivate:deactivate,
                 isSolved:isSolved,
                 setIndex:setIndex,
                 getIndex:getIndex,
@@ -228,14 +175,14 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
             if( logic.isSolved() ) {
                 pieces.forEach( function(piece) {
                     if( piece ) {
-                        piece.raiseHammer();
+                        piece.activate();
                     }
                 });
             }
             else {
                 pieces.forEach( function(piece) {
                     if( piece ) {
-                        piece.lowerHammer();
+                        piece.deactivate();
                     }
                 });
             }
@@ -284,7 +231,16 @@ define(['colors','puzzlelogic','settings','three.min','tween.min'],function(colo
         };
     }
 
+    function Hammer() {
+        return new Puzzle( factory.Hammer );
+    }
+
+    function City() {
+        return new Puzzle( factory.City );
+    }
+
     return {
-        Puzzle:Puzzle
+        Hammer:Hammer,
+        City:City,
     };
 });
