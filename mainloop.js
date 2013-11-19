@@ -1,6 +1,6 @@
 "use strict";
 
-define(['assets', 'arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], function( assets, arscene, ui, imagesource, level ) {
+define(['arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene;
