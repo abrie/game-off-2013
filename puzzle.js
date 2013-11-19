@@ -51,11 +51,11 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             params.width = tileParams.width-0.1;
             params.height = tileParams.height-0.1;
             params.depth = tileParams.depth-0.1;
-            var hammer = new FactoryType( params );
+            var factoryPiece = new FactoryType( params );
 
             var model = new THREE.Object3D();
             model.add( tile );
-            model.add( hammer.model );
+            model.add( factoryPiece.model );
 
             function setIndex(i) {
                 index = i;
@@ -95,11 +95,11 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             }
 
             function activate() {
-                hammer.activate();
+                factoryPiece.activate();
             }
 
             function deactivate() {
-                hammer.deactivate();
+                factoryPiece.deactivate();
             }
 
             return {
