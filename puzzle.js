@@ -203,6 +203,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
         function bump() {
             var index = logic.randomAdjacentToHole();
             logic.doAction( index );
+            checkSolved();
         }
 
         checkSolved();
