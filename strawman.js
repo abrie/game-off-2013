@@ -1,6 +1,6 @@
 "use strict";
 define(['settings','spitball'], function(settings, spitball) {
-    function Straw() {
+    function StrawModel() {
 
         var points = new THREE.SplineCurve3([
             new THREE.Vector3(0, settings.strawLength/2, 0),
@@ -34,7 +34,7 @@ define(['settings','spitball'], function(settings, spitball) {
         return container;
     }
 
-    function Launcher() {
+    function LauncherModel() {
 
         var points = new THREE.SplineCurve3([
             new THREE.Vector3(0, 0, 0),
@@ -69,10 +69,10 @@ define(['settings','spitball'], function(settings, spitball) {
         var container = new THREE.Object3D();
         container.add( mesh );
 
-        var capGeometry = new THREE.SphereGeometry( settings.launcherRadius*1.05, 25 );
-        var capMaterial = new THREE.MeshPhongMaterial( { color:0xFFFFFF, side:THREE.DoubleSide } );
-        var capMesh = new THREE.Mesh( capGeometry, capMaterial );
-        container.add( capMesh );
+        var jointGeometry = new THREE.SphereGeometry( settings.launcherRadius*1.05, 25 );
+        var jointMaterial = new THREE.MeshPhongMaterial( { color:0xFFFFFF, side:THREE.DoubleSide } );
+        var jointMesh = new THREE.Mesh( jointGeometry, jointMaterial );
+        container.add( jointMesh );
 
         var eyeGeometry = new THREE.SphereGeometry( settings.launcherRadius, 50 );
         var eyeMaterial = new THREE.MeshNormalMaterial( { color:0xFFFFFF } );
@@ -83,15 +83,15 @@ define(['settings','spitball'], function(settings, spitball) {
         return container;
     }
 
-    function Strawman() {
+    function StrawmanObject() {
         var model = new THREE.Object3D();
         model.matrixAutoUpdate = false;
 
-        var strawModel = new Straw();
+        var strawModel = new StrawModel();
         model.add( strawModel );
         strawModel.rotation.y = -Math.PI;
 
-        var launcherModel = new Launcher();
+        var launcherModel = new LauncherModel();
         model.add( launcherModel );
         launcherModel.rotation.y = -Math.PI;
         launcherModel.position.z = -settings.strawLength;
@@ -212,6 +212,20 @@ define(['settings','spitball'], function(settings, spitball) {
             setPosition:setPosition,
             insert:insert,
             withdraw: withdraw,
+        };
+    }
+
+    function Strawman() {
+        return {
+            object:new StrawmanObject(),
+            thing:undefined,
+            filter:undefined,
+            spinTween:undefined,
+            moveTween:undefined,
+            withdrawn:true,
+            shouldDisplace: function( f, t ) {
+                return f === this.filter && t === this.thing;
+            }
         };
     }
 

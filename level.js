@@ -11,21 +11,7 @@ define(['filtermode','strawman','assets','puzzle'], function( filtermode, strawm
             return Math.floor( Math.random()*max );
         }
 
-        function SM() {
-            return {
-                object:new strawman.Strawman(),
-                thing:undefined,
-                filter:undefined,
-                spinTween:undefined,
-                moveTween:undefined,
-                withdrawn:true,
-                shouldDisplace: function( f, t ) {
-                    return f === this.filter && t === this.thing;
-                }
-            };
-        }
-
-        var sm = new SM();
+        var sm = new strawman.Strawman();
 
         function onInteraction(f, o) {
             if( sm.shouldDisplace( f, o )  ) {
