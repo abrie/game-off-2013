@@ -35,9 +35,8 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePiece( color, hammerParams ) {
-            var index = undefined;
-            var solvedIndex = undefined;
+        function PuzzlePiece( color, params ) {
+            var index, solvedIndex;
 
             var tileParams = {
                 color:color,
@@ -48,15 +47,10 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             var tile = new Tile( tileParams );
             tile.isPickable = true;
 
-            var params = {
-                color: colors.palette[1],
-                width: tileParams.width-0.1,
-                height:tileParams.height-0.1,
-                depth: tileParams.depth-0.1,
-                type: hammerParams.type,
-                rotation: hammerParams.rotation,
-            };
-
+            params.color = colors.palette[1];
+            params.width = tileParams.width-0.1;
+            params.height = tileParams.height-0.1;
+            params.depth = tileParams.depth-0.1;
             var hammer = new FactoryType( params );
 
             var model = new THREE.Object3D();
