@@ -1,6 +1,6 @@
 "use strict";
 
-define([],function() {
+define(['utility'],function(utility) {
     var palette = [
         0x17A768,
         0xF1601D,
@@ -10,7 +10,7 @@ define([],function() {
     ];
 
     function randomColor() {
-        return palette[ Math.floor( Math.random() * palette.length) ];
+        return palette[ utility.random(palette.length) ];
     }
 
     return {
