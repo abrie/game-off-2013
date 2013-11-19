@@ -1,11 +1,12 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility','settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
+define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settings'], function( filtermode, strawman, assets, puzzle, utility, inventory, settings ) {
     function Level() {
+        var produced  = new inventory.Inventory();
         var filterIndex = 0;
         var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
         filters.forEach( function(filter) {
             filter.onSwap = onInteraction; 
-            filter.onProductProduced = onProductProduced;
+            filter.onProductProduced = produced.add;
         });
 
         var sourceIndex = 0;
@@ -20,10 +21,6 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
             else {
                 spinStrawman();
             }
-        }
-
-        function onProductProduced( thing ) {
-            console.log("production:", thing);
         }
 
         var updateCount = 0; 
