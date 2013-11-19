@@ -167,6 +167,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
 
         function checkSolved() {
             if( logic.isSolved() ) {
+                solvedTime = 0;
                 pieces.forEach( function(piece) {
                     if( piece ) {
                         piece.activate();
@@ -174,6 +175,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
                 });
             }
             else {
+                solvedTime = false;
                 pieces.forEach( function(piece) {
                     if( piece ) {
                         piece.deactivate();
@@ -214,11 +216,20 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             logic.setOnSwap( callback );
         }
 
+        var solvedTime = false;
+        function update() {
+            if( solvedTime !== false ) {
+                solvedTime+=1;
+                console.log("solve time:", solvedTime);
+            }
+        }
+
         return {
             getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
             bump: bump,
             model: container,
+            update: update,
             transform: transform,
             pickables: pickables,
             setOnSwap: setOnSwap, 

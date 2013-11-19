@@ -29,6 +29,10 @@ define(['filtermode','strawman','assets','puzzle','utility','settings'], functio
             else if( updateCount % settings.spinFrequency === 0 ) {
                 spinStrawman();
             }
+
+            filters.forEach( function(filter) { 
+                filter.update(); 
+            });
         }
 
         function spinStrawman() {

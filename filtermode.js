@@ -28,6 +28,12 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
             return puzzles[random(puzzles.length)];
         }
 
+        function update() {
+            puzzles.forEach( function(p) {
+                p.object.update();
+            });
+        }
+
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
                 result.onSwap( result, o );
@@ -39,6 +45,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
             puzzles:puzzles,
             onSwap:undefined,
             remove:remove,
+            update:update,
             view:view,
             add:add,
         };
