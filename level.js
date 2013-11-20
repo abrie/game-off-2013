@@ -3,14 +3,11 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
     function Level() {
         var produced  = new inventory.Inventory();
 
-        var sourceIndex = 0;
-        var sources = [ new Source("clip1"), new Source("clip2") ];
-        function currentSource() {
-            return sources[sourceIndex];
-        }
+        var placeIndex = 0;
+        var places = [ new Place("clip1"), new Place("clip2") ];
 
-        function Source(clipName) {
-            var clip = assets.get(clipName);
+        function Place( clipName ) {
+            var video = assets.get( clipName );
             var filterIndex = 0;
             var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
             filters.forEach( function(filter) {
@@ -44,8 +41,8 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
                 return filters[filterIndex];
             }
 
-            function getClip() {
-                return clip;
+            function getVideo() {
+                return video;
             }
 
             function getRandom() {
@@ -61,7 +58,7 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
                 previousFilter:previousFilter,
                 nextFilter:nextFilter,
                 currentFilter:currentFilter,
-                getClip:getClip,
+                getVideo:getVideo,
                 getRandom:getRandom,
                 update:update,
             };
@@ -87,7 +84,7 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
                 spinStrawman();
             }
 
-            sources.forEach( function(source) { 
+            places.forEach( function(source) { 
                 source.update(); 
             });
         }
@@ -114,10 +111,10 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
                 return;
             }
 
-            var randomSource = sources[ utility.random(sources.length)];
+            var randomPlace = places[ utility.random(places.length)];
             var randomFilterThing;
             do {
-                randomFilterThing = randomSource.getRandom();
+                randomFilterThing = randomPlace.getRandom();
             } while( randomFilterThing.filter === sm.filter && randomFilterThing.thing === sm.thing );
 
             randomFilterThing.thing.object.bump();
@@ -140,31 +137,35 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
         }
 
         function previousFilter() {
-            return currentSource().previousFilter();
+            return currentPlace().previousFilter();
         }
 
         function nextFilter() {
-            return currentSource().nextFilter();
+            return currentPlace().nextFilter();
         }
 
         function currentFilter() {
-            return currentSource().currentFilter();
+            return currentPlace().currentFilter();
         }
 
-        function previousSource() {
-            if(--sourceIndex<0) {
-                sourceIndex = sources.length-1;
+        function previousPlace() {
+            if(--placeIndex<0) {
+                placeIndex = places.length-1;
             }
 
-            return sources[sourceIndex]; 
+            return places[placeIndex]; 
         }
 
-        function nextSource() {
-            if(++sourceIndex>=sources.length) {
-                sourceIndex = 0;
+        function nextPlace() {
+            if(++placeIndex>=places.length) {
+                placeIndex = 0;
             }
 
-            return sources[sourceIndex]; 
+            return places[placeIndex]; 
+        }
+
+        function currentPlace() {
+            return places[placeIndex];
         }
 
         return {
@@ -172,9 +173,9 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
             currentFilter:currentFilter,
             previousFilter:previousFilter,
             nextFilter:nextFilter,
-            currentSource:currentSource,
-            nextSource:nextSource,
-            previousSource:previousSource,
+            currentPlace:currentPlace,
+            nextPlace:nextPlace,
+            previousPlace:previousPlace,
         };
     }
 

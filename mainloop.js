@@ -22,12 +22,12 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
 
         ui.addFilterPreviousListener( previousFilter );
         ui.addFilterNextListener( nextFilter );
-        ui.addSourcePreviousListener( previousSource );
-        ui.addSourceNextListener( nextSource );
+        ui.addSourcePreviousListener( previousPlace );
+        ui.addSourceNextListener( nextPlace );
 
 
         scene.setView( currentLevel.currentFilter().view );
-        source.setVideo( currentLevel.currentSource().getClip() );
+        source.setVideo( currentLevel.currentPlace().getVideo() );
 
         requestAnimationFrame( animate );
     }
@@ -42,16 +42,16 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
         hudView.nextFilter();
     }
 
-    function previousSource() {
-        currentLevel.previousSource();
-        source.setVideo( currentLevel.currentSource().getClip() ); 
-        scene.setView( currentLevel.currentSource().currentFilter().view ); 
+    function previousPlace() {
+        currentLevel.previousPlace();
+        source.setVideo( currentLevel.currentPlace().getVideo() ); 
+        scene.setView( currentLevel.currentPlace().currentFilter().view ); 
     }
 
-    function nextSource() {
-        currentLevel.nextSource();
-        source.setVideo( currentLevel.currentSource().getClip() ); 
-        scene.setView( currentLevel.currentSource().currentFilter().view ); 
+    function nextPlace() {
+        currentLevel.nextPlace();
+        source.setVideo( currentLevel.currentPlace().getVideo() ); 
+        scene.setView( currentLevel.currentPlace().currentFilter().view ); 
     }
 
     return {
