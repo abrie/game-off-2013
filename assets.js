@@ -1,6 +1,6 @@
 "use strict";
 
-define(['video'], function(video) {
+define(['video','three.min'], function(video) {
 
     var list = [], onAllLoaded;
 
@@ -58,6 +58,10 @@ define(['video'], function(video) {
             width: 480,
             height: 360,
             frameRate: 29.970628
+        }), onInitialize, onProgress );
+
+        add( "hudset", new video.ImageCollection({
+            files: ['character.png']
         }), onInitialize, onProgress );
     }
 

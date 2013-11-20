@@ -1,9 +1,9 @@
 "use strict";
 
-define(['arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level ) {
+define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
-    var scene;
+    var scene, hudView;
     var currentLevel;
 
     function animate() {
@@ -18,6 +18,7 @@ define(['arscene', 'ui', 'imagesource', 'level', 'tween.min', 'three.min'], func
     function start() {
         currentLevel = new level.Level();
         scene = new arscene.Scene( document.getElementById("scene"), source );
+        hudView = new hud.HUD( document.getElementById("scene"), source );
 
         ui.addFilterPreviousListener( previousFilter );
         ui.addFilterNextListener( nextFilter );
