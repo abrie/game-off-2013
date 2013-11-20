@@ -33,13 +33,13 @@ body {
 
 progress.assetProgress {
     width: 150px;
-    height: 25px;
-    float: left;
+    height: 18px;
+    display: block;
 }
 
 .centered {
-    width: 300px;
-    height: 18px;
+    width: 150px;
+    height: 54px;
     overflow: auto;
     margin: auto;
     position: absolute;
