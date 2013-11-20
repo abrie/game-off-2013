@@ -27,7 +27,7 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
 
 
         scene.setView( currentLevel.currentFilter().view );
-        source.setVideo( currentLevel.currentSource() );
+        source.setVideo( currentLevel.currentSource().getClip() );
 
         requestAnimationFrame( animate );
     }
@@ -43,11 +43,15 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
     }
 
     function previousSource() {
-        source.setVideo( currentLevel.previousSource() ); 
+        currentLevel.previousSource();
+        source.setVideo( currentLevel.currentSource().getClip() ); 
+        scene.setView( currentLevel.currentSource().currentFilter().view ); 
     }
 
     function nextSource() {
-        source.setVideo( currentLevel.nextSource() );
+        currentLevel.nextSource();
+        source.setVideo( currentLevel.currentSource().getClip() ); 
+        scene.setView( currentLevel.currentSource().currentFilter().view ); 
     }
 
     return {
