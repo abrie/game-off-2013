@@ -34,10 +34,12 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
 
     function previousFilter() {
         scene.setView( currentLevel.previousFilter().view ); 
+        hudView.previousFilter();
     }
 
     function nextFilter() {
         scene.setView( currentLevel.nextFilter().view ); 
+        hudView.nextFilter();
     }
 
     function previousSource() {

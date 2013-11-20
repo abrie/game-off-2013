@@ -6,12 +6,40 @@ define(['assets'], function(assets) {
         element.height = 360; 
         var context = element.getContext('2d');
         var image = assets.get("hudset").get("character.png");
-        context.drawImage(image, 0, 0);
+        var lenses = [
+            assets.get("hudset").get("lens-1.png"),
+            assets.get("hudset").get("lens-2.png"),
+        ];
 
         parent.appendChild( element );
 
+        var lensIndex = 0;
+        function nextFilter() {
+            if( ++lensIndex > lenses.length-1 ) {
+                lensIndex = 0;
+            }
+
+            render();
+        }
+
+        function previousFilter() {
+            if( --lensIndex < 0 ) {
+                lensIndex = lenses.length-1;
+            }
+
+            render();
+        }
+
+        function render() {
+            context.drawImage( image, 0, 0 );
+            context.drawImage( lenses[lensIndex], 0, 0 );
+        }
+
+        render();
+
         return {
-            context:context
+            nextFilter:nextFilter,
+            previousFilter:previousFilter
         };
     }
 

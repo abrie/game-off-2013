@@ -61,7 +61,7 @@ define(['video','three.min'], function(video) {
         }), onInitialize, onProgress );
 
         add( "hudset", new video.ImageCollection({
-            files: ['character.png']
+            files: ['character.png','lens-1.png','lens-2.png']
         }), onInitialize, onProgress );
     }
 
