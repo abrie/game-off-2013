@@ -9,8 +9,8 @@ define(['keys'], function( keys ) {
 
     var filterPreviousButton = makeButton("previous filter");
     var filterNextButton = makeButton("next filter");
-    var scenePreviousButton = makeButton("previous scene");
-    var sceneNextButton = makeButton("next scene");
+    var placePreviousButton = makeButton("previous place");
+    var placeNextButton = makeButton("next place");
 
     var keyEventListeners = {};
     function addKeyEventListener(event, callback) {
@@ -38,20 +38,20 @@ define(['keys'], function( keys ) {
         addKeyEventListener("DOWN", callback);
     }
 
-    function addSourceNextListener( callback ) {
-        sceneNextButton.addEventListener( "click", callback );
+    function addPlaceNextListener( callback ) {
+        placeNextButton.addEventListener( "click", callback );
         addKeyEventListener("LEFT", callback);
     }
 
-    function addSourcePreviousListener( callback ) {
-        scenePreviousButton.addEventListener( "click", callback );
+    function addPlacePreviousListener( callback ) {
+        placePreviousButton.addEventListener( "click", callback );
         addKeyEventListener("RIGHT", callback);
     }
 
     return {
         addFilterNextListener: addFilterNextListener,
         addFilterPreviousListener: addFilterPreviousListener,
-        addSourceNextListener: addSourceNextListener,
-        addSourcePreviousListener: addSourcePreviousListener
+        addPlaceNextListener: addPlaceNextListener,
+        addPlacePreviousListener: addPlacePreviousListener
     };
 });

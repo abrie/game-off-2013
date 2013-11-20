@@ -22,9 +22,8 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
 
         ui.addFilterPreviousListener( previousFilter );
         ui.addFilterNextListener( nextFilter );
-        ui.addSourcePreviousListener( previousPlace );
-        ui.addSourceNextListener( nextPlace );
-
+        ui.addPlacePreviousListener( previousPlace );
+        ui.addPlaceNextListener( nextPlace );
 
         scene.setView( currentLevel.currentFilter().getView() );
         source.setVideo( currentLevel.currentPlace().getVideo() );
