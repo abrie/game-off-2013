@@ -1,6 +1,6 @@
 "use strict";
 define(['assets'], function(assets) {
-    function HUD( parent ) {
+    function HUD( parent, inventory ) {
         var element = document.createElement("canvas");
         element.width = 270;
         element.height = 360; 
@@ -33,13 +33,24 @@ define(['assets'], function(assets) {
         function render() {
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
+
+            inventory.list.forEach( function(item, index) {
+                context.drawImage( assets.get("inventory").get("battery.png"), index*50, 180 );
+            });
+        }
+
+        function update() {
+            if( inventory.hasChanged ) {
+                render();
+            }
         }
 
         render();
 
         return {
             nextFilter:nextFilter,
-            previousFilter:previousFilter
+            previousFilter:previousFilter,
+            update:update,
         };
     }
 

@@ -63,6 +63,10 @@ define(['video','three.min'], function(video) {
         add( "hudset", new video.ImageCollection({
             files: ['character.png','lens-1.png','lens-2.png']
         }), onInitialize, onProgress );
+
+        add( "inventory", new video.ImageCollection({
+            files: ['battery.png']
+        }), onInitialize, onProgress );
     }
 
     return {

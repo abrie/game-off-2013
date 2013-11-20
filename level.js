@@ -1,7 +1,6 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settings'], function( filtermode, strawman, assets, puzzle, utility, inventory, settings ) {
-    function Level() {
-        var produced  = new inventory.Inventory();
+define(['filtermode','strawman','assets','puzzle','utility', 'settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
+    function Level( inventory ) {
 
         var placeIndex = 0;
         var places = [ new Place("clip1"), new Place("clip2") ];
@@ -12,7 +11,7 @@ define(['filtermode','strawman','assets','puzzle','utility','inventory', 'settin
             var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
             filters.forEach( function(filter) {
                 filter.onSwap = onInteraction; 
-                filter.onProductProduced = produced.add;
+                filter.onProductProduced = inventory.add;
             });
 
             function update() {

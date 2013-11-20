@@ -1,24 +1,27 @@
 "use strict";
 
-define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud ) {
+define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, inventory ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene, hudView;
     var currentLevel;
+
+    var produced  = new inventory.Inventory();
 
     function animate() {
         requestAnimationFrame( animate );
         TWEEN.update();
         source.update();
         currentLevel.update();
+        hudView.update();
         scene.update();
         scene.render();
     }
 
     function start() {
-        currentLevel = new level.Level();
+        currentLevel = new level.Level( produced );
         scene = new arscene.Scene( document.getElementById("scene"), source );
-        hudView = new hud.HUD( document.getElementById("scene"), source );
+        hudView = new hud.HUD( document.getElementById("scene"), produced );
 
         ui.addFilterPreviousListener( previousFilter );
         ui.addFilterNextListener( nextFilter );
