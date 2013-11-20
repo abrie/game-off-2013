@@ -41,6 +41,10 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
             });
         }
 
+        function getView() {
+            return view;
+        }
+
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
                 result.onSwap( result, o );
@@ -54,7 +58,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
             onSwap:undefined,
             remove:remove,
             update:update,
-            view:view,
+            getView:getView,
             add:add,
         };
 

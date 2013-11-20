@@ -26,32 +26,32 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'tween.min', 'three.min'
         ui.addSourceNextListener( nextPlace );
 
 
-        scene.setView( currentLevel.currentFilter().view );
+        scene.setView( currentLevel.currentFilter().getView() );
         source.setVideo( currentLevel.currentPlace().getVideo() );
 
         requestAnimationFrame( animate );
     }
 
     function previousFilter() {
-        scene.setView( currentLevel.previousFilter().view ); 
+        scene.setView( currentLevel.previousFilter().getView() ); 
         hudView.previousFilter();
     }
 
     function nextFilter() {
-        scene.setView( currentLevel.nextFilter().view ); 
+        scene.setView( currentLevel.nextFilter().getView() ); 
         hudView.nextFilter();
     }
 
     function previousPlace() {
         currentLevel.previousPlace();
         source.setVideo( currentLevel.currentPlace().getVideo() ); 
-        scene.setView( currentLevel.currentPlace().currentFilter().view ); 
+        scene.setView( currentLevel.currentPlace().currentFilter().getView() ); 
     }
 
     function nextPlace() {
         currentLevel.nextPlace();
         source.setVideo( currentLevel.currentPlace().getVideo() ); 
-        scene.setView( currentLevel.currentPlace().currentFilter().view ); 
+        scene.setView( currentLevel.currentPlace().currentFilter().getView() ); 
     }
 
     return {
