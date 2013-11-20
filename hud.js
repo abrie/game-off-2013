@@ -5,34 +5,34 @@ define(['assets'], function(assets) {
         element.width = 270;
         element.height = 360; 
         var context = element.getContext('2d');
-        var image = assets.get("hudset").get("character.png");
-        var lenses = [
+        var faceImage = assets.get("hudset").get("character.png");
+        var lensImageIndex = 0;
+        var lensImages = [
             assets.get("hudset").get("lens-1.png"),
             assets.get("hudset").get("lens-2.png"),
         ];
 
         parent.appendChild( element );
 
-        var lensIndex = 0;
         function nextFilter() {
-            if( ++lensIndex > lenses.length-1 ) {
-                lensIndex = 0;
+            if( ++lensImageIndex > lensImages.length-1 ) {
+                lensImageIndex = 0;
             }
 
             render();
         }
 
         function previousFilter() {
-            if( --lensIndex < 0 ) {
-                lensIndex = lenses.length-1;
+            if( --lensImageIndex < 0 ) {
+                lensImageIndex = lensImages.length-1;
             }
 
             render();
         }
 
         function render() {
-            context.drawImage( image, 0, 0 );
-            context.drawImage( lenses[lensIndex], 0, 0 );
+            context.drawImage( faceImage, 0, 0 );
+            context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
         }
 
         render();
