@@ -42,21 +42,6 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         return block;
     }
 
-    function RefineryMesh( params ) {
-        var block = new THREE.Object3D();
-        for( var index = 0; index < params.solvedIndex; index++ ) {
-                var depth = 100;
-                var g = new THREE.CubeGeometry( 10, 10, depth );
-                var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
-                var mesh = new THREE.Mesh( g, m );
-                mesh.position.x = utility.random( params.width-8 ) - (params.width-8)/2;
-                mesh.position.y = utility.random( params.height-8 ) - (params.height-8)/2;
-                mesh.position.z = -depth/2;
-                block.add( mesh );
-        }
-
-        return block;
-    }
 
     function HammerMesh( params ) {
         var points = [];
@@ -113,6 +98,23 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         };
     }
 
+    function RefineryMesh( params ) {
+        var radius = 15;
+        var block = new THREE.Object3D();
+        for( var index = 0; index < params.solvedIndex; index++ ) {
+            var depth = 100;
+            var g = new THREE.CubeGeometry( 10, 10, depth );
+            var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
+            var mesh = new THREE.Mesh( g, m );
+            mesh.position.x = Math.sin(index*2*Math.PI/params.solvedIndex)*radius;
+            mesh.position.y = Math.cos(index*2*Math.PI/params.solvedIndex)*radius;
+            mesh.position.z = -depth/2;
+            block.add( mesh );
+        }
+
+        return block;
+    }
+
     function Refinery( params ) {
         var model = new RefineryMesh( params );
         model.position.z = 0;
@@ -120,22 +122,26 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         var tween;
         function activate() {
             if( tween ) { tween.stop(); }
-            tween = new TWEEN.Tween( {z:model.position.z} )
-                .to( { z:-0.01 }, 500 )
+            tween = new TWEEN.Tween( {z:model.position.z, r:0} )
+                .to( { z:-0.01, r:Math.PI }, 500 )
                 .easing( TWEEN.Easing.Exponential.In )
+                .repeat(Infinity)
+                .yoyo(true)
                 .onUpdate( function() {
                     model.position.z = this.z;
+                    model.rotation.z = this.r;
                 })
             .start();
         }
 
         function deactivate() {
             if( tween ) { tween.stop(); }
-            tween = new TWEEN.Tween( { z:model.position.z } )
-                .to( { z:70 }, 500 )
+            tween = new TWEEN.Tween( { z:model.position.z, r:model.rotation.z } )
+                .to( { z:70, r:0 }, 500 )
                 .easing( TWEEN.Easing.Exponential.Out )
                 .onUpdate( function() {
                     model.position.z = this.z;
+                    model.rotation.z = this.r;
                 })
                 .start();
         }
