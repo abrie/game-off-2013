@@ -171,9 +171,10 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
             var raiseEnd = {r:-100};
             var scaleStart = {r:1};
             var scaleEnd = {r:0.05};
-            function reset() {
+            function restart() {
                 raiseStart.r = 100;
                 scaleStart.r = 1.0;
+                raiseTween.start();
             }
             scaleTween = new TWEEN.Tween( scaleStart )
                 .to( scaleEnd, 1000 )
@@ -183,8 +184,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
                 })
                 .onComplete( function() {
                     result.onProductProduced( product );
-                    reset();
-                    raiseTween.start();
+                    restart();
                 });
 
             raiseTween = new TWEEN.Tween( raiseStart )
@@ -199,7 +199,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
                 .chain( scaleTween );
 
 
-            raiseTween.start();
+            restart();
 
             pieces.forEach( function(piece) {
                 if( piece ) {

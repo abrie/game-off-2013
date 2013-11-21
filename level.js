@@ -14,7 +14,7 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
             var filters = filterDescriptors.map( function(filterDescriptor) { 
                 var filter = new filtermode.Filter( filterDescriptor );
                 filter.onSwap = onInteraction; 
-                filter.onProductProduced = inventory.add;
+                filter.setOnProductProduced( inventory.add );
                 return filter;
             });
 

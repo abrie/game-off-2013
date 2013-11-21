@@ -4,6 +4,7 @@ define([], function() {
         var changed = false;
         var list = [];
         function add(thing) {
+            console.log(thing);
             list.push(thing);
             changed = true;
         }

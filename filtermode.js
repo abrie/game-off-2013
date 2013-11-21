@@ -14,16 +14,7 @@ define(['arscene', 'pitobject' ], function( arscene, pitobject ) {
             };
         });
 
-        function ProductionDelegate( thing ) {
-            return function() {
-                result.onProductProduced( thing );
-            };
-        }
-
         puzzles.forEach( function(p) {
-            view.objects.add( p.id, new pitobject.PitObject( { color:0x000000 } ) );
-            view.objects.add( p.id, p.object );
-            p.object.onProductProduced = new ProductionDelegate( p ); 
         });
 
         function add( id, object ) {
@@ -44,15 +35,23 @@ define(['arscene', 'pitobject' ], function( arscene, pitobject ) {
             return view;
         }
 
+        function setOnProductProduced( callback ) {
+            puzzles.forEach( function(o) {
+                o.object.onProductProduced = callback; 
+            });
+        }
+
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
                 result.onSwap( result, o );
             } );
+            view.objects.add( o.id, new pitobject.PitObject( { color:0x000000 } ) );
+            view.objects.add( o.id, o.object );
         });
 
         var result = {
             getRandomThing:getRandomThing,
-            onProductProduced:undefined,
+            setOnProductProduced:setOnProductProduced,
             puzzles:puzzles,
             onSwap:undefined,
             remove:remove,
