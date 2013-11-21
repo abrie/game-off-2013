@@ -60,16 +60,19 @@ define(['video','three.min'], function(video) {
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
-        add( "hudset", new video.ImageCollection({
-            files: ['character.png','lens-1.png','lens-2.png']
+        add( "hudset", new video.BitmapCollection({
+            files: ['character.png','lens-1.png','lens-2.png'],
+            loader: THREE.ImageLoader,
         }), onInitialize, onProgress );
 
-        add( "inventory", new video.ImageCollection({
-            files: ['battery.png']
+        add( "inventory", new video.BitmapCollection({
+            files: ['battery.png'],
+            loader: THREE.ImageLoader,
         }), onInitialize, onProgress );
 
-        add( "texture", new video.TextureCollection({
-            files: ['battery.png']
+        add( "texture", new video.BitmapCollection({
+            files: ['battery.png'],
+            loader: THREE.TextureLoader,
         }), onInitialize, onProgress );
     }
 
