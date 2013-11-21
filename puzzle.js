@@ -168,15 +168,29 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
         function activate() {
             container.add( productMesh );
             if( tween ) { tween.stop(); }
-            tween = new TWEEN.Tween( {r:100} )
-            .to( {r:-100 }, 5000 )
+            var initial = {r:100};
+            var destination = {r:-100};
+            tween = new TWEEN.Tween( initial )
+            .to( destination, 5000 )
             .easing( TWEEN.Easing.Bounce.In )
+            .onStart( function() {
+                productMesh.scale.set(1,1,1);
+            })
             .onUpdate( function() {
                 productMesh.position.z = this.r;
             })
             .onComplete( function() {
-                this.r = 100;
                 result.onProductProduced();
+                var explodeTween = new TWEEN.Tween( {scale:1})
+                    .to( {scale:0.05}, 1000 )
+                    .easing( TWEEN.Easing.Bounce.In )
+                    .onUpdate( function() {
+                        productMesh.scale.set(this.scale,this.scale,this.scale);
+                    })
+                    .onComplete( function() {
+                        initial.r = 100;
+                        tween.start();
+                    }).start();
                 tween.start();
             });
 
