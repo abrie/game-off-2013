@@ -6,7 +6,6 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
     }
 
     function Filter( types ) {
-        console.log(types);
         var view = new arscene.View();
         var puzzles = types.map( function(type) {
             return {
