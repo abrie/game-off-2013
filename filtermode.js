@@ -5,9 +5,15 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         return Math.floor( Math.random()*max );
     }
 
-    function Filter( generator ) {
+    function Filter( types ) {
+        console.log(types);
         var view = new arscene.View();
-        var puzzles = [{id:4, object: new generator()}, {id:32, object: new generator()}];
+        var puzzles = types.map( function(type) {
+            return {
+                id:type.id, 
+                object:type.generator(), 
+            };
+        });
 
         function ProductionDelegate( thing ) {
             return function() {

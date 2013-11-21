@@ -2,16 +2,20 @@
 define(['filtermode','strawman','assets','puzzle','utility', 'settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
     function Level( inventory ) {
 
-        var placeIndex = 0;
-        var places = [ new Place("clip1"), new Place("clip2") ];
+        var filterA = [{id:4, generator: puzzle.Hammer}, {id:32, generator: puzzle.City}];
+        var filterB = [{id:4, generator: puzzle.City}, {id:32, generator: puzzle.Hammer}];
 
-        function Place( clipName ) {
+        var placeIndex = 0;
+        var places = [ new Place("clip1", [filterA,filterB]), new Place("clip2",[filterA,filterB]) ];
+
+        function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
             var filterIndex = 0;
-            var filters = [ new filtermode.Filter( puzzle.Hammer ), new filtermode.Filter( puzzle.City ) ];
-            filters.forEach( function(filter) {
+            var filters = filterDescriptors.map( function(filterDescriptor) { 
+                var filter = new filtermode.Filter( filterDescriptor );
                 filter.onSwap = onInteraction; 
                 filter.onProductProduced = inventory.add;
+                return filter;
             });
 
             function update() {
