@@ -2,7 +2,7 @@
 define(['assets'], function(assets) {
     function HUD( parent, inventory ) {
         var element = document.createElement("canvas");
-        element.width = 270;
+        element.width = 261;
         element.height = 360; 
         var context = element.getContext('2d');
         var faceImage = assets.get("hudset").get("character.png");
@@ -35,7 +35,7 @@ define(['assets'], function(assets) {
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
 
             inventory.list.forEach( function(item, index) {
-                context.drawImage( assets.get("inventory").get("battery.png"), index*26, 180 );
+                context.drawImage( assets.get("inventory").get("battery.png"), index*65+1, 180 );
             });
         }
 
