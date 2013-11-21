@@ -35,8 +35,8 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
-        function PuzzlePiece( color, params ) {
-            var index, solvedIndex;
+        function PuzzlePiece( color, solvedIndex, params ) {
+            var index;
 
             var tileParams = {
                 color:color,
@@ -51,6 +51,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             params.width = tileParams.width-0.1;
             params.height = tileParams.height-0.1;
             params.depth = tileParams.depth-0.1;
+            params.solvedIndex = solvedIndex;
             var factoryPiece = new FactoryType( params );
 
             var model = new THREE.Object3D();
@@ -82,10 +83,6 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
                 return index;
             }
 
-            function setSolvedIndex(i) {
-                solvedIndex = i;
-            }
-
             function getSolvedIndex() {
                 return solvedIndex; 
             }
@@ -103,7 +100,6 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             }
 
             return {
-                setSolvedIndex:setSolvedIndex,
                 getSolvedIndex:getSolvedIndex,
                 activate:activate,
                 deactivate:deactivate,
@@ -134,8 +130,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
                 }
                 else {
                     var color = colors.palette[3];
-                    var newPiece = new PuzzlePiece( color, types[index] );
-                    newPiece.setSolvedIndex( index );
+                    var newPiece = new PuzzlePiece( color, index, types[index] );
                     newPiece.setIndex( index );
                     result.push( newPiece );
                 }
@@ -251,8 +246,13 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
         return new Puzzle( factory.City );
     }
 
+    function Refinery() {
+        return new Puzzle( factory.Refinery );
+    }
+
     return {
         Hammer:Hammer,
         City:City,
+        Refinery:Refinery,
     };
 });

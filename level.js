@@ -2,7 +2,7 @@
 define(['filtermode','strawman','assets','puzzle','utility', 'settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
     function Level( inventory ) {
 
-        var filterA = [{id:4, generator: puzzle.Hammer}, {id:32, generator: puzzle.City}];
+        var filterA = [{id:4, generator: puzzle.Hammer}, {id:32, generator: puzzle.Refinery}];
         var filterB = [{id:4, generator: puzzle.City}, {id:32, generator: puzzle.Hammer}];
 
         var placeIndex = 0;

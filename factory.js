@@ -1,5 +1,5 @@
 "use strict";
-define(['colors','three.min','tween.min'], function(colors) {
+define(['colors','utility','three.min','tween.min'], function(colors, utility) {
     function CityMesh( params ) {
         var block = new THREE.Object3D();
         var w = params.width/2;
@@ -36,6 +36,24 @@ define(['colors','three.min','tween.min'], function(colors) {
                     mesh.position.z = -depth-25/2;
                     block.add( mesh );
                 }
+            }
+        }
+
+        return block;
+    }
+
+    function RefineryMesh( params ) {
+        var block = new THREE.Object3D();
+        for( var x = 0; x < params.width; x+=16) {
+            for( var y = 0; y < params.height; y+=16 ) {
+                var depth = Math.floor( Math.random()*3+1 ) * params.solvedIndex*5;
+                var g = new THREE.CubeGeometry( 3, 5, depth );
+                var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
+                var mesh = new THREE.Mesh( g, m );
+                mesh.position.x = utility.random( params.width-8 ) - (params.width-8)/2;
+                mesh.position.y = utility.random( params.height-8 ) - (params.height-8)/2;
+                mesh.position.z = -depth/2;
+                block.add( mesh );
             }
         }
 
@@ -97,6 +115,23 @@ define(['colors','three.min','tween.min'], function(colors) {
         };
     }
 
+    function Refinery( params ) {
+        var model = new RefineryMesh( params );
+        model.position.z = 0;
+
+        function activate() {
+        }
+
+        function deactivate() {
+        }
+
+        return {
+            model:model,
+            activate:activate,
+            deactivate:deactivate
+        };
+    }
+
     function Hammer( params ) {
         var hammer = new HammerMesh( params );
         hammer.position.z = 0;
@@ -134,5 +169,6 @@ define(['colors','three.min','tween.min'], function(colors) {
     return {
         Hammer:Hammer,
         City:City,
+        Refinery:Refinery,
     };
 });
