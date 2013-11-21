@@ -1,5 +1,5 @@
 "use strict";
-define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject ) {
+define(['arscene', 'pitobject' ], function( arscene, pitobject ) {
 
     function random(max) {
         return Math.floor( Math.random()*max );
@@ -10,7 +10,7 @@ define(['arscene', 'puzzle', 'pitobject' ], function( arscene, puzzle, pitobject
         var puzzles = types.map( function(type) {
             return {
                 id:type.id, 
-                object:type.generator(), 
+                object: new type.generator(), 
             };
         });
 

@@ -1,12 +1,12 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility', 'settings'], function( filtermode, strawman, assets, puzzle, utility, settings ) {
+define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'product'], function( filtermode, strawman, assets, puzzle, utility, settings, product ) {
     function Level( inventory ) {
 
         var filterA = [{id:4, generator: puzzle.Hammer}, {id:32, generator: puzzle.Refinery}];
         var filterB = [{id:4, generator: puzzle.City}, {id:32, generator: puzzle.Hammer}];
 
         var placeIndex = 0;
-        var places = [ new Place("clip1", [filterA,filterB]), new Place("clip2",[filterA,filterB]) ];
+        var places = [ new Place("clip1", [filterA, filterB]), new Place("clip2",[filterA, filterB]) ];
 
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );

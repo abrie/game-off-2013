@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory) {
+define(['colors','assets','puzzlelogic','settings','factory','product', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, product) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
         return mesh;
     }
 
-    function Puzzle( FactoryType ) {
+    function Puzzle( FactoryType, ProductType ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -160,14 +160,11 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
             }
         });
 
-        var productGeometry = new THREE.CubeGeometry(50,50,50);
-        var texture = assets.get("texture").get("battery.png");
-        var productMaterial = new THREE.MeshPhongMaterial({transparent:true, opacity:0.95, side:THREE.DoubleSide, map:texture});
-        var productMesh = new THREE.Mesh( productGeometry, productMaterial );
+        var product = new ProductType();
 
         var raiseTween, scaleTween;
         function activate() {
-            container.add( productMesh );
+            container.add( product.model );
             if( raiseTween ) { raiseTween.stop(); }
             if( scaleTween ) { scaleTween.stop(); }
             var raiseStart = {r:100};
@@ -182,10 +179,10 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
                 .to( scaleEnd, 1000 )
                 .easing( TWEEN.Easing.Bounce.In )
                 .onUpdate( function() {
-                    productMesh.scale.set(this.r,this.r,this.r);
+                    product.model.scale.set(this.r,this.r,this.r);
                 })
                 .onComplete( function() {
-                    result.onProductProduced();
+                    result.onProductProduced( product );
                     reset();
                     raiseTween.start();
                 });
@@ -194,10 +191,10 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
                 .to( raiseEnd, 5000 )
                 .easing( TWEEN.Easing.Bounce.In )
                 .onStart( function() {
-                    productMesh.scale.set(1,1,1);
+                    product.model.scale.set(1,1,1);
                 })
                 .onUpdate( function() {
-                    productMesh.position.z = this.r;
+                    product.model.position.z = this.r;
                 })
                 .chain( scaleTween );
 
@@ -212,7 +209,7 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
         }
 
         function deactivate() {
-            container.remove( productMesh );
+            container.remove( product.model );
             if( scaleTween ) { scaleTween.stop(); }
             if( raiseTween ) { raiseTween.stop(); }
             pieces.forEach( function(piece) {
@@ -279,15 +276,15 @@ define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.
     }
 
     function Hammer() {
-        return new Puzzle( factory.Hammer );
+        return new Puzzle( factory.Hammer, product.Battery );
     }
 
     function City() {
-        return new Puzzle( factory.City );
+        return new Puzzle( factory.City, product.Battery );
     }
 
     function Refinery() {
-        return new Puzzle( factory.Refinery );
+        return new Puzzle( factory.Refinery, product.Battery );
     }
 
     return {
