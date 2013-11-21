@@ -44,17 +44,15 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
 
     function RefineryMesh( params ) {
         var block = new THREE.Object3D();
-        for( var x = 0; x < params.width; x+=16) {
-            for( var y = 0; y < params.height; y+=16 ) {
-                var depth = Math.floor( Math.random()*3+1 ) * params.solvedIndex*5;
-                var g = new THREE.CubeGeometry( 3, 5, depth );
+        for( var index = 0; index < params.solvedIndex; index++ ) {
+                var depth = 100;
+                var g = new THREE.CubeGeometry( 10, 10, depth );
                 var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
                 var mesh = new THREE.Mesh( g, m );
                 mesh.position.x = utility.random( params.width-8 ) - (params.width-8)/2;
                 mesh.position.y = utility.random( params.height-8 ) - (params.height-8)/2;
                 mesh.position.z = -depth/2;
                 block.add( mesh );
-            }
         }
 
         return block;
@@ -119,10 +117,27 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         var model = new RefineryMesh( params );
         model.position.z = 0;
 
+        var tween;
         function activate() {
+            if( tween ) { tween.stop(); }
+            tween = new TWEEN.Tween( {z:model.position.z} )
+                .to( { z:-0.01 }, 500 )
+                .easing( TWEEN.Easing.Exponential.In )
+                .onUpdate( function() {
+                    model.position.z = this.z;
+                })
+            .start();
         }
 
         function deactivate() {
+            if( tween ) { tween.stop(); }
+            tween = new TWEEN.Tween( { z:model.position.z } )
+                .to( { z:70 }, 500 )
+                .easing( TWEEN.Easing.Exponential.Out )
+                .onUpdate( function() {
+                    model.position.z = this.z;
+                })
+                .start();
         }
 
         return {
@@ -143,8 +158,8 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
                 .to( { z:-8 }, 500 )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onUpdate( function () {
-                        hammer.position.z = this.z;
-                        } )
+                    hammer.position.z = this.z;
+                })
             .start();
         }
 
