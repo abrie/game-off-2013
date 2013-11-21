@@ -1,5 +1,5 @@
 "use strict";
-define([], function() {
+define(['ui'], function(ui) {
     function Inventory() {
         var changed = false;
         var list = [];
@@ -23,6 +23,7 @@ define([], function() {
                 list.length = 0;
                 console.log("BOOM! Inventory destroyed:", list);
                 changed = true;
+                ui.shake();
             }
         }
 
