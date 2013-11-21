@@ -35,7 +35,7 @@ define(['assets'], function(assets) {
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
 
             inventory.list.forEach( function(item, index) {
-                context.drawImage( assets.get("inventory").get("battery.png"), index*50, 180 );
+                context.drawImage( assets.get("inventory").get("battery.png"), index*26, 180 );
             });
         }
 
