@@ -8,7 +8,7 @@ define(['assets','three.min'],function(assets){
         return {
             model:mesh,
             image: assets.get("inventory").get("battery.png"),
-            id:"BATTERY",
+            type:"BATTERY",
         };
     }
 

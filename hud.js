@@ -30,17 +30,23 @@ define(['assets'], function(assets) {
             render();
         }
 
+        function clear() {
+            context.clearRect(0,0,element.width,element.height);
+        }
+
         function render() {
+            clear();
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
 
-            inventory.list.forEach( function(item, index) {
+            inventory.getList().forEach( function(item, index) {
                 context.drawImage( assets.get("inventory").get("battery.png"), index*65+1, 180 );
             });
         }
 
         function update() {
-            if( inventory.hasChanged ) {
+            if( inventory.hasChanged() ) {
+                console.log(inventory.getList());
                 render();
             }
         }
