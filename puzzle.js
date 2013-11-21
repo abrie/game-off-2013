@@ -91,12 +91,12 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
                 return solvedIndex === index;
             }
 
-            function activate() {
-                factoryPiece.activate();
+            function activate( time ) {
+                factoryPiece.activate( time );
             }
 
-            function deactivate() {
-                factoryPiece.deactivate();
+            function deactivate( time ) {
+                factoryPiece.deactivate( time );
             }
 
             return {
@@ -160,22 +160,51 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             }
         });
 
+        var productGeometry = new THREE.CubeGeometry(50,50,50);
+        var productMaterial = new THREE.MeshPhongMaterial({color:0xF00FA0, transparent:true, opacity:0.5, side:THREE.DoubleSide});
+        var productMesh = new THREE.Mesh( productGeometry, productMaterial );
+
+        var tween;
+        function activate() {
+            container.add( productMesh );
+            if( tween ) { tween.stop(); }
+            tween = new TWEEN.Tween( {r:100} )
+            .to( {r:-100 }, 5000 )
+            .easing( TWEEN.Easing.Bounce.In )
+            .onUpdate( function() {
+                productMesh.position.z = this.r;
+            })
+            .onComplete( function() {
+                this.r = 100;
+                result.onProductProduced();
+                tween.start();
+            });
+
+            tween.start();
+
+            pieces.forEach( function(piece) {
+                if( piece ) {
+                    piece.activate( 2000 );
+                }
+            });
+        }
+
+        function deactivate() {
+            container.remove( productMesh );
+            if( tween ) { tween.stop(); }
+            pieces.forEach( function(piece) {
+                if( piece ) {
+                    piece.deactivate( 1000 );
+                }
+            });
+        }
+
         function checkSolved() {
             if( logic.isSolved() ) {
-                solvedTime = 0;
-                pieces.forEach( function(piece) {
-                    if( piece ) {
-                        piece.activate();
-                    }
-                });
+                activate();
             }
             else {
-                solvedTime = false;
-                pieces.forEach( function(piece) {
-                    if( piece ) {
-                        piece.deactivate();
-                    }
-                });
+                deactivate();
             }
         }
 
@@ -212,15 +241,7 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             logic.setOnSwap( callback );
         }
 
-        var solvedTime = false;
         function update() {
-            if( solvedTime !== false ) {
-                solvedTime+=1;
-                if( solvedTime >= 30 ) {
-                    result.onProductProduced();
-                    solvedTime = 0;
-                }
-            }
         }
 
         var result = {

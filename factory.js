@@ -120,10 +120,10 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         model.position.z = 0;
 
         var tween;
-        function activate() {
+        function activate( rate ) {
             if( tween ) { tween.stop(); }
             tween = new TWEEN.Tween( {z:model.position.z, r:0} )
-                .to( { z:-0.01, r:Math.PI }, 500 )
+                .to( { z:-0.01, r:Math.PI }, rate/2 )
                 .easing( TWEEN.Easing.Exponential.In )
                 .repeat(Infinity)
                 .yoyo(true)
@@ -134,10 +134,10 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
             .start();
         }
 
-        function deactivate() {
+        function deactivate( rate ) {
             if( tween ) { tween.stop(); }
             tween = new TWEEN.Tween( { z:model.position.z, r:model.rotation.z } )
-                .to( { z:70, r:0 }, 500 )
+                .to( { z:70, r:0 }, rate/2 )
                 .easing( TWEEN.Easing.Exponential.Out )
                 .onUpdate( function() {
                     model.position.z = this.z;
