@@ -18,12 +18,6 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings'], functi
                 return filter;
             });
 
-            function update() {
-                filters.forEach( function(filter) { 
-                    filter.update(); 
-                });
-            }
-
             function previousFilter() {
                 if( --filterIndex < 0 ) {
                     filterIndex = filters.length-1;
@@ -172,7 +166,6 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings'], functi
         }
 
         return {
-            update:update,
             currentFilter:currentFilter,
             previousFilter:previousFilter,
             nextFilter:nextFilter,

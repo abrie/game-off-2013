@@ -2,6 +2,63 @@
 
 define([],function() {
 
+    function TextureCollection( params ) {
+        var loaded = false;
+        var collection = {};
+        var loader = new THREE.LoadingManager();
+        loader.onProgress = function( item, current, total) {
+            var percent = Math.ceil( current/total *100 );
+            if( progressCallback ) {
+                progressCallback( percent );
+            }
+            if( percent >= 100 ) {
+                loaded = true;
+                if( loadCallback ) {
+                    loadCallback();
+                }
+            }
+        };
+
+        function load() {
+            var imageLoader = new THREE.TextureLoader( loader );
+            params.files.forEach( function(file) {
+                imageLoader.load( 'assets/'+file, function(obj) { 
+                    collection[file] = obj;
+                });
+            });
+        }
+
+        load();
+
+        var loadCallback;
+        function onLoaded( callback ) {
+            loadCallback = callback;
+            if( loaded ) {
+                loadCallback();
+            }
+        }
+
+        var progressCallback;
+        function onProgress( callback ) {
+            progressCallback = callback;
+        }
+
+        function isLoaded() {
+            return loaded;
+        }
+
+        function get( name ) {
+            return collection[name];
+        }
+
+        return {
+            get: get,
+            onLoaded: onLoaded,
+            isLoaded: isLoaded,
+            onProgress: onProgress,
+        };
+    }
+
     function ImageCollection( params ) {
         var loaded = false;
         var collection = {};
@@ -171,5 +228,6 @@ define([],function() {
     return {
         Video:Video,
         ImageCollection:ImageCollection,
+        TextureCollection:TextureCollection,
     };
 }());

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],function(colors, puzzlelogic, settings, factory) {
+define(['colors','assets','puzzlelogic','settings','factory','three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -161,40 +161,48 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
         });
 
         var productGeometry = new THREE.CubeGeometry(50,50,50);
-        var productMaterial = new THREE.MeshPhongMaterial({color:0xF00FA0, transparent:true, opacity:0.5, side:THREE.DoubleSide});
+        var texture = assets.get("texture").get("battery.png");
+        var productMaterial = new THREE.MeshPhongMaterial({transparent:true, opacity:0.95, side:THREE.DoubleSide, map:texture});
         var productMesh = new THREE.Mesh( productGeometry, productMaterial );
 
-        var tween;
+        var raiseTween, scaleTween;
         function activate() {
             container.add( productMesh );
-            if( tween ) { tween.stop(); }
-            var initial = {r:100};
-            var destination = {r:-100};
-            tween = new TWEEN.Tween( initial )
-            .to( destination, 5000 )
-            .easing( TWEEN.Easing.Bounce.In )
-            .onStart( function() {
-                productMesh.scale.set(1,1,1);
-            })
-            .onUpdate( function() {
-                productMesh.position.z = this.r;
-            })
-            .onComplete( function() {
-                result.onProductProduced();
-                var explodeTween = new TWEEN.Tween( {scale:1})
-                    .to( {scale:0.05}, 1000 )
-                    .easing( TWEEN.Easing.Bounce.In )
-                    .onUpdate( function() {
-                        productMesh.scale.set(this.scale,this.scale,this.scale);
-                    })
-                    .onComplete( function() {
-                        initial.r = 100;
-                        tween.start();
-                    }).start();
-                tween.start();
-            });
+            if( raiseTween ) { raiseTween.stop(); }
+            if( scaleTween ) { scaleTween.stop(); }
+            var raiseStart = {r:100};
+            var raiseEnd = {r:-100};
+            var scaleStart = {r:1};
+            var scaleEnd = {r:0.05};
+            function reset() {
+                raiseStart.r = 100;
+                scaleStart.r = 1.0;
+            }
+            scaleTween = new TWEEN.Tween( scaleStart )
+                .to( scaleEnd, 1000 )
+                .easing( TWEEN.Easing.Bounce.In )
+                .onUpdate( function() {
+                    productMesh.scale.set(this.r,this.r,this.r);
+                })
+                .onComplete( function() {
+                    result.onProductProduced();
+                    reset();
+                    raiseTween.start();
+                });
 
-            tween.start();
+            raiseTween = new TWEEN.Tween( raiseStart )
+                .to( raiseEnd, 5000 )
+                .easing( TWEEN.Easing.Bounce.In )
+                .onStart( function() {
+                    productMesh.scale.set(1,1,1);
+                })
+                .onUpdate( function() {
+                    productMesh.position.z = this.r;
+                })
+                .chain( scaleTween );
+
+
+            raiseTween.start();
 
             pieces.forEach( function(piece) {
                 if( piece ) {
@@ -205,7 +213,8 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
 
         function deactivate() {
             container.remove( productMesh );
-            if( tween ) { tween.stop(); }
+            if( scaleTween ) { scaleTween.stop(); }
+            if( raiseTween ) { raiseTween.stop(); }
             pieces.forEach( function(piece) {
                 if( piece ) {
                     piece.deactivate( 1000 );
@@ -255,16 +264,12 @@ define(['colors','puzzlelogic','settings','factory','three.min','tween.min'],fun
             logic.setOnSwap( callback );
         }
 
-        function update() {
-        }
-
         var result = {
             getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
             onProductProduced: undefined,
             bump: bump,
             model: container,
-            update: update,
             transform: transform,
             pickables: pickables,
             setOnSwap: setOnSwap, 

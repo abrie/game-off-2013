@@ -67,6 +67,10 @@ define(['video','three.min'], function(video) {
         add( "inventory", new video.ImageCollection({
             files: ['battery.png']
         }), onInitialize, onProgress );
+
+        add( "texture", new video.TextureCollection({
+            files: ['battery.png']
+        }), onInitialize, onProgress );
     }
 
     return {
