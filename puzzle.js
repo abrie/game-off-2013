@@ -297,7 +297,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
     }
 
     function Forest() {
-        return new Puzzle( factory.Forest, product.Battery );
+        return new Puzzle( factory.Forest, product.Molecule );
     }
 
     return {

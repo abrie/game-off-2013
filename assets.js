@@ -77,7 +77,8 @@ define(['media','three.min'], function(media) {
         add( "inventory", new media.BitmapCollection({
             files: [
                 { id: 'battery', file: 'battery-border.png' },
-                { id: 'note', file: 'note-border.png' }
+                { id: 'note', file: 'note-border.png' },
+                { id: 'molecule', file: 'molecule.png' }
             ],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );

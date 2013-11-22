@@ -6,7 +6,7 @@ define(['colors','utility','three.min','tween.min'], function( colors, utility )
             new THREE.Vector3(0, 0, 0),
             new THREE.Vector3(0, 20, utility.randomZero(20)),
             new THREE.Vector3(0, 40, utility.randomZero(20)),
-            new THREE.Vector3(0, 60, utility.randomZero(20)),
+            new THREE.Vector3(0, 60, utility.randomZero(50)),
             new THREE.Vector3(0, 80, utility.randomZero(20)),
             new THREE.Vector3(0, 100, utility.randomZero(20)),
         ]);

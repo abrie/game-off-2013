@@ -55,6 +55,9 @@ define(['assets'], function(assets) {
             for( index = 0; index < inventory.count("MUSIC"); index++ ) {
                 context.drawImage( assets.get("inventory").get("note"), column(index), row(1) );
             }
+            for( index = 0; index < inventory.count("MOLECULE"); index++ ) {
+                context.drawImage( assets.get("inventory").get("molecule"), column(index), row(2) );
+            }
         }
 
         function update() {
