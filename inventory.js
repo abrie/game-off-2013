@@ -17,7 +17,7 @@ define(['ui'], function(ui) {
                 else {
                     return total;
                 }
-            }, 0 );
+            }, 0);
         }
 
         function compute() {
