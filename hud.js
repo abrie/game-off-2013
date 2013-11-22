@@ -5,11 +5,11 @@ define(['assets'], function(assets) {
         element.width = 261;
         element.height = 360; 
         var context = element.getContext('2d');
-        var faceImage = assets.get("hudset").get("character.png");
+        var faceImage = assets.get("hudset").get("character");
         var lensImageIndex = 0;
         var lensImages = [
-            assets.get("hudset").get("lens-1.png"),
-            assets.get("hudset").get("lens-2.png"),
+            assets.get("hudset").get("lens1"),
+            assets.get("hudset").get("lens2"),
         ];
 
         parent.appendChild( element );
@@ -49,10 +49,10 @@ define(['assets'], function(assets) {
 
             var index;
             for( index = 0; index < inventory.count("BATTERY"); index++ ) {
-                context.drawImage( assets.get("inventory").get("battery.png"), column(index), row(0) );
+                context.drawImage( assets.get("inventory").get("battery"), column(index), row(0) );
             }
             for( index = 0; index < inventory.count("MUSIC"); index++ ) {
-                context.drawImage( assets.get("inventory").get("note.png"), column(index), row(1) );
+                context.drawImage( assets.get("inventory").get("note"), column(index), row(1) );
             }
         }
 

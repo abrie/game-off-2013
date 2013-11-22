@@ -2,7 +2,7 @@
 define(['assets','utility','three.min'],function(assets,utility){
     function Battery() {
         var geometry = new THREE.CubeGeometry(50,50,50);
-        var texture = assets.get("texture").get("battery.png");
+        var texture = assets.get("texture").get("battery");
         var material = new THREE.MeshPhongMaterial({transparent:true, opacity:0.95, side:THREE.DoubleSide, map:texture});
         var mesh = new THREE.Mesh( geometry, material );
 
@@ -18,7 +18,7 @@ define(['assets','utility','three.min'],function(assets,utility){
 
         return {
             model:mesh,
-            image: assets.get("inventory").get("battery.png"),
+            image: assets.get("inventory").get("battery"),
             type:"BATTERY",
             update:update,
             start:start,
@@ -31,7 +31,7 @@ define(['assets','utility','three.min'],function(assets,utility){
         var pMaterial = new THREE.ParticleBasicMaterial({
             color: 0x999999,
             size: 64,
-            map: assets.get("texture").get("note.png"),
+            map: assets.get("texture").get("note"),
             blending: THREE.AdditiveBlending,
             transparent: true
           });
@@ -65,7 +65,7 @@ define(['assets','utility','three.min'],function(assets,utility){
              model: particleSystem,
              update: update,
              start: start,
-             image: assets.get("inventory").get("note.png"),
+             image: assets.get("inventory").get("note"),
              type: "MUSIC"
          };
     }

@@ -21,9 +21,9 @@ define([],function() {
 
         function load() {
             var imageLoader = new params.loader( loader );
-            params.files.forEach( function(file) {
-                imageLoader.load( 'assets/'+file, function(obj) { 
-                    collection[file] = obj;
+            params.files.forEach( function(entry) {
+                imageLoader.load( 'assets/'+entry.file, function(obj) { 
+                    collection[entry.id] = obj;
                 });
             });
         }
