@@ -4,22 +4,27 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
 
         var filterA = [
             { id:4, generator: puzzle.Hammer }, 
-            { id:32, generator: puzzle.Refinery }
+            { id:32, generator: puzzle.Hammer }
         ];
 
         var filterB = [
+            { id:4, generator: puzzle.Refinery }, 
+            { id:32, generator: puzzle.Refinery }
+        ];
+
+        var filterC = [
             { id:4, generator: puzzle.City }, 
-            { id:32, generator: puzzle.Hammer }
+            { id:32, generator: puzzle.City }
         ];
 
         var placeIndex = 0;
         var places = [ 
-            new Place( "clip1", [ filterA, filterB ] ), 
-            new Place( "clip2", [ filterA, filterB ] ) 
+            new Place( "clip1", [ filterA, filterB, filterC ] ), 
+            new Place( "clip2", [ filterA, filterB, filterC ] ) 
         ];
 
         var filterIndex = 0;
-        var filterMax = 1;
+        var filterMax = 2;
 
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
