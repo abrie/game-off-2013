@@ -8,35 +8,17 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
         var placeIndex = 0;
         var places = [ new Place("clip1", [filterA, filterB]), new Place("clip2",[filterA, filterB]) ];
 
+        var filterIndex = 0;
+        var filterMax = 1;
+
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
-            var filterIndex = 0;
             var filters = filterDescriptors.map( function(filterDescriptor) { 
                 var filter = new filtermode.Filter( filterDescriptor );
                 filter.onSwap = onInteraction; 
                 filter.setOnProductProduced( inventory.add );
                 return filter;
             });
-
-            function previousFilter() {
-                if( --filterIndex < 0 ) {
-                    filterIndex = filters.length-1;
-                }
-
-                return filters[filterIndex];
-            }
-
-            function nextFilter() {
-                if( ++filterIndex >= filters.length ) {
-                    filterIndex = 0;
-                }
-
-                return filters[filterIndex];
-            }
-
-            function currentFilter() {
-                return filters[filterIndex];
-            }
 
             function getVideo() {
                 return video;
@@ -51,12 +33,14 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
                 };
             }
 
+            function getFilter( index ) {
+                return filters[index];
+            }
+
             return {
-                previousFilter:previousFilter,
-                nextFilter:nextFilter,
-                currentFilter:currentFilter,
-                getVideo:getVideo,
+                getFilter: getFilter,
                 getRandom:getRandom,
+                getVideo:getVideo,
             };
         }
 
@@ -129,15 +113,21 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
         }
 
         function previousFilter() {
-            return currentPlace().previousFilter();
+            if( --filterIndex < 0 ) {
+                filterIndex = filterMax;
+            }
+            return currentFilter();
         }
 
         function nextFilter() {
-            return currentPlace().nextFilter();
+            if( ++filterIndex > filterMax ) {
+                filterIndex = 0;
+            }
+            return currentFilter();
         }
 
         function currentFilter() {
-            return currentPlace().currentFilter();
+            return currentPlace().getFilter( filterIndex );
         }
 
         function previousPlace() {

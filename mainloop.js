@@ -47,13 +47,13 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'tween.min'
     function previousPlace() {
         currentLevel.previousPlace();
         source.setVideo( currentLevel.currentPlace().getVideo() ); 
-        scene.setView( currentLevel.currentPlace().currentFilter().getView() ); 
+        scene.setView( currentLevel.currentFilter().getView() ); 
     }
 
     function nextPlace() {
         currentLevel.nextPlace();
         source.setVideo( currentLevel.currentPlace().getVideo() ); 
-        scene.setView( currentLevel.currentPlace().currentFilter().getView() ); 
+        scene.setView( currentLevel.currentFilter().getView() ); 
     }
 
     return {
