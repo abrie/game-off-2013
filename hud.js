@@ -40,7 +40,7 @@ define(['assets'], function(assets) {
         }
 
         function row(index) {
-            return 180+index*65;
+            return 168+index*65;
         }
 
         function render() {
