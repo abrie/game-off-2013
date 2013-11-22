@@ -71,7 +71,7 @@ define(['media','three.min'], function(media) {
         }), onInitialize, onProgress );
 
         add( "texture", new media.BitmapCollection({
-            files: ['battery.png'],
+            files: ['battery.png','note.png'],
             loader: THREE.TextureLoader,
         }), onInitialize, onProgress );
     }

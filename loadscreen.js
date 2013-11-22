@@ -42,6 +42,9 @@ define([], function() {
             parent.removeChild( progressContainer );
             parent.removeChild( document.getElementById("logo") );
             document.body.removeChild( document.getElementById("status"));
+            var sceneElement = document.createElement("div");
+            sceneElement.id = "scene";
+            document.body.appendChild( sceneElement );
         }
 
         return {
