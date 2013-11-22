@@ -57,7 +57,6 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
                 currentFilter:currentFilter,
                 getVideo:getVideo,
                 getRandom:getRandom,
-                update:update,
             };
         }
 
@@ -80,10 +79,6 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
             else if( updateCount % settings.spinFrequency === 0 ) {
                 spinStrawman();
             }
-
-            places.forEach( function(source) { 
-                source.update(); 
-            });
         }
 
         function spinStrawman() {
@@ -172,6 +167,7 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
             currentPlace:currentPlace,
             nextPlace:nextPlace,
             previousPlace:previousPlace,
+            update:update,
         };
     }
 

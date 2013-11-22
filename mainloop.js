@@ -10,6 +10,7 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'tween.min'
 
     function animate() {
         requestAnimationFrame( animate );
+        currentLevel.update();
         TWEEN.update();
         source.update();
         hudView.update();
