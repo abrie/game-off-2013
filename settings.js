@@ -4,6 +4,7 @@ define([], function() {
         arMarkerPersist: 20,
         arThreshold: 90,
         arMarkerSize: 150,
+        tileDepth:30,
         strawLength: 100,
         launcherLength: 100/3,
         launcherRadius: 12,
