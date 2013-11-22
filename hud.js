@@ -49,12 +49,15 @@ define(['assets'], function(assets) {
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
 
             var index;
+
             for( index = 0; index < inventory.count("BATTERY"); index++ ) {
                 context.drawImage( assets.get("inventory").get("battery"), column(index), row(0) );
             }
+
             for( index = 0; index < inventory.count("MUSIC"); index++ ) {
                 context.drawImage( assets.get("inventory").get("note"), column(index), row(1) );
             }
+
             for( index = 0; index < inventory.count("MOLECULE"); index++ ) {
                 context.drawImage( assets.get("inventory").get("molecule"), column(index), row(2) );
             }
@@ -62,7 +65,6 @@ define(['assets'], function(assets) {
 
         function update() {
             if( inventory.hasChanged() ) {
-                console.log(inventory.getList());
                 render();
             }
         }
