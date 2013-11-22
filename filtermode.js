@@ -1,20 +1,13 @@
 "use strict";
-define(['arscene', 'pitobject' ], function( arscene, pitobject ) {
-
-    function random(max) {
-        return Math.floor( Math.random()*max );
-    }
+define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utility ) {
 
     function Filter( types ) {
         var view = new arscene.View();
         var puzzles = types.map( function(type) {
             return {
-                id:type.id, 
+                id: type.id, 
                 object: new type.generator(), 
             };
-        });
-
-        puzzles.forEach( function(p) {
         });
 
         function add( id, object ) {
@@ -28,7 +21,7 @@ define(['arscene', 'pitobject' ], function( arscene, pitobject ) {
         }
 
         function getRandomThing() {
-            return puzzles[random(puzzles.length)];
+            return puzzles[ utility.random( puzzles.length ) ];
         }
 
         function getView() {
