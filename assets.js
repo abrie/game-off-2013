@@ -1,6 +1,6 @@
 "use strict";
 
-define(['video','three.min'], function(video) {
+define(['media','three.min'], function(media) {
 
     var list = [], onAllLoaded;
 
@@ -46,31 +46,31 @@ define(['video','three.min'], function(video) {
 
         onAllLoaded = onComplete;
 
-        add( "clip1", new video.Video({
+        add( "clip1", new media.Video({
             src: "assets/clip1.m4v",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
-        add( "clip2", new video.Video({
+        add( "clip2", new media.Video({
             src: "assets/clip2.m4v",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
-        add( "hudset", new video.BitmapCollection({
+        add( "hudset", new media.BitmapCollection({
             files: ['character.png','lens-1.png','lens-2.png'],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );
 
-        add( "inventory", new video.BitmapCollection({
+        add( "inventory", new media.BitmapCollection({
             files: ['battery.png'],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );
 
-        add( "texture", new video.BitmapCollection({
+        add( "texture", new media.BitmapCollection({
             files: ['battery.png'],
             loader: THREE.TextureLoader,
         }), onInitialize, onProgress );
