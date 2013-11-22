@@ -68,7 +68,8 @@ define(['media','three.min'], function(media) {
             files: [
                 { id: 'character', file: 'character.png' },
                 { id: 'lens1', file: 'lens-1.png' },
-                { id: 'lens2', file: 'lens-2.png' }
+                { id: 'lens2', file: 'lens-2.png' },
+                { id: 'lens3', file: 'lens-3.png' }
             ],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );

@@ -10,6 +10,7 @@ define(['assets'], function(assets) {
         var lensImages = [
             assets.get("hudset").get("lens1"),
             assets.get("hudset").get("lens2"),
+            assets.get("hudset").get("lens3"),
         ];
 
         parent.appendChild( element );
