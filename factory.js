@@ -21,7 +21,7 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
                     var m = new THREE.MeshPhongMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
                     g.applyMatrix( 
                          new THREE.Matrix4()
-                            .makeTranslation( 10, 0, 0 ) );
+                            .makeTranslation( 0, 0, 0 ) );
 
                     g.applyMatrix( 
                          new THREE.Matrix4()

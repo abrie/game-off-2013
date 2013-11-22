@@ -175,17 +175,19 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
             var raiseStart = {r:100};
             var raiseEnd = {r:-100};
             var scaleStart = {r:1};
-            var scaleEnd = {r:0.05};
+            var scaleEnd = {r:10.0};
             function restart() {
                 raiseStart.r = 100;
                 scaleStart.r = 1.0;
+                product.start();
                 raiseTween.start();
             }
             scaleTween = new TWEEN.Tween( scaleStart )
                 .to( scaleEnd, 1000 )
-                .easing( TWEEN.Easing.Bounce.In )
+                .easing( TWEEN.Easing.Exponential.In )
                 .onUpdate( function() {
                     product.model.scale.set(this.r,this.r,this.r);
+                    product.update();
                 })
                 .onComplete( function() {
                     result.onProductProduced( product );
@@ -281,7 +283,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
     }
 
     function Hammer() {
-        return new Puzzle( factory.Hammer, product.Battery );
+        return new Puzzle( factory.Hammer, product.Music );
     }
 
     function City() {
