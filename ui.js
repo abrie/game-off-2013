@@ -34,13 +34,13 @@ define(['keys','utility'], function( keys, utility ) {
 
     function shake() {
         var element = document.getElementById("scene");
-        var timeoutID = window.setTimeout(shiftBody, utility.random(5));
-        var times = 60;
-        function shiftBody() {
+        var timeoutID = window.setTimeout(shiftScene, utility.random(5));
+        var times = 30;
+        function shiftScene() {
             element.style.left = utility.random(times)+"px";
             element.style.bottom = utility.random(times)+"px";
             if( --times >= 0 ){
-                timeoutID = window.setTimeout(shiftBody, utility.random(5));
+                timeoutID = window.setTimeout(shiftScene, utility.random(5));
             }
         }
     }
