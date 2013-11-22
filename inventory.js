@@ -9,15 +9,19 @@ define(['ui'], function(ui) {
             compute();
         }
 
-        function compute() {
-            var batteryCount = list.reduce( function(total, item) {
-                if( item.type === "BATTERY" ) {
+        function count(type) {
+            return list.reduce( function(total, item) {
+                if( item.type === type ) {
                     return total + 1;
                 }
                 else {
                     return total;
                 }
             }, 0 );
+        }
+
+        function compute() {
+            var batteryCount = count("BATTERY");
 
             if( batteryCount > 4 ) {
                 list.length = 0;
@@ -44,6 +48,7 @@ define(['ui'], function(ui) {
         return {
             add:add,
             getList:getList,
+            count:count,
             hasChanged:hasChanged,
         };
     }

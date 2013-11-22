@@ -169,7 +169,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
 
         var raiseTween, scaleTween;
         function activate() {
-            container.add( product.model );
             if( raiseTween ) { raiseTween.stop(); }
             if( scaleTween ) { scaleTween.stop(); }
             var raiseStart = {r:100};
@@ -186,19 +185,22 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
                 .to( scaleEnd, 1000 )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onUpdate( function() {
-                    product.model.scale.set(this.r,this.r,this.r);
+                    product.model.scale.set( this.r, this.r, this.r );
                     product.update();
                 })
                 .onComplete( function() {
                     result.onProductProduced( product );
+                    container.remove( product.model );
                     restart();
                 });
 
             raiseTween = new TWEEN.Tween( raiseStart )
                 .to( raiseEnd, 5000 )
+                .delay( 250 )
                 .easing( TWEEN.Easing.Bounce.In )
                 .onStart( function() {
-                    product.model.scale.set(1,1,1);
+                    container.add( product.model );
+                    product.model.scale.set( 1, 1, 1 );
                 })
                 .onUpdate( function() {
                     product.model.position.z = this.r;

@@ -26,6 +26,10 @@ define(['media','three.min'], function(media) {
             return asset.id === id;
         });
 
+        if( matched.length === 0 ) {
+            console.log("no asset found:",id);
+        }
+
         return matched[0].obj;
     }
 
@@ -66,7 +70,7 @@ define(['media','three.min'], function(media) {
         }), onInitialize, onProgress );
 
         add( "inventory", new media.BitmapCollection({
-            files: ['battery.png'],
+            files: ['battery.png','note.png'],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );
 

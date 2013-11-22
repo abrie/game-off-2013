@@ -34,14 +34,26 @@ define(['assets'], function(assets) {
             context.clearRect(0,0,element.width,element.height);
         }
 
+        function column(index) {
+            return index*65+1;
+        }
+
+        function row(index) {
+            return 180+index*65;
+        }
+
         function render() {
             clear();
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
 
-            inventory.getList().forEach( function(item, index) {
-                context.drawImage( assets.get("inventory").get("battery.png"), index*65+1, 180 );
-            });
+            var index;
+            for( index = 0; index < inventory.count("BATTERY"); index++ ) {
+                context.drawImage( assets.get("inventory").get("battery.png"), column(index), row(0) );
+            }
+            for( index = 0; index < inventory.count("MUSIC"); index++ ) {
+                context.drawImage( assets.get("inventory").get("note.png"), column(index), row(1) );
+            }
         }
 
         function update() {
