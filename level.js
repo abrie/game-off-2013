@@ -13,8 +13,8 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'produc
         ];
 
         var filterC = [
-            { id:4, generator: puzzle.City }, 
-            { id:32, generator: puzzle.City }
+            { id:4, generator: puzzle.Forest }, 
+            { id:32, generator: puzzle.Forest }
         ];
 
         var placeIndex = 0;

@@ -1,5 +1,41 @@
 "use strict";
-define(['colors','utility','three.min','tween.min'], function(colors, utility) {
+define(['colors','utility','three.min','tween.min'], function( colors, utility ) {
+    function ForestMesh( params ) {
+
+        var points = new THREE.SplineCurve3([
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(0, 20, utility.randomZero(20)),
+            new THREE.Vector3(0, 40, utility.randomZero(20)),
+            new THREE.Vector3(0, 60, utility.randomZero(20)),
+            new THREE.Vector3(0, 80, utility.randomZero(20)),
+            new THREE.Vector3(0, 100, utility.randomZero(20)),
+        ]);
+           
+        // points, ?, radius, facets, ? ?
+        var radius = 2.5 * params.solvedIndex;
+        var geometry = new THREE.TubeGeometry( points, 3, radius, 4, true, true );
+
+        geometry.applyMatrix( 
+             new THREE.Matrix4()
+                .makeTranslation( 0, 0, 0 ) );
+
+        geometry.applyMatrix( 
+             new THREE.Matrix4()
+                .makeRotationFromQuaternion(
+                    new THREE.Quaternion()
+                        .setFromAxisAngle( 
+                            new THREE.Vector3( 1, 0, 0), 
+                            -Math.PI/2 )));
+
+        var material = new THREE.MeshPhongMaterial({
+            color: 0xFFFFFF,
+            side: THREE.DoubleSide,
+        });
+
+        var mesh = new THREE.Mesh( geometry, material );
+        return mesh;
+    }
+
     function CityMesh( params ) {
         var block = new THREE.Object3D();
         var w = params.width/2;
@@ -143,6 +179,43 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
         return block;
     }
 
+    function Forest( params ) {
+        var model = new ForestMesh( params );
+
+        var tween;
+        function activate( rate ) {
+            if( tween ) { tween.stop(); }
+            tween = new TWEEN.Tween( {z:model.position.z, r:0} )
+                .to( { z:-0.01, r:Math.PI }, rate/2 )
+                .easing( TWEEN.Easing.Exponential.In )
+                .repeat(Infinity)
+                .yoyo(true)
+                .onUpdate( function() {
+                    model.position.z = this.z;
+                    model.rotation.z = this.r;
+                })
+            .start();
+        }
+
+        function deactivate( rate ) {
+            if( tween ) { tween.stop(); }
+            tween = new TWEEN.Tween( { z:model.position.z, r:model.rotation.z } )
+                .to( { z:50, r:0 }, rate/2 )
+                .easing( TWEEN.Easing.Exponential.Out )
+                .onUpdate( function() {
+                    model.position.z = this.z;
+                    model.rotation.z = this.r;
+                })
+                .start();
+        }
+
+        return {
+            model:model,
+            activate:activate,
+            deactivate:deactivate
+        };
+    }
+
     function Refinery( params ) {
         var model = new RefineryMesh( params );
         model.position.z = 0;
@@ -216,9 +289,10 @@ define(['colors','utility','three.min','tween.min'], function(colors, utility) {
     }
 
     return {
-        Hammer:Hammer,
-        City:City,
-        Refinery:Refinery,
-        PointerMesh:PointerMesh,
+        Hammer: Hammer,
+        City: City,
+        Refinery: Refinery,
+        PointerMesh: PointerMesh,
+        Forest: Forest,
     };
 });

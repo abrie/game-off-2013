@@ -296,9 +296,14 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         return new Puzzle( factory.Refinery, product.Battery );
     }
 
+    function Forest() {
+        return new Puzzle( factory.Forest, product.Battery );
+    }
+
     return {
-        Hammer:Hammer,
-        City:City,
-        Refinery:Refinery,
+        Hammer: Hammer,
+        City: City,
+        Refinery: Refinery,
+        Forest: Forest,
     };
 });
