@@ -1,5 +1,65 @@
 "use strict";
 define(['assets','utility','three.min'],function( assets, utility ){
+    function Animator( product ) {
+        var raiseTween, scaleTween;
+        function activate() {
+            if( raiseTween ) { raiseTween.stop(); }
+            if( scaleTween ) { scaleTween.stop(); }
+            var raiseStart = {r:100};
+            var raiseEnd = {r:-100};
+            var scaleStart = {r:1};
+            var scaleEnd = {r:10.0};
+            function restart() {
+                raiseStart.r = 100;
+                scaleStart.r = 1.0;
+                product.start();
+                raiseTween.start();
+            }
+            scaleTween = new TWEEN.Tween( scaleStart )
+                .to( scaleEnd, 1000 )
+                .easing( TWEEN.Easing.Exponential.In )
+                .onUpdate( function() {
+                    product.model.scale.set( this.r, this.r, this.r );
+                    product.update();
+                })
+                .onComplete( function() {
+                    result.onProductProduced( product );
+                    product.model.visible = false;
+                    restart();
+                });
+
+            raiseTween = new TWEEN.Tween( raiseStart )
+                .to( raiseEnd, 5000 )
+                .delay( 250 )
+                .easing( TWEEN.Easing.Bounce.In )
+                .onStart( function() {
+                    product.model.visible = true;
+                    product.model.scale.set( 1, 1, 1 );
+                })
+                .onUpdate( function() {
+                    product.model.position.z = this.r;
+                })
+                .chain( scaleTween );
+
+
+            restart();
+        } 
+
+        function deactivate() {
+            product.model.visible = false;
+            if( scaleTween ) { scaleTween.stop(); }
+            if( raiseTween ) { raiseTween.stop(); }
+        }
+
+        var result = {
+            activate: activate,
+            deactivate: deactivate,
+            onProductProduced: undefined,
+        };
+
+        return result;
+    }
+
     function Battery() {
         var geometry = new THREE.CubeGeometry(50,50,50);
         var texture = assets.get("texture").get("battery");
@@ -100,6 +160,7 @@ define(['assets','utility','three.min'],function( assets, utility ){
     }
 
     return {
+        Animator: Animator,
         Battery: Battery,
         Music: Music,
         Molecule: Molecule

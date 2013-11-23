@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         return mesh;
     }
 
-    function Puzzle( FactoryType, ProductType ) {
+    function Puzzle( FactoryType, ProductType, AnimatorType ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -168,51 +168,14 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         var product = new ProductType();
         container.add( product.model );
         product.model.visible = false;
+        var animator = new AnimatorType( product );
+        animator.onProductProduced = function(p) { 
+            result.onProductProduced(p); 
+        };
 
-        var raiseTween, scaleTween;
         function activate() {
-            if( raiseTween ) { raiseTween.stop(); }
-            if( scaleTween ) { scaleTween.stop(); }
-            var raiseStart = {r:100};
-            var raiseEnd = {r:-100};
-            var scaleStart = {r:1};
-            var scaleEnd = {r:10.0};
-            function restart() {
-                raiseStart.r = 100;
-                scaleStart.r = 1.0;
-                product.start();
-                raiseTween.start();
-            }
-            scaleTween = new TWEEN.Tween( scaleStart )
-                .to( scaleEnd, 1000 )
-                .easing( TWEEN.Easing.Exponential.In )
-                .onUpdate( function() {
-                    product.model.scale.set( this.r, this.r, this.r );
-                    product.update();
-                })
-                .onComplete( function() {
-                    result.onProductProduced( product );
-                    product.model.visible = false;
-                    console.log(product.model.visible);
-                    restart();
-                });
 
-            raiseTween = new TWEEN.Tween( raiseStart )
-                .to( raiseEnd, 5000 )
-                .delay( 250 )
-                .easing( TWEEN.Easing.Bounce.In )
-                .onStart( function() {
-                    product.model.visible = true;
-                    console.log(product.model.visible);
-                    product.model.scale.set( 1, 1, 1 );
-                })
-                .onUpdate( function() {
-                    product.model.position.z = this.r;
-                })
-                .chain( scaleTween );
-
-
-            restart();
+            animator.activate();
 
             pieces.forEach( function(piece) {
                 if( piece ) {
@@ -222,9 +185,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         }
 
         function deactivate() {
-            product.model.visible = false;
-            if( scaleTween ) { scaleTween.stop(); }
-            if( raiseTween ) { raiseTween.stop(); }
+            animator.deactivate();
+
             pieces.forEach( function(piece) {
                 if( piece ) {
                     piece.deactivate( 1000 );
@@ -289,19 +251,19 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
     }
 
     function Hammer() {
-        return new Puzzle( factory.Hammer, product.Music );
+        return new Puzzle( factory.Hammer, product.Music, product.Animator );
     }
 
     function City() {
-        return new Puzzle( factory.City, product.Battery );
+        return new Puzzle( factory.City, product.Battery, product.Animator );
     }
 
     function Refinery() {
-        return new Puzzle( factory.Refinery, product.Battery );
+        return new Puzzle( factory.Refinery, product.Battery, product.Animator );
     }
 
     function Forest() {
-        return new Puzzle( factory.Forest, product.Molecule );
+        return new Puzzle( factory.Forest, product.Molecule, product.Animator );
     }
 
     return {
