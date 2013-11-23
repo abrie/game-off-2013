@@ -1,6 +1,14 @@
 "use strict";
-define(['assets', 'three.min'],function( assets ){
+define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, utility ){
     function Animator( product ) {
+        var sound = {
+            target: 'oscsynth',
+            notes: [64, 68, 71],
+            at: 0,
+            velocity: 1.0,
+            adsr: {attack:0.10, release:0.25 },
+            duration: 0.1,
+        };
         var raiseTween, scaleTween;
         function activate( rate ) {
             if( raiseTween ) { raiseTween.stop(); }
@@ -20,6 +28,9 @@ define(['assets', 'three.min'],function( assets ){
             scaleTween = new TWEEN.Tween( scaleStart )
                 .to( scaleEnd, 1/4 * rate )
                 .easing( TWEEN.Easing.Exponential.In )
+                .onStart( function() {
+                    audio.dispatch( sound );
+                })
                 .onUpdate( function() {
                     product.model.scale.set( this.r, this.r, this.r );
                     product.update();
