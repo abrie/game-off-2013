@@ -175,7 +175,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
 
         function activate() {
 
-            animator.activate();
+            animator.activate( 2500 );
 
             pieces.forEach( function(piece) {
                 if( piece ) {

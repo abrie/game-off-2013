@@ -2,21 +2,23 @@
 define(['assets','utility','three.min'],function( assets, utility ){
     function Animator( product ) {
         var raiseTween, scaleTween;
-        function activate() {
+        function activate( rate ) {
             if( raiseTween ) { raiseTween.stop(); }
             if( scaleTween ) { scaleTween.stop(); }
             var raiseStart = {r:100};
             var raiseEnd = {r:-100};
             var scaleStart = {r:1};
-            var scaleEnd = {r:10.0};
+            var scaleEnd = {r:20.0};
+
             function restart() {
                 raiseStart.r = 100;
                 scaleStart.r = 1.0;
                 product.start();
                 raiseTween.start();
             }
+
             scaleTween = new TWEEN.Tween( scaleStart )
-                .to( scaleEnd, 1000 )
+                .to( scaleEnd, 1/4 * rate )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onUpdate( function() {
                     product.model.scale.set( this.r, this.r, this.r );
@@ -29,8 +31,8 @@ define(['assets','utility','three.min'],function( assets, utility ){
                 });
 
             raiseTween = new TWEEN.Tween( raiseStart )
-                .to( raiseEnd, 5000 )
-                .delay( 250 )
+                .to( raiseEnd, 2/4 * rate )
+                .delay( 1/4 * rate )
                 .easing( TWEEN.Easing.Bounce.In )
                 .onStart( function() {
                     product.model.visible = true;
@@ -78,7 +80,6 @@ define(['assets','utility','three.min'],function( assets, utility ){
 
         return {
             model:mesh,
-            image: assets.get("inventory").get("battery"),
             type:"BATTERY",
             update:update,
             start:start,
@@ -107,7 +108,6 @@ define(['assets','utility','three.min'],function( assets, utility ){
 
         return {
             model:container,
-            image: assets.get("inventory").get("battery"),
             type:"MOLECULE",
             update:update,
             start:start,
@@ -154,7 +154,6 @@ define(['assets','utility','three.min'],function( assets, utility ){
              model: particleSystem,
              update: update,
              start: start,
-             image: assets.get("inventory").get("music"),
              type: "MUSIC"
          };
     }
