@@ -1,23 +1,15 @@
 "use strict";
-define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, utility ){
-    function Animator( product ) {
-        var sound = {
-            target: 'oscsynth',
-            notes: [71-12, 64, 68, 71, 71-12],
-            type: "sine",
-            at: 0,
-            velocity: 1.0,
-            adsr: {attack:0.10, release:0.05 },
-        };
 
+define(['assets', 'utility', 'three.min'],function( assets, utility ){
+    function Animator( product ) {
         var raiseTween, scaleTween;
         function activate( rate ) {
             if( raiseTween ) { raiseTween.stop(); }
             if( scaleTween ) { scaleTween.stop(); }
-            var raiseStart = {r:100};
-            var raiseEnd = {r:-100};
-            var scaleStart = {r:1};
-            var scaleEnd = {r:20.0};
+            var raiseStart = { r: 100 };
+            var raiseEnd = { r: -100 };
+            var scaleStart = { r: 1 };
+            var scaleEnd = { r: 20.0 };
 
             function restart() {
                 raiseStart.r = 100;
@@ -26,7 +18,6 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
                 raiseTween.start();
             }
 
-            sound.span = rate*(3/4)/1000;
             scaleTween = new TWEEN.Tween( scaleStart )
                 .to( scaleEnd, 1/4 * rate )
                 .easing( TWEEN.Easing.Exponential.In )
@@ -49,7 +40,7 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
                 .onStart( function() {
                     product.model.visible = true;
                     product.model.scale.set( 1, 1, 1 );
-                    audio.dispatch( sound );
+                    result.onStart();
                 })
                 .onUpdate( function() {
                     product.model.position.z = this.r;
@@ -70,15 +61,16 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
             activate: activate,
             deactivate: deactivate,
             onComplete: undefined,
+            onStart: undefined,
         };
 
         return result;
     }
 
     function Battery() {
-        var geometry = new THREE.CubeGeometry(50,50,50);
+        var geometry = new THREE.CubeGeometry( 50, 50, 50 );
         var texture = assets.get("texture").get("battery");
-        var material = new THREE.MeshPhongMaterial({transparent:true, opacity:0.95, side:THREE.DoubleSide, map:texture});
+        var material = new THREE.MeshPhongMaterial({ transparent:true, opacity:0.95, side:THREE.DoubleSide, map:texture });
         var mesh = new THREE.Mesh( geometry, material );
 
         function start() {
@@ -103,14 +95,14 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
         var container = new THREE.Object3D();
         for( var index = 0; index < 10; index++ ) {
             var geometry = new THREE.SphereGeometry( Math.random()*7 );
-            var material = new THREE.MeshPhongMaterial({transparent:true, opacity:0.75, side:THREE.DoubleSide});
+            var material = new THREE.MeshPhongMaterial({ transparent:true, opacity:0.75, side:THREE.DoubleSide });
             var mesh = new THREE.Mesh( geometry, material );
             mesh.position.set( Math.random()*10-5, Math.random()*10-5, Math.random()*10-5 );
             container.add( mesh );
         }
 
         function start() {
-            container.rotation.set(0,0,0);
+            container.rotation.set( 0, 0, 0 );
         }
 
         function update() {
@@ -143,15 +135,15 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
         for(var p = 0; p < particleCount; p++) {
             var theta = Math.random()*2*Math.PI;
             var phi = Math.random()*Math.PI;
-            var pX = radius*Math.cos(theta)*Math.sin(phi);
-            var pY = radius*Math.sin(theta)*Math.sin(phi);
-            var pZ = radius*Math.cos(phi);
-            var particle = new THREE.Vector3(pX, pY, pZ);
+            var pX = radius*Math.cos( theta )*Math.sin( phi );
+            var pY = radius*Math.sin( theta )*Math.sin( phi );
+            var pZ = radius*Math.cos( phi );
+            var particle = new THREE.Vector3( pX, pY, pZ );
 
-            particles.vertices.push(particle);
+            particles.vertices.push( particle );
         }
 
-        var particleSystem = new THREE.ParticleSystem( particles, pMaterial);
+        var particleSystem = new THREE.ParticleSystem( particles, pMaterial );
 
         function update() {
             particleSystem.rotation.y += Math.PI/90; 
@@ -160,15 +152,15 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
         }
 
         function start() {
-            particleSystem.rotation.set(0,0,0);
+            particleSystem.rotation.set( 0, 0, 0 );
         }
 
-         return {
-             model: particleSystem,
-             update: update,
-             start: start,
-             type: "MUSIC"
-         };
+        return {
+            model: particleSystem,
+            update: update,
+            start: start,
+            type: "MUSIC"
+        };
     }
 
     return {

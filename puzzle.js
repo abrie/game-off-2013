@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','assets','puzzlelogic','settings','factory','product', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, product) {
+define(['colors','assets','puzzlelogic','settings','factory','product','noisemaker', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, product, noisemaker ) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         return mesh;
     }
 
-    function Puzzle( FactoryType, ProductType, AnimatorType, waveform ) {
+    function Puzzle( FactoryType, ProductType, AnimatorType, AudioType ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -174,6 +174,12 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
             result.onProductProduced(p); 
         };
 
+        animator.onStart = function() {
+            noiseGenerator.emit();
+        };
+
+        var noiseGenerator = new AudioType();
+
         function activate() {
 
             animator.activate( 2500 );
@@ -252,19 +258,19 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
     }
 
     function Hammer() {
-        return new Puzzle( factory.Hammer, product.Music, product.Animator );
+        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Generic  );
     }
 
     function City() {
-        return new Puzzle( factory.City, product.Battery, product.Animator );
+        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Generic );
     }
 
     function Refinery() {
-        return new Puzzle( factory.Refinery, product.Battery, product.Animator );
+        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Generic );
     }
 
     function Forest() {
-        return new Puzzle( factory.Forest, product.Molecule, product.Animator );
+        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Generic );
     }
 
     return {
