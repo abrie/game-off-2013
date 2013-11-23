@@ -6,7 +6,7 @@ define(['ui','audio'], function(ui,audio) {
         type: "sawtooth",
         at: 0,
         velocity: 1.0,
-        adsr: {attack:0.20, release:0.15 },
+        adsr: {attack:0.20, release:0.05 },
         span: 0.75
     };
 

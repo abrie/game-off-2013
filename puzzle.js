@@ -258,19 +258,19 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
     }
 
     function Hammer() {
-        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Generic  );
+        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Sine  );
     }
 
     function City() {
-        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Generic );
+        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Sine );
     }
 
     function Refinery() {
-        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Generic );
+        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Sawtooth );
     }
 
     function Forest() {
-        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Generic );
+        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Square );
     }
 
     return {

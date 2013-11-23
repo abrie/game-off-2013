@@ -34,7 +34,7 @@ define([], function() {
             oscillator.detune.value = detune;
             oscillator.frequency.value = getFrequency( params.note );
             oscillator.start( start );
-            oscillator.stop( start + params.duration );
+            oscillator.stop( start + params.duration*1.5 );
 
             voiceOutput.gain.value = gain;
         }
