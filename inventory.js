@@ -1,11 +1,22 @@
 "use strict";
-define(['ui'], function(ui) {
+define(['ui','audio'], function(ui,audio) {
+    var sound = {
+        target: 'oscsynth',
+        notes: [68-12],
+        type: "sawtooth",
+        at: 0,
+        velocity: 1.0,
+        adsr: {attack:0.20, release:0.15 },
+        span: 0.75
+    };
+
     function Inventory() {
         var changed = false;
         var list = [];
         function add(thing) {
             list.push(thing);
             changed = true;
+            audio.dispatch( sound );
             compute();
         }
 

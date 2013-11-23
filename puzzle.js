@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         return mesh;
     }
 
-    function Puzzle( FactoryType, ProductType, AnimatorType ) {
+    function Puzzle( FactoryType, ProductType, AnimatorType, waveform ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 

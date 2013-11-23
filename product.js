@@ -3,12 +3,13 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
     function Animator( product ) {
         var sound = {
             target: 'oscsynth',
-            notes: [64, 68, 71],
+            notes: [71-12, 64, 68, 71, 71-12],
+            type: "sine",
             at: 0,
             velocity: 1.0,
-            adsr: {attack:0.10, release:0.25 },
-            duration: 0.1,
+            adsr: {attack:0.10, release:0.05 },
         };
+
         var raiseTween, scaleTween;
         function activate( rate ) {
             if( raiseTween ) { raiseTween.stop(); }
@@ -25,11 +26,11 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
                 raiseTween.start();
             }
 
+            sound.span = rate*(3/4)/1000;
             scaleTween = new TWEEN.Tween( scaleStart )
                 .to( scaleEnd, 1/4 * rate )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onStart( function() {
-                    audio.dispatch( sound );
                 })
                 .onUpdate( function() {
                     product.model.scale.set( this.r, this.r, this.r );
@@ -48,6 +49,7 @@ define(['assets', 'audio', 'utility', 'three.min'],function( assets, audio, util
                 .onStart( function() {
                     product.model.visible = true;
                     product.model.scale.set( 1, 1, 1 );
+                    audio.dispatch( sound );
                 })
                 .onUpdate( function() {
                     product.model.position.z = this.r;

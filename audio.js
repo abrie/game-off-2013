@@ -42,8 +42,10 @@ function( oscsynth, sampler, utility, google ) {
     sampler.initialize( context, chain[0], utility.noteToFrequency );
 
     function dispatch( event ) {
+        var duration = event.span / event.notes.length;
         event.notes.forEach( function( note, index ) {
-            event.at = index * 0.15;
+            event.at = index * duration;
+            event.duration = duration;
             event.note = note;
             switch( event.target ) {
                 case 'oscsynth': oscsynth.play( event ); break;
