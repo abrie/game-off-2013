@@ -1,5 +1,5 @@
 "use strict";
-define(['assets','utility','three.min'],function( assets, utility ){
+define(['assets', 'three.min'],function( assets ){
     function Animator( product ) {
         var raiseTween, scaleTween;
         function activate( rate ) {
@@ -25,7 +25,7 @@ define(['assets','utility','three.min'],function( assets, utility ){
                     product.update();
                 })
                 .onComplete( function() {
-                    result.onProductProduced( product );
+                    result.onComplete( product );
                     product.model.visible = false;
                     restart();
                 });
@@ -56,7 +56,7 @@ define(['assets','utility','three.min'],function( assets, utility ){
         var result = {
             activate: activate,
             deactivate: deactivate,
-            onProductProduced: undefined,
+            onComplete: undefined,
         };
 
         return result;

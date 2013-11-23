@@ -168,8 +168,9 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         var product = new ProductType();
         container.add( product.model );
         product.model.visible = false;
+
         var animator = new AnimatorType( product );
-        animator.onProductProduced = function(p) { 
+        animator.onComplete = function(p) { 
             result.onProductProduced(p); 
         };
 
