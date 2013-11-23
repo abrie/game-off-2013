@@ -166,6 +166,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         });
 
         var product = new ProductType();
+        container.add( product.model );
+        product.model.visible = false;
 
         var raiseTween, scaleTween;
         function activate() {
@@ -190,7 +192,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
                 })
                 .onComplete( function() {
                     result.onProductProduced( product );
-                    container.remove( product.model );
+                    product.model.visible = false;
+                    console.log(product.model.visible);
                     restart();
                 });
 
@@ -199,7 +202,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
                 .delay( 250 )
                 .easing( TWEEN.Easing.Bounce.In )
                 .onStart( function() {
-                    container.add( product.model );
+                    product.model.visible = true;
+                    console.log(product.model.visible);
                     product.model.scale.set( 1, 1, 1 );
                 })
                 .onUpdate( function() {
@@ -218,7 +222,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product', 'three.m
         }
 
         function deactivate() {
-            container.remove( product.model );
+            product.model.visible = false;
             if( scaleTween ) { scaleTween.stop(); }
             if( raiseTween ) { raiseTween.stop(); }
             pieces.forEach( function(piece) {
