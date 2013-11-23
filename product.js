@@ -1,5 +1,5 @@
 "use strict";
-define(['assets','utility','three.min'],function(assets,utility){
+define(['assets','utility','three.min'],function( assets, utility ){
     function Battery() {
         var geometry = new THREE.CubeGeometry(50,50,50);
         var texture = assets.get("texture").get("battery");
@@ -60,7 +60,7 @@ define(['assets','utility','three.min'],function(assets,utility){
         var pMaterial = new THREE.ParticleBasicMaterial({
             color: 0x999999,
             size: 64,
-            map: assets.get("texture").get("note"),
+            map: assets.get("texture").get("music"),
             blending: THREE.AdditiveBlending,
             transparent: true
           });
@@ -94,7 +94,7 @@ define(['assets','utility','three.min'],function(assets,utility){
              model: particleSystem,
              update: update,
              start: start,
-             image: assets.get("inventory").get("note"),
+             image: assets.get("inventory").get("music"),
              type: "MUSIC"
          };
     }

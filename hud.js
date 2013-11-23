@@ -35,12 +35,15 @@ define(['assets'], function(assets) {
             context.clearRect(0,0,element.width,element.height);
         }
 
+        var itemWidth = 32;
+        var itemHeight = 32;
+
         function column(index) {
-            return index*65+1;
+            return index*(itemWidth+1)+1;
         }
 
         function row(index) {
-            return 168+index*65;
+            return 168+index*(itemHeight+1);
         }
 
         function render() {
@@ -50,16 +53,19 @@ define(['assets'], function(assets) {
 
             var index;
 
+            var image = assets.get("inventory").get("battery");
             for( index = 0; index < inventory.count("BATTERY"); index++ ) {
-                context.drawImage( assets.get("inventory").get("battery"), column(index), row(0) );
+                context.drawImage( image, column(index), row(0), itemWidth, itemHeight );
             }
 
+            image = assets.get("inventory").get("music");
             for( index = 0; index < inventory.count("MUSIC"); index++ ) {
-                context.drawImage( assets.get("inventory").get("note"), column(index), row(1) );
+                context.drawImage( image, column(index), row(1), itemWidth, itemHeight );
             }
 
+            image = assets.get("inventory").get("molecule");
             for( index = 0; index < inventory.count("MOLECULE"); index++ ) {
-                context.drawImage( assets.get("inventory").get("molecule"), column(index), row(2) );
+                context.drawImage( image, column(index), row(2), itemWidth, itemHeight );
             }
         }
 

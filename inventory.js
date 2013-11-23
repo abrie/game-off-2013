@@ -23,7 +23,7 @@ define(['ui'], function(ui) {
         function compute() {
             var batteryCount = count("BATTERY");
 
-            if( batteryCount > 4 ) {
+            if( batteryCount > 8 ) {
                 list.length = 0;
                 console.log("BOOM! Inventory destroyed:", list);
                 changed = true;
