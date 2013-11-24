@@ -11,7 +11,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             var scaleStart = { r: 1 };
             var scaleEnd = { r: 20.0 };
 
-            function restart() {
+            function start() {
                 raiseStart.r = 100;
                 scaleStart.r = 1.0;
                 product.start();
@@ -19,9 +19,10 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             }
 
             scaleTween = new TWEEN.Tween( scaleStart )
-                .to( scaleEnd, 1/4 * rate )
+                .to( scaleEnd, rate )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onStart( function() {
+                    result.onScale();
                 })
                 .onUpdate( function() {
                     product.model.scale.set( this.r, this.r, this.r );
@@ -30,13 +31,13 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 .onComplete( function() {
                     result.onComplete( product );
                     product.model.visible = false;
-                    restart();
+                    start();
                 });
 
             raiseTween = new TWEEN.Tween( raiseStart )
-                .to( raiseEnd, 2/4 * rate )
-                .delay( 1/4 * rate )
-                .easing( TWEEN.Easing.Bounce.In )
+                .to( raiseEnd, rate )
+                //.delay( 1/4 * rate )
+                .easing( TWEEN.Easing.Exponential.In )
                 .onStart( function() {
                     product.model.visible = true;
                     product.model.scale.set( 1, 1, 1 );
@@ -47,8 +48,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 })
                 .chain( scaleTween );
 
-
-            restart();
+            start();
         } 
 
         function deactivate() {
@@ -62,6 +62,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             deactivate: deactivate,
             onComplete: undefined,
             onStart: undefined,
+            onScale: undefined,
         };
 
         return result;

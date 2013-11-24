@@ -224,7 +224,7 @@ define(['colors','utility','three.min','tween.min'], function( colors, utility )
         function activate( rate ) {
             if( tween ) { tween.stop(); }
             tween = new TWEEN.Tween( {z:model.position.z, r:0} )
-                .to( { z:-0.01, r:Math.PI }, rate/2 )
+                .to( { z:-0.01, r:Math.PI }, rate )
                 .easing( TWEEN.Easing.Exponential.In )
                 .repeat(Infinity)
                 .yoyo(true)

@@ -7,7 +7,7 @@ define(['ui','audio'], function(ui,audio) {
         at: 0,
         velocity: 1.0,
         adsr: {attack:0.20, release:0.05 },
-        span: 0.75,
+        span: 750,
         lensId: -1,
     };
 

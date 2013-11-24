@@ -64,7 +64,7 @@ function( oscsynth, sampler, utility, google ) {
     }
 
     function dispatch( event ) {
-        var duration = event.span / event.notes.length;
+        var duration = event.span / 1000 / event.notes.length;
         event.notes.forEach( function( note, index ) {
             event.at = index * duration;
             event.duration = duration;

@@ -72,11 +72,13 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
                     .to( {x:newx, y:newy }, 500 )
                     .easing( TWEEN.Easing.Bounce.Out)
                     .onUpdate( function () {
-                            model.position.x = this.x; 
-                            model.position.y = this.y;
-                            model.position.z = 0;
-                            } )
-                .start();
+                        model.position.x = this.x; 
+                        model.position.y = this.y;
+                        model.position.z = 0;
+                        })
+                    .onComplete( function() { checkSolved();
+                        })
+                    .start();
             }
 
             function getIndex() {
@@ -160,7 +162,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
                 container.add( piece.model );
                 addPickable( piece.model, function() { 
                     logic.doAction( piece.getIndex() );
-                    checkSolved();
                 });
             }
         });
@@ -174,24 +175,27 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             result.onProductProduced(p); 
         };
 
-        animator.onStart = function() {
-            noiseGenerator.emit( lensId );
-        };
-
         var noiseGenerator = new AudioType();
+        animator.onScale = function() {
+            noiseGenerator.emit( lensId, 1, 1000 );
+        };
+        animator.onStart = function() {
+            noiseGenerator.emit( lensId, 0, 500 );
+        };
 
         function activate() {
 
-            animator.activate( 2500 );
+            animator.activate( 1000 );
 
             pieces.forEach( function(piece) {
                 if( piece ) {
-                    piece.activate( 2000 );
+                    piece.activate( 1000 );
                 }
             });
         }
 
         function deactivate() {
+
             animator.deactivate();
 
             pieces.forEach( function(piece) {
@@ -229,7 +233,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         function bump() {
             var index = logic.randomAdjacentToHole();
             logic.doAction( index );
-            checkSolved();
         }
 
         checkSolved();
