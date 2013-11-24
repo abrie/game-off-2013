@@ -1,12 +1,12 @@
 "use strict";
 define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utility ) {
 
-    function Filter( types ) {
+    function Filter( descriptor ) {
         var view = new arscene.View();
-        var puzzles = types.map( function(type) {
+        var puzzles = descriptor.puzzles.map( function(puzzle) {
             return {
-                id: type.id, 
-                object: new type.generator(), 
+                id: puzzle.id, 
+                object: new puzzle.generator(), 
             };
         });
 

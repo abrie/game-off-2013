@@ -1,21 +1,21 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility', 'settings', 'product'], function( filtermode, strawman, assets, puzzle, utility, settings, product ) {
+define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, settings ) {
     function Level( inventory ) {
 
-        var filterA = [
+        var filterA = { puzzles:[
             { id:4, generator: puzzle.Hammer }, 
             { id:32, generator: puzzle.Hammer }
-        ];
+        ]};
 
-        var filterB = [
+        var filterB = { puzzles:[
             { id:4, generator: puzzle.Refinery }, 
             { id:32, generator: puzzle.Refinery }
-        ];
+        ]};
 
-        var filterC = [
+        var filterC = { puzzles:[
             { id:4, generator: puzzle.Forest }, 
             { id:32, generator: puzzle.Forest }
-        ];
+        ]};
 
         var placeIndex = 0;
         var places = [ 
