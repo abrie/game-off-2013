@@ -38,8 +38,29 @@ function( oscsynth, sampler, utility, google ) {
         context.destination
     ]);
 
-    oscsynth.initialize( context, chain[0], utility.noteToFrequency );  
-    sampler.initialize( context, chain[0], utility.noteToFrequency );
+    var convolver = context.createConvolver();
+
+    function setConvolverBuffer( buffer ) {
+        convolver.buffer = buffer;
+        console.log(convolver.buffer);
+    }
+
+    var chainB = connect([
+        convolver,
+        masterGain,
+        waveShaper,
+        allPass,
+        masterCompressor,
+        context.destination
+    ]);
+
+    oscsynth.initialize( context, chain[0], chainB[0], utility.noteToFrequency );  
+    //sampler.initialize( context, chain[0], utility.noteToFrequency );
+
+    var lens = 0;
+    function setLens( id ) {
+        lens = id;
+    }
 
     function dispatch( event ) {
         var duration = event.span / event.notes.length;
@@ -59,6 +80,8 @@ function( oscsynth, sampler, utility, google ) {
         setOscSynthGain: function(value) { oscsynth.setGain(value); },
         setSamplerGain: function(value) { sampler.setGain(value); },
         setWaveShaperDrive: function(value) { waveShaper.setDrive(value); },
+        setConvolver: setConvolverBuffer,
         loadSample: sampler.loadSample,
+        getContext: function() { return context; },
 	};
 });

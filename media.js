@@ -1,6 +1,54 @@
 "use strict";
 
-define([],function() {
+define([], function() {
+    function AudioCollection( params ) {
+        var loaded = false;
+        var collection = {};
+        var loader = new params.loader( params.context, params.files );
+        loader.onProgress = function( item, current, total) {
+            collection[item.id] = item.buffer;
+            var percent = Math.ceil( current/total *100 );
+            if( progressCallback ) {
+                progressCallback( percent );
+            }
+            if( percent >= 100 ) {
+                loaded = true;
+                if( loadCallback ) {
+                    loadCallback();
+                }
+            }
+        };
+
+        loader.load();
+
+        var loadCallback;
+        function onLoaded( callback ) {
+            loadCallback = callback;
+            if( loaded ) {
+                loadCallback();
+            }
+        }
+
+        var progressCallback;
+        function onProgress( callback ) {
+            progressCallback = callback;
+        }
+
+        function isLoaded() {
+            return loaded;
+        }
+
+        function get( name ) {
+            return collection[name];
+        }
+
+        return {
+            get: get,
+            onLoaded: onLoaded,
+            isLoaded: isLoaded,
+            onProgress: onProgress,
+        };
+    }
 
     function BitmapCollection( params ) {
         var loaded = false;
@@ -171,5 +219,6 @@ define([],function() {
     return {
         Video:Video,
         BitmapCollection:BitmapCollection,
+        AudioCollection:AudioCollection,
     };
 }());

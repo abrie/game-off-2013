@@ -4,7 +4,7 @@ requirejs.config({
     waitSeconds: 200,
 });
 
-require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mainloop ) {
+require(['assets', 'audio', 'loadscreen', 'mainloop' ], function( assets, audio, loadscreen, mainloop ) {
 
     var loadScreen = new loadscreen.LoadScreen( document.body );
 
@@ -14,6 +14,7 @@ require(['assets', 'loadscreen', 'mainloop' ], function( assets, loadscreen, mai
     }
 
     function loadComplete() {
+        audio.setConvolver( assets.get("impulses").get("telephone") );
         loadScreen.close();
         mainloop.start();
     }

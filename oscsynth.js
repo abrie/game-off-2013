@@ -1,22 +1,25 @@
 "use strict";
 define([], function() {
 
-    var context, destination, mainOutput, getFrequency = undefined;
-    function initialize( ctx, dst, ff ) {
+    var context, destination, destinationB, mainOutput, secondaryOutput, getFrequency = undefined;
+    function initialize( ctx, dst, dstB, ff ) {
         context = ctx;
         destination = dst;
+        destinationB = dstB;
         getFrequency = ff;
         mainOutput = context.createGainNode();
         mainOutput.connect( destination );
+        secondaryOutput = context.createGainNode();
+        secondaryOutput.connect( destinationB );
     }
 
     function setGain(value) {
         mainOutput.gain.value = value;
     }
 
-    var Voice = function( params, detune, gain ) {
+    var Voice = function( params, detune, gain, output ) {
         var voiceOutput = context.createGainNode();
-        voiceOutput.connect( mainOutput );
+        voiceOutput.connect( output );
 
         var envelope = context.createGainNode();
         envelope.connect( voiceOutput );
@@ -45,7 +48,7 @@ define([], function() {
     };
     
     function play( params ) {
-        var v = new Voice( params, Math.random()*0.25, 0.5 );
+        var v = new Voice( params, Math.random()*0.25, 0.5, params.dull ? secondaryOutput : mainOutput );
         v.play();
     }
 

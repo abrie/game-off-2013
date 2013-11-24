@@ -1,6 +1,6 @@
 "use strict";
 
-define(['media','three.min'], function(media) {
+define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferloader, audio ) {
 
     var list = [], onAllLoaded;
 
@@ -89,6 +89,14 @@ define(['media','three.min'], function(media) {
                 { id: 'music', file: 'note.png' }
             ],
             loader: THREE.TextureLoader,
+        }), onInitialize, onProgress );
+
+        add( "impulses", new media.AudioCollection({
+            files: [
+                { id: 'telephone', file: 'assets/telephone.wav' },
+            ],
+           loader: bufferloader.BufferLoader,
+           context: audio.getContext(),
         }), onInitialize, onProgress );
     }
 
