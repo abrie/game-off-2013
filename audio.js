@@ -68,6 +68,8 @@ function( oscsynth, sampler, utility, google ) {
             event.at = index * duration;
             event.duration = duration;
             event.note = note;
+            event.dull = event.lensId === lens ? false : true;
+            console.log(event.dull);
             switch( event.target ) {
                 case 'oscsynth': oscsynth.play( event ); break;
                 case 'sampler': sampler.play( event ); break;
@@ -83,5 +85,6 @@ function( oscsynth, sampler, utility, google ) {
         setConvolver: setConvolverBuffer,
         loadSample: sampler.loadSample,
         getContext: function() { return context; },
+        setLens: setLens,
 	};
 });

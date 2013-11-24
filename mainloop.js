@@ -1,6 +1,6 @@
 "use strict";
 
-define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, inventory ) {
+define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, inventory, audio ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene, hudView;
@@ -36,11 +36,13 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'tween.min'
 
     function previousFilter() {
         scene.setView( currentLevel.previousFilter().getView() ); 
+        audio.setLens( currentLevel.currentFilter().id );
         hudView.previousFilter();
     }
 
     function nextFilter() {
         scene.setView( currentLevel.nextFilter().getView() ); 
+        audio.setLens( currentLevel.currentFilter().id );
         hudView.nextFilter();
     }
 

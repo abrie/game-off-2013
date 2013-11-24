@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         return mesh;
     }
 
-    function Puzzle( FactoryType, ProductType, AnimatorType, AudioType ) {
+    function Puzzle( FactoryType, ProductType, AnimatorType, AudioType, lensId ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -175,7 +175,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         };
 
         animator.onStart = function() {
-            noiseGenerator.emit();
+            noiseGenerator.emit( lensId );
         };
 
         var noiseGenerator = new AudioType();
@@ -257,20 +257,20 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         return result;
     }
 
-    function Hammer() {
-        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Sine  );
+    function Hammer( lensId ) {
+        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Sine, lensId  );
     }
 
-    function City() {
-        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Sine );
+    function City( lensId ) {
+        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Sine, lensId );
     }
 
-    function Refinery() {
-        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Sawtooth );
+    function Refinery( lensId ) {
+        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Sawtooth, lensId );
     }
 
-    function Forest() {
-        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Square );
+    function Forest( lensId ) {
+        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Square, lensId );
     }
 
     return {

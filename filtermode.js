@@ -6,7 +6,7 @@ define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utili
         var puzzles = descriptor.puzzles.map( function(puzzle) {
             return {
                 id: puzzle.id, 
-                object: new puzzle.generator(), 
+                object: new puzzle.generator( descriptor.id ), 
             };
         });
 
@@ -50,6 +50,7 @@ define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utili
             remove:remove,
             getView:getView,
             add:add,
+            id:descriptor.id,
         };
 
         return result;

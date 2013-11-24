@@ -12,7 +12,8 @@ define(['audio'], function( audio ) {
             span: 1.2,
         };
 
-        function emit() {
+        function emit( lensId ) {
+            sound.lensId = lensId;
             audio.dispatch( sound );
         }
         return {
@@ -31,7 +32,8 @@ define(['audio'], function( audio ) {
             span: 1.2,
         };
 
-        function emit() {
+        function emit( lensId ) {
+            sound.lensId = lensId;
             audio.dispatch( sound );
         }
         return {
@@ -50,7 +52,8 @@ define(['audio'], function( audio ) {
             span: 1.2,
         };
 
-        function emit() {
+        function emit( lensId ) {
+            sound.lensId = lensId;
             audio.dispatch( sound );
         }
         return {
