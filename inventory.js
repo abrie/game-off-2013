@@ -2,12 +2,13 @@
 define(['ui','audio'], function(ui,audio) {
     var sound = {
         target: 'oscsynth',
-        notes: [68-12],
+        notes: [68-12,68-11],
         type: "sawtooth",
         at: 0,
         velocity: 1.0,
         adsr: {attack:0.20, release:0.05 },
-        span: 0.75
+        span: 0.75,
+        lensId: -1,
     };
 
     function Inventory() {
