@@ -18,10 +18,15 @@ define([], function() {
     }
 
     var Voice = function( params, detune, gain ) {
-        var voiceOutput = context.createGainNode();
+        var frontVoice = context.createGainNode();
+        frontVoice.connect( mainOutput );
+
+        var backVoice = context.createGainNode();
+        backVoice.connect( secondaryOutput );
 
         var envelope = context.createGainNode();
-        envelope.connect( voiceOutput );
+        envelope.connect( frontVoice );
+        envelope.connect( backVoice );
 
         var oscillator = context.createOscillator();
         oscillator.connect( envelope );
@@ -37,39 +42,35 @@ define([], function() {
             oscillator.frequency.value = getFrequency( params.note );
             oscillator.start( start );
             oscillator.stop( start + params.duration*1.5 );
-
-            voiceOutput.gain.value = gain;
         }
 
         function isAlive() {
             return oscillator.playbackState !== 3;
         }
 
-        function setOutput( target ) {
-            var saveGain = voiceOutput.gain.value;
-            voiceOutput.gain.value = 0;
-            voiceOutput.disconnect();
-            voiceOutput.connect(target);
-            voiceOutput.gain.setTargetValueAtTime( saveGain, context.currentTime, 0.5) ;
+        function reRoute( front ) {
+            if( front ) {
+                backVoice.gain.setTargetValueAtTime(0, context.currentTime, 0.05 );
+                frontVoice.gain.setTargetValueAtTime(1, context.currentTime, 1 );
+            }
+            else {
+                backVoice.gain.setTargetValueAtTime(1, context.currentTime, 1 );
+                frontVoice.gain.setTargetValueAtTime(0, context.currentTime, 0.05 );
+            }
         }
 
         return {
             play: play,
             isAlive: isAlive,
             lensId: params.lensId,
-            setOutput: setOutput,
+            reRoute: reRoute,
         };
     };
     
     var voices = [];
     function play( params ) {
         var v = new Voice( params, Math.random()*0.25, 0.5 );
-        if( v.lensId === currentLens ) {
-            v.setOutput( mainOutput );
-        }
-        else {
-            v.setOutput( secondaryOutput );
-        }
+        v.reRoute( v.lensId === currentLens );
         v.play();
         voices.push(v);
     }
@@ -78,12 +79,7 @@ define([], function() {
     function routeToLens( id ) {
         voices = voices.filter( function(voice) { return voice.isAlive(); } );
         voices.forEach( function(voice) { 
-            if( voice.lensId === id) {
-                voice.setOutput( mainOutput );
-            }
-            else {
-                voice.setOutput( secondaryOutput );
-            }
+            voice.reRoute( voice.lensId === id );
         });
         currentLens = id;
     }
