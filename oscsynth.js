@@ -17,9 +17,8 @@ define([], function() {
         mainOutput.gain.value = value;
     }
 
-    var Voice = function( params, detune, gain, output ) {
+    var Voice = function( params, detune, gain ) {
         var voiceOutput = context.createGainNode();
-        voiceOutput.connect( output );
 
         var envelope = context.createGainNode();
         envelope.connect( voiceOutput );
@@ -42,19 +41,57 @@ define([], function() {
             voiceOutput.gain.value = gain;
         }
 
+        function isAlive() {
+            return oscillator.playbackState !== 3;
+        }
+
+        function setOutput( target ) {
+            var saveGain = voiceOutput.gain.value;
+            voiceOutput.gain.value = 0;
+            voiceOutput.disconnect();
+            voiceOutput.connect(target);
+            voiceOutput.gain.setTargetValueAtTime( saveGain, context.currentTime, 0.5) ;
+        }
+
         return {
             play: play,
+            isAlive: isAlive,
+            lensId: params.lensId,
+            setOutput: setOutput,
         };
     };
     
+    var voices = [];
     function play( params ) {
-        var v = new Voice( params, Math.random()*0.25, 0.5, params.dull ? secondaryOutput : mainOutput );
+        var v = new Voice( params, Math.random()*0.25, 0.5 );
+        if( v.lensId === currentLens ) {
+            v.setOutput( mainOutput );
+        }
+        else {
+            v.setOutput( secondaryOutput );
+        }
         v.play();
+        voices.push(v);
+    }
+
+    var currentLens = 0;
+    function routeToLens( id ) {
+        voices = voices.filter( function(voice) { return voice.isAlive(); } );
+        voices.forEach( function(voice) { 
+            if( voice.lensId === id) {
+                voice.setOutput( mainOutput );
+            }
+            else {
+                voice.setOutput( secondaryOutput );
+            }
+        });
+        currentLens = id;
     }
 
     return {
         initialize: initialize,
         play: play,
         setGain: setGain,
+        routeToLens: routeToLens,
     };
 });

@@ -60,6 +60,7 @@ function( oscsynth, sampler, utility, google ) {
     var lens = 0;
     function setLens( id ) {
         lens = id;
+        oscsynth.routeToLens(id);
     }
 
     function dispatch( event ) {
@@ -68,8 +69,6 @@ function( oscsynth, sampler, utility, google ) {
             event.at = index * duration;
             event.duration = duration;
             event.note = note;
-            event.dull = event.lensId === lens ? false : true;
-            console.log(event.dull);
             switch( event.target ) {
                 case 'oscsynth': oscsynth.play( event ); break;
                 case 'sampler': sampler.play( event ); break;
