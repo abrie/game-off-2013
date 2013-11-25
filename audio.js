@@ -55,7 +55,7 @@ function( oscsynth, sampler, utility, google ) {
     ]);
 
     oscsynth.initialize( context, chain[0], chainB[0], utility.noteToFrequency );  
-    //sampler.initialize( context, chain[0], utility.noteToFrequency );
+    sampler.initialize( context, chain[0], utility.noteToFrequency );
 
     var lens = 0;
     function setLens( id ) {
@@ -64,16 +64,18 @@ function( oscsynth, sampler, utility, google ) {
     }
 
     function dispatch( event ) {
-        var duration = event.span / 1000 / event.notes.length;
-        event.notes.forEach( function( note, index ) {
-            event.at = index * duration;
-            event.duration = duration;
-            event.note = note;
-            switch( event.target ) {
-                case 'oscsynth': oscsynth.play( event ); break;
-                case 'sampler': sampler.play( event ); break;
-            }
-        });
+        if( event.target === "oscsynth" ) {
+            var duration = event.span / 1000 / event.notes.length;
+            event.notes.forEach( function( note, index ) {
+                event.at = index * duration;
+                event.duration = duration;
+                event.note = note;
+                oscsynth.play( event ); 
+            });
+        }
+        else if( event.target === "sampler" ) {
+            sampler.play( event );
+        } 
     }
 
 	return {

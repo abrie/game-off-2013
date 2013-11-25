@@ -98,6 +98,15 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
            loader: bufferloader.BufferLoader,
            context: audio.getContext(),
         }), onInitialize, onProgress );
+
+        add( "sample", new media.AudioCollection({
+            files: [
+                { id: 'kick', file: 'assets/kick.wav' },
+                { id: 'snare', file: 'assets/snare.wav' },
+            ],
+           loader: bufferloader.BufferLoader,
+           context: audio.getContext(),
+        }), onInitialize, onProgress );
     }
 
     return {

@@ -15,6 +15,7 @@ require(['assets', 'audio', 'loadscreen', 'mainloop' ], function( assets, audio,
 
     function loadComplete() {
         audio.setConvolver( assets.get("impulses").get("telephone") );
+        audio.setWaveShaperDrive( 3.0 );
         loadScreen.close();
         mainloop.start();
     }

@@ -1,9 +1,8 @@
 "use strict";
-define(['ui','audio'], function(ui,audio) {
+define(['ui','audio','assets'], function(ui,audio,assets) {
     var sound = {
-        target: 'oscsynth',
-        notes: [68-12,68-11],
-        type: "sawtooth",
+        target: 'sampler',
+        sample: "kick",
         at: 0,
         velocity: 1.0,
         adsr: {attack:0.20, release:0.05 },
@@ -17,6 +16,12 @@ define(['ui','audio'], function(ui,audio) {
         function add(thing) {
             list.push(thing);
             changed = true;
+            if( thing.type === "MUSIC") {
+                sound.buffer = assets.get("sample").get("kick");
+            }
+            else {
+                sound.buffer = assets.get("sample").get("snare");
+            }
             audio.dispatch( sound );
             compute();
         }

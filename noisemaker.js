@@ -9,7 +9,7 @@ define(['audio'], function( audio ) {
                 type: waveform,
                 at: 0,
                 velocity: 1.0,
-                adsr: {attack:1.5, release:1.0 },
+                adsr: {attack:1, release:0.25 },
             },
 
             {
@@ -33,16 +33,24 @@ define(['audio'], function( audio ) {
         };
 
     }
+
+    function triad( base,x,y ) {
+        var intervals = [2,2,1,2,2,2,1];
+        function add(a,b) { return a+b; }
+        function get(degree) { return intervals.slice(0, degree).reduce( add, 0 ); }
+        return [ get(0)+base, get(x)+base, get(y)+base ];
+    }
+
     function Sine() {
-        return new Generator("sine", [71-12, 64, 68, 71, 71], [71-12] );
+        return new Generator("sine", triad(64,2,3), [64-12*2] );
     }
 
     function Square() {
-        return new Generator("square", [71-12], [71-12, 64, 68] );
+        return new Generator("square", triad(64,3,2), [64-12*2] );
     }
 
     function Sawtooth() {
-        return new Generator("sawtooth", [71-12, 64, 68, 71, 71], [71-12] );
+        return new Generator("sawtooth", triad(64-12,1,3), [64-12*2] );
     }
 
     return {
