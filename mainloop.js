@@ -1,6 +1,6 @@
 "use strict";
 
-define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, inventory, audio ) {
+define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 'assets', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, inventory, audio, assets ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene, hudView;
@@ -8,6 +8,8 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 't
 
     var produced  = new inventory.Inventory();
 
+    var hatCount = 0;
+    var hatFrequency = 8;
     function animate() {
         requestAnimationFrame( animate );
         currentLevel.update();
@@ -16,9 +18,23 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 't
         hudView.update();
         scene.update();
         scene.render();
+        if( ++hatCount % hatFrequency === 0 ) {
+            audio.dispatch( hatSound );
+        }
     }
 
+    var hatSound = {
+        target: 'sampler',
+        sample: "kick",
+        at: 0,
+        velocity: 1.0,
+        adsr: {attack:0.20, release:0.05 },
+        span: 750,
+        lensId: -1,
+    };
+
     function start() {
+        hatSound.buffer = assets.get("sample").get("hh");
         currentLevel = new level.Level( produced );
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), produced );

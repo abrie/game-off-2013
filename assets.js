@@ -103,6 +103,7 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
             files: [
                 { id: 'kick', file: 'assets/kick.wav' },
                 { id: 'snare', file: 'assets/snare.wav' },
+                { id: 'hh', file: 'assets/hihat.wav'},
             ],
            loader: bufferloader.BufferLoader,
            context: audio.getContext(),
