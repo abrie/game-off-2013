@@ -36,49 +36,6 @@ define(['colors','utility','three.min','tween.min'], function( colors, utility )
         return mesh;
     }
 
-    function CityMesh( params ) {
-        var block = new THREE.Object3D();
-        var w = params.width/2;
-        var h = params.height/2;
-        var cx = w/2;
-        var cy = h/2;
-        for( var x = 0; x < 2; x++ ) {
-            for( var y = 0; y < 2; y++ ) {
-                var depth = Math.floor( Math.random()*3+1 ) * 25;
-                var g = new THREE.CubeGeometry( w-1, h-1, depth );
-                var m = new THREE.MeshLambertMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
-                var mesh = new THREE.Mesh( g, m );
-                mesh.position.x = w*x-cx;
-                mesh.position.y = h*y-cy;
-                mesh.position.z = -depth/2;
-                block.add( mesh );
-                if( Math.random()*100 > 50 ) {
-                    var g = new THREE.CylinderGeometry( 1, 5, 25 );
-                    var m = new THREE.MeshPhongMaterial({side:THREE.DoubleSide, color:colors.randomColor()});
-                    g.applyMatrix( 
-                         new THREE.Matrix4()
-                            .makeTranslation( 0, 0, 0 ) );
-
-                    g.applyMatrix( 
-                         new THREE.Matrix4()
-                            .makeRotationFromQuaternion(
-                                new THREE.Quaternion()
-                                    .setFromAxisAngle( 
-                                        new THREE.Vector3( 1, 0, 0), 
-                                        -Math.PI/2 )));
-                    var mesh = new THREE.Mesh(g,m);
-                    mesh.position.x = w*x-cx;
-                    mesh.position.y = h*y-cy;
-                    mesh.position.z = -depth-25/2;
-                    block.add( mesh );
-                }
-            }
-        }
-
-        return block;
-    }
-
-
     function PointerMesh( size ) {
         var points = [];
         var shape;
@@ -143,23 +100,6 @@ define(['colors','utility','three.min','tween.min'], function( colors, utility )
         mesh.rotation.z = params.rotation;
 
         return mesh;
-    }
-
-    function City( params ) {
-        var model = new CityMesh( params );
-        model.position.z = 0;
-
-        function activate() {
-        }
-
-        function deactivate() {
-        }
-
-        return {
-            model:model,
-            activate:activate,
-            deactivate:deactivate
-        };
     }
 
     function RefineryMesh( params ) {
@@ -290,7 +230,6 @@ define(['colors','utility','three.min','tween.min'], function( colors, utility )
 
     return {
         Hammer: Hammer,
-        City: City,
         Refinery: Refinery,
         PointerMesh: PointerMesh,
         Forest: Forest,
