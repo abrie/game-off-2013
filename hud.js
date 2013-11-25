@@ -57,15 +57,24 @@ define(['assets'], function(assets) {
             for( index = 0; index < inventory.count("BATTERY"); index++ ) {
                 context.drawImage( image, column(index), row(0), itemWidth, itemHeight );
             }
+            for( index = 0; index < inventory.countCaptured("BATTERY"); index++ ) {
+                context.drawImage( image, column(index), row(3), itemWidth, itemHeight );
+            }
 
             image = assets.get("inventory").get("music");
             for( index = 0; index < inventory.count("MUSIC"); index++ ) {
                 context.drawImage( image, column(index), row(1), itemWidth, itemHeight );
             }
+            for( index = 0; index < inventory.countCaptured("MUSIC"); index++ ) {
+                context.drawImage( image, column(index), row(4), itemWidth, itemHeight );
+            }
 
             image = assets.get("inventory").get("molecule");
             for( index = 0; index < inventory.count("MOLECULE"); index++ ) {
                 context.drawImage( image, column(index), row(2), itemWidth, itemHeight );
+            }
+            for( index = 0; index < inventory.countCaptured("MOLECULE"); index++ ) {
+                context.drawImage( image, column(index), row(5), itemWidth, itemHeight );
             }
         }
 

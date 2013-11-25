@@ -37,6 +37,21 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
             }, 0);
         }
 
+        function countCaptured(type) {
+            if( !captured ) {
+                return 0;
+            }
+
+            return captured.reduce( function(total, item) {
+                if( item.type === type ) {
+                    return total + 1;
+                }
+                else {
+                    return total;
+                }
+            }, 0);
+        }
+
         function compute() {
             var batteryCount = count("BATTERY");
 
@@ -46,6 +61,13 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
                 changed = true;
                 ui.shake();
             }
+        }
+
+        var captured = undefined;
+        function capture() {
+            captured = list.slice( 0, list.length );
+            list = [];
+            changed = true;
         }
 
         function hasChanged() {
@@ -62,9 +84,16 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
             return list;
         }
 
+        function getCaptured() {
+            return captured;
+        }
+
         return {
             add:add,
             getList:getList,
+            getCaptured:getCaptured,
+            capture:capture,
+            countCaptured:countCaptured,
             count:count,
             hasChanged:hasChanged,
         };

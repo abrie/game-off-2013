@@ -54,12 +54,14 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'inventory', 'audio', 'a
         scene.setView( currentLevel.previousFilter().getView() ); 
         audio.setLens( currentLevel.currentFilter().id );
         hudView.previousFilter();
+        produced.capture();
     }
 
     function nextFilter() {
         scene.setView( currentLevel.nextFilter().getView() ); 
         audio.setLens( currentLevel.currentFilter().id );
         hudView.nextFilter();
+        produced.capture();
     }
 
     function previousPlace() {
