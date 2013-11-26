@@ -208,6 +208,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         addPickable( holePiece.model, function() {
             if( holePiece.isActive ) {
                 console.log("selected hole");
+                animator.activate( 1000 );
                 return true;
             }
             else {
@@ -234,8 +235,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
 
         function activate() {
 
-            animator.activate( 1000 );
-
             pieces.forEach( function(piece) {
                 if( piece ) {
                     piece.activate( 1000 );
@@ -246,7 +245,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         }
 
         function deactivate() {
-
             animator.deactivate();
 
             pieces.forEach( function(piece) {
