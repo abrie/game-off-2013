@@ -1,6 +1,8 @@
 "use strict";
 
-define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, noisemaker ) {
+define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', 'tween.min'],
+       function(colors, assets, puzzlelogic, settings, factory ) {
+    
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -18,7 +20,7 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
         return mesh;
     }
 
-    function Puzzle( FactoryType, AudioType, lensId ) {
+    function Puzzle( FactoryType ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -207,7 +209,6 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
         holePiece.visible = false;
         addPickable( holePiece.model, function() {
             if( holePiece.isActive ) {
-                console.log("selected hole");
                 transportCallback();
                 return true;
             }
@@ -215,7 +216,6 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
                 return false;
             }
         });
-
 
         function addItem( item ) {
             container.add( item.model );
@@ -226,7 +226,6 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
         }
 
         function activate() {
-
             pieces.forEach( function(piece) {
                 if( piece ) {
                     piece.activate( 1000 );
@@ -295,7 +294,6 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
         var result = {
             getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
-            onProductProduced: undefined,
             bump: bump,
             model: container,
             transform: transform,
@@ -309,26 +307,11 @@ define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'thre
         return result;
     }
 
-    function Hammer( lensId ) {
-        return new Puzzle( factory.Hammer, noisemaker.Sine, lensId  );
-    }
-
-    function City( lensId ) {
-        return new Puzzle( factory.City, noisemaker.Sine, lensId );
-    }
-
-    function Refinery( lensId ) {
-        return new Puzzle( factory.Refinery, noisemaker.Sawtooth, lensId );
-    }
-
-    function Forest( lensId ) {
-        return new Puzzle( factory.Forest, noisemaker.Square, lensId );
+    function Hammer( ) {
+        return new Puzzle( factory.Hammer );
     }
 
     return {
         Hammer: Hammer,
-        City: City,
-        Refinery: Refinery,
-        Forest: Forest,
     };
 });
