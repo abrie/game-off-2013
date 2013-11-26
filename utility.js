@@ -4,6 +4,10 @@ define([], function() {
         return Math.floor( Math.random()*max );
     }
 
+    function randomElement( array ) {
+        return array[ random(array.length) ];
+    }
+
     function randomZero(max) {
         return Math.floor( Math.random()*max-max/2 );
     }
@@ -15,6 +19,7 @@ define([], function() {
     return {
         random: random,
         randomZero: randomZero,
+        randomElement: randomElement,
         noteToFrequency: noteToFrequency,
     };
 });

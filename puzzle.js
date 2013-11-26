@@ -208,6 +208,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         addPickable( holePiece.model, function() {
             if( holePiece.isActive ) {
                 console.log("selected hole");
+                transportCallback();
                 animator.activate( 1000 );
                 return true;
             }
@@ -297,6 +298,11 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             logic.setOnSwap( callback );
         }
 
+        var transportCallback;
+        function setOnTransport( callback ) {
+            transportCallback = callback;
+        }
+
         var result = {
             getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
@@ -306,6 +312,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             transform: transform,
             pickables: pickables,
             setOnSwap: setOnSwap, 
+            setOnTransport: setOnTransport,
         };
 
         return result;

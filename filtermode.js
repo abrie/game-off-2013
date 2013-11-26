@@ -20,8 +20,8 @@ define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utili
             view.scene.remove( object );
         }
 
-        function getRandomThing() {
-            return puzzles[ utility.random( puzzles.length ) ];
+        function getRandomPuzzle() {
+            return utility.randomElement( puzzles );
         }
 
         function getView() {
@@ -37,16 +37,20 @@ define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utili
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
                 result.onSwap( result, o );
-            } );
+            });
+            o.object.setOnTransport( function() {
+                result.onTransport( result, o );
+            });
             view.objects.add( o.id, new pitobject.PitObject( { color:0x000000 } ) );
             view.objects.add( o.id, o.object );
         });
 
         var result = {
-            getRandomThing:getRandomThing,
+            getRandomPuzzle:getRandomPuzzle,
             setOnProductProduced:setOnProductProduced,
             puzzles:puzzles,
             onSwap:undefined,
+            onTransport:undefined,
             remove:remove,
             getView:getView,
             add:add,

@@ -1,6 +1,6 @@
 "use strict";
 define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, settings ) {
-    function Level( inventory ) {
+    function Level() {
 
         var filterA = { 
             puzzles:[
@@ -19,11 +19,29 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
         var filterIndex = 0;
         var filterMax = 0;
 
+        var chain = [];
+        var terminalPuzzle;
+        function connect() {
+            chain.length = 0;
+            places.forEach( function(place) {
+                place.filters.forEach( function(filter) {
+                    filter.puzzles.forEach( function(puzzle) {
+                        chain.push(puzzle);
+                    });
+                });
+            });
+
+            terminalPuzzle = chain.shift();
+            console.log("terminal:", terminalPuzzle );
+            console.log("chain:", chain );
+        }
+
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
             var filters = filterDescriptors.map( function(filterDescriptor) { 
                 var filter = new filtermode.Filter( filterDescriptor );
                 filter.onSwap = onInteraction; 
+                filter.onTransport = onTransport;
                 filter.setOnProductProduced( function() { console.log("produced"); } );
                 return filter;
             });
@@ -33,11 +51,10 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             }
 
             function getRandom() {
-                var filter = filters[ utility.random(filterMax) ];
-                var thing = filter.getRandomThing();
+                var filter = utility.randomElement( filters );
                 return {
-                    filter:filter,
-                    thing:thing,
+                    filter: filter,
+                    puzzle: filter.getRandomPuzzle(),
                 };
             }
 
@@ -46,6 +63,7 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             }
 
             return {
+                filters: filters,
                 getFilter: getFilter,
                 getRandom:getRandom,
                 getVideo:getVideo,
@@ -61,6 +79,10 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             else {
                 spinStrawman();
             }
+        }
+
+        function onTransport(f, o) {
+            console.log( "transport requested:", chain.indexOf(o) );
         }
 
         var updateCount = 0; 
@@ -95,14 +117,14 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
                 return;
             }
 
-            var randomPlace = places[ utility.random(places.length)];
-            var randomFilterThing;
+            var randomPlace = utility.randomElement( places );
+            var randomFilterPuzzle;
             do {
-                randomFilterThing = randomPlace.getRandom();
-            } while( randomFilterThing.filter === sm.filter && randomFilterThing.thing === sm.thing );
+                randomFilterPuzzle = randomPlace.getRandom();
+            } while( randomFilterPuzzle.filter === sm.filter && randomFilterPuzzle.puzzle === sm.thing );
 
-            randomFilterThing.thing.object.bump();
-            addStrawman( randomFilterThing.filter, randomFilterThing.thing, randomFilterThing.thing.object.getHolePosition() );
+            randomFilterPuzzle.puzzle.object.bump();
+            addStrawman( randomFilterPuzzle.filter, randomFilterPuzzle.puzzle, randomFilterPuzzle.puzzle.object.getHolePosition() );
             sm.moveTween = sm.object.insert();
             sm.moveTween.onComplete = function() { sm.moveTween = false; };
             sm.withdrawn = false;
@@ -166,6 +188,7 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             nextPlace:nextPlace,
             previousPlace:previousPlace,
             update:update,
+            connect:connect,
         };
     }
 
