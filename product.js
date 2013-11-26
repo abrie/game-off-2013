@@ -92,34 +92,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         };
     }
 
-    function Molecule() {
-        var container = new THREE.Object3D();
-        for( var index = 0; index < 10; index++ ) {
-            var geometry = new THREE.SphereGeometry( Math.random()*7 );
-            var material = new THREE.MeshPhongMaterial({ transparent:true, opacity:0.75, side:THREE.DoubleSide });
-            var mesh = new THREE.Mesh( geometry, material );
-            mesh.position.set( Math.random()*10-5, Math.random()*10-5, Math.random()*10-5 );
-            container.add( mesh );
-        }
-
-        function start() {
-            container.rotation.set( 0, 0, 0 );
-        }
-
-        function update() {
-            container.rotation.y += Math.PI/90; 
-            container.rotation.z += Math.PI/90; 
-            container.rotation.x -= Math.PI/90; 
-        }
-
-        return {
-            model:container,
-            type:"MOLECULE",
-            update:update,
-            start:start,
-        };
-    }
-
     function Music() {
         var particleCount = 1000;
         var particles = new THREE.Geometry();
@@ -168,6 +140,5 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         Animator: Animator,
         Battery: Battery,
         Music: Music,
-        Molecule: Molecule
     };
 });
