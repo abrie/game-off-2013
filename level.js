@@ -35,17 +35,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             console.log("chain:", chain );
         }
 
-
-        /*
-        var noiseGenerator = new AudioType();
-        animator.onScale = function() {
-            noiseGenerator.emit( lensId, 1, 1000 );
-        };
-        animator.onStart = function() {
-            noiseGenerator.emit( lensId, 0, 500 );
-        };
-       */
-
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
             var filters = filterDescriptors.map( function(filterDescriptor) { 
