@@ -53,7 +53,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 var filter = new filtermode.Filter( filterDescriptor );
                 filter.onSwap = onInteraction; 
                 filter.onTransport = onTransport;
-                filter.setOnProductProduced( function() { console.log("produced"); } );
                 return filter;
             });
 
