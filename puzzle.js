@@ -35,6 +35,34 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             return puzzleSize/puzzleDim * (2*v - puzzleDim + 1) / 2;
         }
 
+        function HolePiece( params ) {
+            var geometry = new THREE.CubeGeometry( params.width, params.height, params.depth );
+            var material = new THREE.MeshBasicMaterial( { color:0xAABBCC } );
+            var mesh = new THREE.Mesh( geometry, material );
+            mesh.isPickable = true;
+            var model = new THREE.Object3D();
+            model.add( mesh );
+
+            function activate() {
+                mesh.visible = true;
+                result.isActive = true;
+            }
+
+            function deactivate() {
+                mesh.visible = false;
+                result.isActive = false;
+            }
+
+            var result = {
+                model: model,
+                activate: activate,
+                deactivate: deactivate,
+                isActive: false
+            };
+
+            return result;
+        }
+
         function PuzzlePiece( color, solvedIndex, params ) {
             var index;
 
@@ -162,7 +190,28 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
                 container.add( piece.model );
                 addPickable( piece.model, function() { 
                     logic.doAction( piece.getIndex() );
+                    return true;
                 });
+            }
+        });
+
+        var holeParams = {
+            color: 0xABCDEF,
+            width: puzzleSize/puzzleDim-1,
+            height:puzzleSize/puzzleDim-1,
+            depth: puzzleSize/puzzleDim/2
+        };
+
+        var holePiece = new HolePiece( holeParams );
+        container.add( holePiece.model );
+        holePiece.visible = false;
+        addPickable( holePiece.model, function() {
+            if( holePiece.isActive ) {
+                console.log("selected hole");
+                return true;
+            }
+            else {
+                return false;
             }
         });
 
@@ -192,6 +241,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
                     piece.activate( 1000 );
                 }
             });
+
+            holePiece.activate();
         }
 
         function deactivate() {
@@ -203,6 +254,8 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
                     piece.deactivate( 1000 );
                 }
             });
+
+            holePiece.deactivate();
         }
 
         function checkSolved() {

@@ -22,9 +22,10 @@ define(["three.min"],function() {
             var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
 
             var intersects = ray.intersectObjects( registered );
-
-            if ( intersects.length > 0 ) {
-                intersects[0].object.onPicked();
+            for( var index = 0; index < intersects.length; index++ ) {
+                if( intersects[index].object.onPicked() ) {
+                    return;
+                }
             }
         }
 
