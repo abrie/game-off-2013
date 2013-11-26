@@ -38,11 +38,7 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
         }
 
         function countCaptured(type) {
-            if( !captured ) {
-                return 0;
-            }
-
-            return captured.reduce( function(total, item) {
+            return lastCaptured.reduce( function(total, item) {
                 if( item.type === type ) {
                     return total + 1;
                 }
@@ -63,9 +59,20 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
             }
         }
 
-        var captured = undefined;
+        var lastCaptured = [];
+        var isLastMatch = false;
         function capture() {
-            captured = list.slice( 0, list.length );
+            var currentCapture = list.slice( 0, list.length );
+            isLastMatch = false;
+            if( lastCaptured.length === currentCapture.length ) {
+                isLastMatch = currentCapture.every( function(item, index)  {
+                    return item.type == lastCaptured[index].type;
+                });
+            }
+            if( isLastMatch ) {
+                console.log("matched!");
+            }
+            lastCaptured = currentCapture;
             list = [];
             changed = true;
         }
@@ -84,18 +91,18 @@ define(['ui','audio','assets'], function(ui,audio,assets) {
             return list;
         }
 
-        function getCaptured() {
-            return captured;
+        function getLastMatched() {
+            return isLastMatch;
         }
 
         return {
             add:add,
-            getList:getList,
-            getCaptured:getCaptured,
-            capture:capture,
-            countCaptured:countCaptured,
             count:count,
+            getList:getList,
+            capture:capture,
             hasChanged:hasChanged,
+            countCaptured:countCaptured,
+            getLastMatched:getLastMatched,
         };
     }
 

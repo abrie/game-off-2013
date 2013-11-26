@@ -46,11 +46,11 @@ define(['audio'], function( audio ) {
     }
 
     function Square() {
-        return new Generator("square", triad(64,3,2), [64-12*2], 0.25 );
+        return new Generator("square", triad(64,3,2), [64-12*2], 0.025 );
     }
 
     function Sawtooth() {
-        return new Generator("sawtooth", triad(64-12,1,3), [64-12*2], 0.15 );
+        return new Generator("sawtooth", triad(64-12,1,3), [64-12*2], 0.025 );
     }
 
     return {
