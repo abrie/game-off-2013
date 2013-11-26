@@ -39,7 +39,7 @@ define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utili
                 result.onSwap( result, o );
             });
             o.object.setOnTransport( function() {
-                result.onTransport( result, o );
+                result.onTransport( o );
             });
             view.objects.add( o.id, new pitobject.PitObject( { color:0x000000 } ) );
             view.objects.add( o.id, o.object );

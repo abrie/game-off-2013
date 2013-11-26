@@ -1,5 +1,5 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, settings ) {
+define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, product, settings ) {
     function Level() {
 
         var filterA = { 
@@ -35,6 +35,17 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             console.log("terminal:", terminalPuzzle );
             console.log("chain:", chain );
         }
+
+
+        /*
+        var noiseGenerator = new AudioType();
+        animator.onScale = function() {
+            noiseGenerator.emit( lensId, 1, 1000 );
+        };
+        animator.onStart = function() {
+            noiseGenerator.emit( lensId, 0, 500 );
+        };
+       */
 
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
@@ -81,8 +92,27 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             }
         }
 
-        function onTransport(f, o) {
-            console.log( "transport requested:", chain.indexOf(o) );
+        var transfer = new product.Music();
+        //var animator = new product.Animator();
+
+        //animator.onComplete = function(p) { 
+          //  result.onProductProduced(p); 
+        //};
+
+        function onTransport( o ) {
+            if( transfer.currentlyIn ) {
+                transfer.currentlyIn.object.removeItem( transfer );
+                var index = chain.indexOf( o ) + 1;
+                if( index >= chain.length ) {
+                    index = 0;
+                }
+                chain[index].object.addItem( transfer );
+                transfer.currentlyIn = chain[index];
+            }
+            else {
+                o.object.addItem( transfer );
+                transfer.currentlyIn = o;
+            }
         }
 
         var updateCount = 0; 

@@ -1,6 +1,6 @@
 "use strict";
 
-define(['colors','assets','puzzlelogic','settings','factory','product','noisemaker', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, product, noisemaker ) {
+define(['colors','assets','puzzlelogic','settings','factory','noisemaker', 'three.min','tween.min'],function(colors, assets, puzzlelogic, settings, factory, noisemaker ) {
     function Tile( params ) {
         var geometry = new THREE.CubeGeometry(
             params.width, 
@@ -18,7 +18,7 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         return mesh;
     }
 
-    function Puzzle( FactoryType, ProductType, AnimatorType, AudioType, lensId ) {
+    function Puzzle( FactoryType, AudioType, lensId ) {
         var puzzleDim = 3, puzzleSize = settings.arMarkerSize;
         var pickables = [];
 
@@ -209,7 +209,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             if( holePiece.isActive ) {
                 console.log("selected hole");
                 transportCallback();
-                animator.activate( 1000 );
                 return true;
             }
             else {
@@ -217,22 +216,14 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             }
         });
 
-        var product = new ProductType();
-        container.add( product.model );
-        product.model.visible = false;
 
-        var animator = new AnimatorType( product );
-        animator.onComplete = function(p) { 
-            result.onProductProduced(p); 
-        };
+        function addItem( item ) {
+            container.add( item.model );
+        }
 
-        var noiseGenerator = new AudioType();
-        animator.onScale = function() {
-            noiseGenerator.emit( lensId, 1, 1000 );
-        };
-        animator.onStart = function() {
-            noiseGenerator.emit( lensId, 0, 500 );
-        };
+        function removeItem( item ) {
+            container.remove( item.model );
+        }
 
         function activate() {
 
@@ -246,8 +237,6 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
         }
 
         function deactivate() {
-            animator.deactivate();
-
             pieces.forEach( function(piece) {
                 if( piece ) {
                     piece.deactivate( 1000 );
@@ -313,25 +302,27 @@ define(['colors','assets','puzzlelogic','settings','factory','product','noisemak
             pickables: pickables,
             setOnSwap: setOnSwap, 
             setOnTransport: setOnTransport,
+            addItem:addItem,
+            removeItem:removeItem,
         };
 
         return result;
     }
 
     function Hammer( lensId ) {
-        return new Puzzle( factory.Hammer, product.Music, product.Animator, noisemaker.Sine, lensId  );
+        return new Puzzle( factory.Hammer, noisemaker.Sine, lensId  );
     }
 
     function City( lensId ) {
-        return new Puzzle( factory.City, product.Battery, product.Animator, noisemaker.Sine, lensId );
+        return new Puzzle( factory.City, noisemaker.Sine, lensId );
     }
 
     function Refinery( lensId ) {
-        return new Puzzle( factory.Refinery, product.Battery, product.Animator, noisemaker.Sawtooth, lensId );
+        return new Puzzle( factory.Refinery, noisemaker.Sawtooth, lensId );
     }
 
     function Forest( lensId ) {
-        return new Puzzle( factory.Forest, product.Molecule, product.Animator, noisemaker.Square, lensId );
+        return new Puzzle( factory.Forest, noisemaker.Square, lensId );
     }
 
     return {
