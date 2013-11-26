@@ -292,16 +292,16 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
         }
 
         var result = {
-            getHolePosition: getHolePosition,
             getAdjacentPosition: getAdjacentPosition,
-            bump: bump,
-            model: container,
+            getHolePosition: getHolePosition,
+            setOnTransport: setOnTransport,
+            removeItem:removeItem,
             transform: transform,
             pickables: pickables,
             setOnSwap: setOnSwap, 
-            setOnTransport: setOnTransport,
+            model: container,
             addItem:addItem,
-            removeItem:removeItem,
+            bump: bump,
         };
 
         return result;
