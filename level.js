@@ -92,30 +92,26 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
         }
 
-        var transfer = new product.Music();
-        var transferAnimator = new product.Animator( transfer );
+        var transferProduct = new product.Music();
+        var transferAnimator = new product.Animator( transferProduct );
         transferAnimator.onStart = function() {};
         transferAnimator.onComplete = function() {};
         transferAnimator.onScale = function() {};
 
-        //animator.onComplete = function(p) { 
-          //  result.onProductProduced(p); 
-        //};
-
         function onTransport( o ) {
-            if( transfer.currentlyIn ) {
-                transfer.currentlyIn.object.removeItem( transfer );
+            if( transferProduct.currentlyIn ) {
+                transferProduct.currentlyIn.object.removeItem( transferProduct );
                 var index = chain.indexOf( o ) + 1;
                 if( index >= chain.length ) {
                     index = 0;
                 }
-                chain[index].object.addItem( transfer );
-                transfer.currentlyIn = chain[index];
+                chain[index].object.addItem( transferProduct );
+                transferProduct.currentlyIn = chain[index];
                 transferAnimator.activate();
             }
             else {
-                o.object.addItem( transfer );
-                transfer.currentlyIn = o;
+                o.object.addItem( transferProduct );
+                transferProduct.currentlyIn = o;
                 transferAnimator.activate();
             }
         }
