@@ -10,30 +10,14 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             id:0,
         };
 
-        var filterB = { 
-            puzzles:[
-                { id:4, generator: puzzle.Refinery }, 
-                { id:32, generator: puzzle.Refinery }
-            ],
-            id:1,
-        };
-
-        var filterC = { 
-            puzzles:[
-                { id:4, generator: puzzle.Forest }, 
-                { id:32, generator: puzzle.Forest }
-            ],
-            id:2,
-        };
-
         var placeIndex = 0;
         var places = [ 
-            new Place( "clip1", [ filterA, filterB, filterC ] ), 
-            new Place( "clip2", [ filterA, filterB, filterC ] ) 
+            new Place( "clip1", [ filterA ] ), 
+            new Place( "clip2", [ filterA ] ) 
         ];
 
         var filterIndex = 0;
-        var filterMax = 2;
+        var filterMax = 0;
 
         function Place( clipName, filterDescriptors ) {
             var video = assets.get( clipName );
@@ -49,7 +33,7 @@ define(['filtermode','strawman','assets','puzzle','utility', 'settings' ], funct
             }
 
             function getRandom() {
-                var filter = filters[ utility.random(2) ];
+                var filter = filters[ utility.random(filterMax) ];
                 var thing = filter.getRandomThing();
                 return {
                     filter:filter,
