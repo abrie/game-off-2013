@@ -93,7 +93,10 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         }
 
         var transfer = new product.Music();
-        //var animator = new product.Animator();
+        var transferAnimator = new product.Animator( transfer );
+        transferAnimator.onStart = function() {};
+        transferAnimator.onComplete = function() {};
+        transferAnimator.onScale = function() {};
 
         //animator.onComplete = function(p) { 
           //  result.onProductProduced(p); 
@@ -108,10 +111,12 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 }
                 chain[index].object.addItem( transfer );
                 transfer.currentlyIn = chain[index];
+                transferAnimator.activate();
             }
             else {
                 o.object.addItem( transfer );
                 transfer.currentlyIn = o;
+                transferAnimator.activate();
             }
         }
 
