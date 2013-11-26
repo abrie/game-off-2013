@@ -1,7 +1,6 @@
 "use strict";
 define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, product, settings ) {
     function Level() {
-
         var filterA = { 
             puzzles:[
                 { id:4, generator: puzzle.Hammer }, 
@@ -99,19 +98,29 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         function onTransport( o ) {
             if( transferProduct.currentlyIn ) {
-                transferProduct.currentlyIn.object.removeItem( transferProduct );
                 var index = chain.indexOf( o ) + 1;
                 if( index >= chain.length ) {
                     index = 0;
                 }
-                chain[index].object.addItem( transferProduct );
-                transferProduct.currentlyIn = chain[index];
-                transferAnimator.activate();
+                if( chain[index].object.isSolved() ) {
+                    transferProduct.currentlyIn.object.removeItem( transferProduct );
+                    chain[index].object.addItem( transferProduct );
+                    transferProduct.currentlyIn = chain[index];
+                    transferAnimator.activate();
+                }
+                else {
+                    console.log("cannot transfer. Target is not solved.");
+                }
             }
             else {
-                o.object.addItem( transferProduct );
-                transferProduct.currentlyIn = o;
-                transferAnimator.activate();
+                if( o.object.isSolved() ) {
+                    o.object.addItem( transferProduct );
+                    transferProduct.currentlyIn = o;
+                    transferAnimator.activate();
+                }
+                else {
+                    console.log("cannot transfer. Target is not solved.");
+                }
             }
         }
 

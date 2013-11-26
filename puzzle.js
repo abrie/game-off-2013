@@ -105,9 +105,10 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
                         model.position.x = this.x; 
                         model.position.y = this.y;
                         model.position.z = 0;
-                        })
-                    .onComplete( function() { checkSolved();
-                        })
+                    })
+                    .onComplete( function() { 
+                        checkSolved();
+                    })
                     .start();
             }
 
@@ -302,6 +303,7 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
             model: container,
             addItem:addItem,
             bump: bump,
+            isSolved: logic.isSolved,
         };
 
         return result;
