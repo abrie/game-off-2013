@@ -2,67 +2,45 @@
 
 define(['assets', 'utility', 'three.min'],function( assets, utility ){
     function Animator( product ) {
-        var raiseTween, scaleTween;
+        var up = {z:-100};
+        var down = {z:100};
+
         function activate( rate ) {
-            if( raiseTween ) { raiseTween.stop(); }
-            if( scaleTween ) { scaleTween.stop(); }
-            var raiseStart = { r: 100 };
-            var raiseEnd = { r: -100 };
-            var scaleStart = { r: 1 };
-            var scaleEnd = { r: 20.0 };
-
-            function start() {
-                raiseStart.r = 100;
-                scaleStart.r = 1.0;
-                product.start();
-                raiseTween.start();
-            }
-
-            scaleTween = new TWEEN.Tween( scaleStart )
-                .to( scaleEnd, rate )
-                .easing( TWEEN.Easing.Exponential.In )
+            var tween = new TWEEN.Tween( {z:100} )
+                .to( up, rate )
+                .easing( TWEEN.Easing.Bounce.Out )
                 .onStart( function() {
-                    result.onScale();
                 })
                 .onUpdate( function() {
-                    product.model.scale.set( this.r, this.r, this.r );
-                    product.update();
+                    product.model.position.z = this.z;
                 })
                 .onComplete( function() {
-                    result.onComplete( product );
-                    product.model.visible = false;
-                    start();
                 });
 
-            raiseTween = new TWEEN.Tween( raiseStart )
-                .to( raiseEnd, rate )
-                //.delay( 1/4 * rate )
-                .easing( TWEEN.Easing.Exponential.In )
-                .onStart( function() {
-                    product.model.visible = true;
-                    product.model.scale.set( 1, 1, 1 );
-                    result.onStart();
-                })
-                .onUpdate( function() {
-                    product.model.position.z = this.r;
-                })
-                .chain( scaleTween );
-
-            start();
+            tween.start();
         } 
 
-        function deactivate() {
-            product.model.visible = false;
-            if( scaleTween ) { scaleTween.stop(); }
-            if( raiseTween ) { raiseTween.stop(); }
-        }
+        function deactivate( rate, onComplete ) {
+            var tween = new TWEEN.Tween( {z:-100} )
+                .to( down, rate )
+                .easing( TWEEN.Easing.Quintic.In )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    product.model.position.z = this.z;
+                })
+                .onComplete( function() {
+                    if( onComplete ) {
+                        onComplete();
+                    }
+                });
+
+            tween.start();
+        } 
 
         var result = {
             activate: activate,
             deactivate: deactivate,
-            onComplete: undefined,
-            onStart: undefined,
-            onScale: undefined,
         };
 
         return result;
@@ -124,14 +102,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             particleSystem.rotation.x -= Math.PI/90; 
         }
 
-        function start() {
-            particleSystem.rotation.set( 0, 0, 0 );
-        }
-
         return {
             model: particleSystem,
             update: update,
-            start: start,
             type: "MUSIC"
         };
     }

@@ -1,12 +1,19 @@
 "use strict";
-define(['arscene', 'pitobject', 'utility' ], function( arscene, pitobject, utility ) {
+define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitobject, product, utility ) {
 
     function Filter( descriptor ) {
         var view = new arscene.View();
+        
+        var transfer = {};
+        transfer.product = new product.Music();
+        transfer.product.model.position.z = 100;
+        transfer.animator = new product.Animator( transfer.product );
+
         var puzzles = descriptor.puzzles.map( function(puzzle) {
             return {
                 id: puzzle.id, 
                 object: new puzzle.generator( descriptor.id ), 
+                transfer: transfer,
             };
         });
 

@@ -1,6 +1,6 @@
 "use strict";
 define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, product, settings ) {
-    function Level() {
+    function Level( scene ) {
         var filterA = { 
             puzzles:[
                 { id:4, generator: puzzle.Hammer }, 
@@ -79,11 +79,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
         }
 
-        var transferProduct = new product.Music();
-        var transferAnimator = new product.Animator( transferProduct );
-        transferAnimator.onStart = function() {};
-        transferAnimator.onComplete = function() {};
-        transferAnimator.onScale = function() {};
+        var transferProduct = {};
 
         function onTransport( o ) {
             if( transferProduct.currentlyIn ) {
@@ -92,10 +88,12 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                     index = 0;
                 }
                 if( chain[index].object.isSolved() ) {
-                    transferProduct.currentlyIn.object.removeItem( transferProduct );
-                    chain[index].object.addItem( transferProduct );
-                    transferProduct.currentlyIn = chain[index];
-                    transferAnimator.activate();
+                    o.transfer.animator.deactivate( 1500, function() {
+                        o.object.removeItem( o.transfer.product );
+                        chain[index].object.addItem( chain[index].transfer.product );
+                        transferProduct.currentlyIn = chain[index];
+                        chain[index].transfer.animator.activate( 2000 );
+                    });
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
@@ -103,9 +101,9 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
             else {
                 if( o.object.isSolved() ) {
-                    o.object.addItem( transferProduct );
+                    o.object.addItem( o.transfer.product );
                     transferProduct.currentlyIn = o;
-                    transferAnimator.activate();
+                    o.transfer.animator.activate( 3000 );
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
