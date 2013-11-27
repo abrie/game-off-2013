@@ -35,36 +35,32 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         return result;
     }
 
+    function Coordinate( place, filter, puzzle ) {
+        return {
+            place:place, 
+            filter:filter, 
+            puzzle:puzzle
+        };
+    }
+
     function Graph( places ) {
         var chain = [];
-        var terminalPuzzle;
+        var terminalCoordinate;
 
         places.forEach( function(place) {
             place.filters.forEach( function(filter) {
                 filter.puzzles.forEach( function(puzzle) {
-                    var coordinate = {
-                        place:place, 
-                        filter:filter, 
-                        puzzle:puzzle
-                    };
+                    var coordinate = new Coordinate( place, filter, puzzle );
+                    puzzle.coordinate = coordinate;
                     chain.push( coordinate );
                 });
             });
         });
 
-        terminalPuzzle = chain.shift();
-
-        function indexOf( coordinate ) {
-            for( var index = 0; index < chain.length; index++ ) {
-                if( chain[index].puzzle === coordinate.puzzle ) {
-                    return index;
-                }
-            }
-            return -1;
-        }
+        terminalCoordinate = chain.shift();
 
         function nextCoordinate( coordinate ) {
-            var index = indexOf( coordinate );
+            var index = chain.indexOf( coordinate );
             var nextIndex;
 
             if( index < 0 ) {
@@ -84,7 +80,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         return {
             chain: chain,
             nextCoordinate: nextCoordinate,
-            terminalPuzzle: terminalPuzzle,
+            terminalCoordinate: terminalCoordinate,
         };
     }
 

@@ -42,10 +42,10 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
 
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
-                result.onSwap( {filter:result, puzzle:o} );
+                result.onSwap( o.coordinate );
             });
             o.object.setOnTransport( function() {
-                result.onTransport( {filter:result, puzzle:o} );
+                result.onTransport( o.coordinate );
             });
             view.objects.add( o.id, new pitobject.PitObject( { color:0x000000 } ) );
             view.objects.add( o.id, o.object );
