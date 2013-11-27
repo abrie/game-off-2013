@@ -1,5 +1,5 @@
 "use strict";
-define(['strawman', 'puzzle', 'place', 'graph', 'utility', 'settings' ], function( Strawman, Puzzle, Place, Graph, utility, settings ) {
+define(['strawman', 'puzzle', 'place', 'graph', 'settings' ], function( Strawman, Puzzle, Place, Graph, settings ) {
 
     function TransferProduct() {
         var currentCoordinate;
