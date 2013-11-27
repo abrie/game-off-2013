@@ -105,11 +105,11 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 }
                 var nextCoordinate = graph.nextCoordinate( coordinate );
                 if( nextCoordinate.puzzle.object.isSolved() ) {
-                    coordinate.filter.transfer.animator.deactivate( 1500, function() {
+                    coordinate.filter.transfer.animator.deactivate( 500, function() {
                         coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
                         nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
                         currentCoordinate = nextCoordinate;
-                        nextCoordinate.filter.transfer.animator.activate( 2000 );
+                        nextCoordinate.filter.transfer.animator.activate( 500 );
                     });
                 }
                 else {
@@ -120,7 +120,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 if( coordinate.puzzle.object.isSolved() ) {
                     coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                     currentCoordinate = coordinate;
-                    coordinate.filter.transfer.animator.activate( 3000 );
+                    coordinate.filter.transfer.animator.activate( 500 );
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");

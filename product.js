@@ -74,7 +74,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var particleCount = 1000;
         var particles = new THREE.Geometry();
         var pMaterial = new THREE.ParticleBasicMaterial({
-            color: 0x999999,
+            color: 0xFFFFFF,
             size: 64,
             map: assets.get("texture").get("music"),
             blending: THREE.AdditiveBlending,
@@ -82,8 +82,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
           });
         particles.sortParticles = true;
 
-        var radius = 25;
         for(var p = 0; p < particleCount; p++) {
+            var radius = Math.random()*35;
             var theta = Math.random()*2*Math.PI;
             var phi = Math.random()*Math.PI;
             var pX = radius*Math.cos( theta )*Math.sin( phi );
@@ -95,6 +95,21 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         var particleSystem = new THREE.ParticleSystem( particles, pMaterial );
+
+        var tween = new TWEEN.Tween( {r:-Math.PI} )
+            .to( {r:Math.PI}, 10000 )
+            .easing( TWEEN.Easing.Bounce.In )
+            .repeat( Infinity )
+            .yoyo( true )
+            .onStart( function() {
+            })
+            .onUpdate( function() {
+                particleSystem.rotation.set(this.r,this.r,this.r);
+            })
+            .onComplete( function() {
+            });
+
+        tween.start();
 
         function update() {
             particleSystem.rotation.y += Math.PI/90; 
