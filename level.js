@@ -78,7 +78,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         }
 
         return {
-            chain: chain,
             nextCoordinate: nextCoordinate,
             terminalCoordinate: terminalCoordinate,
         };
