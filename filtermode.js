@@ -13,7 +13,6 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
             return {
                 id: puzzle.id, 
                 object: new puzzle.generator( descriptor.id ), 
-                transfer: transfer,
             };
         });
 
@@ -58,6 +57,7 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
             puzzles:puzzles,
             onSwap:undefined,
             onTransport:undefined,
+            transfer: transfer,
             remove:remove,
             getView:getView,
             add:add,

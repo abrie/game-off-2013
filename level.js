@@ -94,8 +94,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                     index = 0;
                 }
                 if( graph.chain[index].object.isSolved() ) {
-                    coordinate.puzzle.transfer.animator.deactivate( 1500, function() {
-                        coordinate.puzzle.object.removeItem( coordinate.puzzle.transfer.product );
+                    coordinate.transfer.animator.deactivate( 1500, function() {
+                        coordinate.puzzle.object.removeItem( coordinate.transfer.product );
                         graph.chain[index].object.addItem( graph.chain[index].transfer.product );
                         transferProduct.currentlyIn = graph.chain[index];
                         graph.chain[index].transfer.animator.activate( 2000 );
@@ -107,9 +107,9 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
             else {
                 if( coordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.puzzle.transfer.product );
+                    coordinate.puzzle.object.addItem( coordinate.transfer.product );
                     transferProduct.currentlyIn = coordinate.puzzle;
-                    coordinate.puzzle.transfer.animator.activate( 3000 );
+                    coordinate.transfer.animator.activate( 3000 );
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
