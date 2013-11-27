@@ -87,15 +87,15 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         var transferProduct = {};
 
-        function onTransport( o ) {
+        function onTransport( coordinate ) {
             if( transferProduct.currentlyIn ) {
-                var index = graph.chain.indexOf( o ) + 1;
+                var index = graph.chain.indexOf( coordinate.puzzle ) + 1;
                 if( index >= graph.chain.length ) {
                     index = 0;
                 }
                 if( graph.chain[index].object.isSolved() ) {
-                    o.transfer.animator.deactivate( 1500, function() {
-                        o.object.removeItem( o.transfer.product );
+                    coordinate.puzzle.transfer.animator.deactivate( 1500, function() {
+                        coordinate.puzzle.object.removeItem( coordinate.puzzle.transfer.product );
                         graph.chain[index].object.addItem( graph.chain[index].transfer.product );
                         transferProduct.currentlyIn = graph.chain[index];
                         graph.chain[index].transfer.animator.activate( 2000 );
@@ -106,10 +106,10 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 }
             }
             else {
-                if( o.object.isSolved() ) {
-                    o.object.addItem( o.transfer.product );
-                    transferProduct.currentlyIn = o;
-                    o.transfer.animator.activate( 3000 );
+                if( coordinate.puzzle.object.isSolved() ) {
+                    coordinate.puzzle.object.addItem( coordinate.puzzle.transfer.product );
+                    transferProduct.currentlyIn = coordinate.puzzle;
+                    coordinate.puzzle.transfer.animator.activate( 3000 );
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
