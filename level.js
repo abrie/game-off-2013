@@ -1,5 +1,5 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, Puzzle, utility, product, settings ) {
+define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, Strawman, assets, Puzzle, utility, product, settings ) {
     function Place( clipName, filterDescriptors, onTransport, onInteraction ) {
         var video = assets.get( clipName );
         var filters = filterDescriptors.map( function(filterDescriptor) { 
@@ -117,12 +117,12 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             new Place( "clip2", [ filterA ], onTransport, onInteraction ) 
         ];
 
-        var sm = new strawman.Strawman();
-        sm.coordinate = new Coordinate(); 
+        var strawman = new Strawman.Strawman();
+        strawman.coordinate = new Coordinate(); 
         var graph = new Graph( places );
 
         function onInteraction( coordinate ) {
-            if( sm.coordinate === coordinate ) {
+            if( strawman.coordinate === coordinate ) {
                 withdrawStrawman();
             }
             else {
@@ -174,44 +174,44 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         }
 
         function spinStrawman() {
-            sm.spinTween = sm.object.spin();
-            sm.spinTween.start();
+            strawman.spinTween = strawman.object.spin();
+            strawman.spinTween.start();
         }
 
         function withdrawStrawman() {
-            if( sm.spinTween ) {
-                sm.spinTween.stop();
+            if( strawman.spinTween ) {
+                strawman.spinTween.stop();
             }
-            sm.moveTween = sm.object.withdraw();
-            sm.moveTween.onComplete( function() {
+            strawman.moveTween = strawman.object.withdraw();
+            strawman.moveTween.onComplete( function() {
                 removeStrawman();
-                sm.withdrawn = true;
+                strawman.withdrawn = true;
             }); 
-            sm.moveTween.start();
+            strawman.moveTween.start();
         }
 
         function bumpStrawman() {
-            if( !sm.withdrawn ) {
+            if( !strawman.withdrawn ) {
                 return;
             }
 
-            var newCoordinate = graph.differentCoordinate( sm.coordinate );
+            var newCoordinate = graph.differentCoordinate( strawman.coordinate );
             newCoordinate.puzzle.object.bump();
             addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
-            sm.moveTween = sm.object.insert();
-            sm.moveTween.onComplete = function() { sm.moveTween = false; };
-            sm.withdrawn = false;
-            sm.moveTween.start();
+            strawman.moveTween = strawman.object.insert();
+            strawman.moveTween.onComplete = function() { strawman.moveTween = false; };
+            strawman.withdrawn = false;
+            strawman.moveTween.start();
         }
 
         function addStrawman( newCoordinate, position ) {
-            newCoordinate.filter.add( newCoordinate.puzzle.id, sm.object );
-            sm.coordinate = newCoordinate;
-            sm.object.setPosition( position );
+            newCoordinate.filter.add( newCoordinate.puzzle.id, strawman.object );
+            strawman.coordinate = newCoordinate;
+            strawman.object.setPosition( position );
         }
 
         function removeStrawman() {
-            sm.coordinate.filter.remove( sm.coordinate.puzzle.id, sm.object );
+            strawman.coordinate.filter.remove( strawman.coordinate.puzzle.id, strawman.object );
         }
 
         function previousFilter() {
