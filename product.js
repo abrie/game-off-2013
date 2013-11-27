@@ -5,21 +5,39 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var state = {z:100};
 
         function detonate( rate, onComplete ) {
-            var tween = new TWEEN.Tween( {s:1.0} )
-                .to( {s:100}, rate )
-                .easing( TWEEN.Easing.Bounce.Out )
-                .onStart( function() {
-                })
-                .onUpdate( function() {
-                    product.model.scale.set( this.s, this.s, this.s );
-                })
-                .onComplete( function() {
-                    if( onComplete ) {
-                        onComplete();
-                    }
-                });
+            var detonateState = {s:1.0};
+            var countDownState = {r:10};
+            var countDownTime = 3000;
 
-            tween.start();
+            new TWEEN.Tween( countDownState )
+                .to( {r:10}, countDownTime )
+                .onUpdate( function() {
+                    console.log("tick:", this.r);
+                })
+                .chain(
+                new TWEEN.Tween( detonateState )
+                    .to( {s:0.10}, rate/2 )
+                    .easing( TWEEN.Easing.Bounce.In )
+                    .onUpdate( function() {
+                        product.model.scale.set( this.s, this.s, this.s );
+                    })
+                    .chain(
+                    new TWEEN.Tween( detonateState )
+                        .to( {s:100}, rate/2 )
+                        .easing( TWEEN.Easing.Bounce.Out )
+                        .onStart( function() {
+                        })
+                        .onUpdate( function() {
+                            product.model.scale.set( this.s, this.s, this.s );
+                        })
+                        .onComplete( function() {
+                            if( onComplete ) {
+                                onComplete();
+                            }
+                        })
+                    )
+                )
+                .start();
         }
 
         function activate( rate, onComplete ) {
@@ -92,7 +110,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
     }
 
     function Music() {
-        var particleCount = 1000;
+        var particleCount = 5000;
         var particles = new THREE.Geometry();
         var pMaterial = new THREE.ParticleBasicMaterial({
             color: 0xFFFFFF,
