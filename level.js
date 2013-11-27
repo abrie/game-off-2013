@@ -64,9 +64,27 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             return -1;
         }
 
+        function nextCoordinate( coordinate ) {
+            var index = indexOf( coordinate );
+            var nextIndex;
+
+            if( index < 0 ) {
+                return undefined;
+            }
+
+            if( index < chain.length-1 ) {
+                nextIndex = index+1;
+            }
+            else {
+                nextIndex = 0;
+            }
+
+            return chain[nextIndex];
+        }
+
         return {
             chain: chain,
-            indexOf: indexOf,
+            nextCoordinate: nextCoordinate,
             terminalPuzzle: terminalPuzzle,
         };
     }
@@ -104,16 +122,13 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         function onTransport( coordinate ) {
             if( transferProduct.currentlyIn ) {
-                var index = graph.indexOf( coordinate ) + 1; 
-                if( index >= graph.chain.length ) {
-                    index = 0;
-                }
-                if( graph.chain[index].puzzle.object.isSolved() ) {
+                var nextCoordinate = graph.nextCoordinate( coordinate );
+                if( nextCoordinate.puzzle.object.isSolved() ) {
                     coordinate.filter.transfer.animator.deactivate( 1500, function() {
                         coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
-                        graph.chain[index].puzzle.object.addItem( graph.chain[index].filter.transfer.product );
-                        transferProduct.currentlyIn = graph.chain[index];
-                        graph.chain[index].filter.transfer.animator.activate( 2000 );
+                        nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
+                        transferProduct.currentlyIn = nextCoordinate;
+                        nextCoordinate.filter.transfer.animator.activate( 2000 );
                     });
                 }
                 else {
