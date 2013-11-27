@@ -1,62 +1,6 @@
 "use strict";
-define(['strawman', 'puzzle', 'place', 'graph', 'settings' ], function( Strawman, Puzzle, Place, Graph, settings ) {
-
-    function TransferProduct() {
-        var currentCoordinate;
-        var energy = 0;
-
-        function detonate( ) {
-            currentCoordinate.filter.transfer.animator.detonate( 500 );
-        }
-
-        function transfer( coordinate, graph ) {
-            if( currentCoordinate ) {
-                if( currentCoordinate != coordinate ) {
-                    console.log("cannot transfer. transferProduct is not here.");
-                    return;
-                }
-                var nextCoordinate = graph.nextCoordinate( coordinate );
-                if( nextCoordinate.puzzle.object.isSolved() ) {
-                    coordinate.filter.transfer.animator.deactivate( 500, function() {
-                        coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
-                        nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
-                        currentCoordinate = nextCoordinate;
-                        nextCoordinate.filter.transfer.animator.activate( 500, function() {
-                            energy--;
-                            console.log("energy now:", energy);
-                            if( energy === 0 ) {
-                                detonate();
-                            }
-                        } );
-                    });
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
-            }
-            else {
-                if( coordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
-                    currentCoordinate = coordinate;
-                    coordinate.filter.transfer.animator.activate( 500 );
-                    energy = 3;
-                    console.log("initial energy: ", energy);
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
-            }
-        }
-
-        function getCurrentCoordinate() {
-            return currentCoordinate;
-        }
-
-        return {
-            transfer:transfer,
-            getCurrentCoordinate: getCurrentCoordinate,
-        };
-    }
+define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
+       function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
     function Level() {
         var filterIndex = 0;
@@ -83,7 +27,7 @@ define(['strawman', 'puzzle', 'place', 'graph', 'settings' ], function( Strawman
             strawman.change( coordinate );
         }
 
-        var transferProduct = new TransferProduct();
+        var transferProduct = new Product.Product();
 
         function onTransport( coordinate ) {
             transferProduct.transfer( coordinate, graph );
