@@ -83,6 +83,12 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         };
     }
 
+    function TransferProduct() {
+        return {
+            coordinate:undefined
+        };
+    }
+
     function Level() {
         var filterIndex = 0;
         var filterMax = 0;
@@ -112,7 +118,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
         }
 
-        var transferProduct = {};
+        var transferProduct = new TransferProduct();
 
         function onTransport( coordinate ) {
             if( transferProduct.coordinate ) {
