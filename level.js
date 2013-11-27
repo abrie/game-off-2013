@@ -1,10 +1,10 @@
 "use strict";
 define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, Puzzle, utility, product, settings ) {
-    function Place( clipName, filterDescriptors ) {
+    function Place( clipName, filterDescriptors, onTransport, onInteraction ) {
         var video = assets.get( clipName );
         var filters = filterDescriptors.map( function(filterDescriptor) { 
             var filter = new filtermode.Filter( filterDescriptor );
-            filter.onSwap = onSwap; 
+            filter.onSwap = onInteraction; 
             filter.onTransport = onTransport;
             return filter;
         });
@@ -25,24 +25,35 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             return filters[index];
         }
 
-        function onSwap( f, o ) {
-            result.onSwap( f, o );
-        }
-
-        function onTransport( o ) {
-            result.onTransport( o );
-        }
-
         var result = {
             filters: filters,
             getFilter: getFilter,
             getRandomPuzzle: getRandomPuzzle,
             getVideo: getVideo,
-            onTransport: undefined,
-            onSwap: undefined,
         };
 
         return result;
+    }
+
+    function Graph( places ) {
+        var chain = [];
+        var terminalPuzzle;
+        chain.length = 0;
+
+        places.forEach( function(place) {
+            place.filters.forEach( function(filter) {
+                filter.puzzles.forEach( function(puzzle) {
+                    chain.push(puzzle);
+                });
+            });
+        });
+
+        terminalPuzzle = chain.shift();
+
+        return {
+            chain: chain,
+            terminalPuzzle: terminalPuzzle,
+        };
     }
 
     function Level() {
@@ -56,31 +67,15 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         var placeIndex = 0;
         var places = [ 
-            new Place( "clip1", [ filterA ] ), 
-            new Place( "clip2", [ filterA ] ) 
+            new Place( "clip1", [ filterA ], onTransport, onInteraction ), 
+            new Place( "clip2", [ filterA ], onTransport, onInteraction ) 
         ];
 
         var filterIndex = 0;
         var filterMax = 0;
 
-        var chain = [];
-        var terminalPuzzle;
-        function connect() {
-            chain.length = 0;
-            places.forEach( function(place) {
-                place.onTransport = onTransport;
-                place.onSwap = onInteraction;
-                place.filters.forEach( function(filter) {
-                    filter.puzzles.forEach( function(puzzle) {
-                        chain.push(puzzle);
-                    });
-                });
-            });
-
-            terminalPuzzle = chain.shift();
-        }
-
         var sm = new strawman.Strawman();
+        var graph = new Graph( places );
 
         function onInteraction(f, o) {
             if( sm.shouldDisplace( f, o ) ) {
@@ -95,16 +90,16 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         function onTransport( o ) {
             if( transferProduct.currentlyIn ) {
-                var index = chain.indexOf( o ) + 1;
-                if( index >= chain.length ) {
+                var index = graph.chain.indexOf( o ) + 1;
+                if( index >= graph.chain.length ) {
                     index = 0;
                 }
-                if( chain[index].object.isSolved() ) {
+                if( graph.chain[index].object.isSolved() ) {
                     o.transfer.animator.deactivate( 1500, function() {
                         o.object.removeItem( o.transfer.product );
-                        chain[index].object.addItem( chain[index].transfer.product );
-                        transferProduct.currentlyIn = chain[index];
-                        chain[index].transfer.animator.activate( 2000 );
+                        graph.chain[index].object.addItem( graph.chain[index].transfer.product );
+                        transferProduct.currentlyIn = graph.chain[index];
+                        graph.chain[index].transfer.animator.activate( 2000 );
                     });
                 }
                 else {
@@ -226,7 +221,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             nextPlace:nextPlace,
             previousPlace:previousPlace,
             update:update,
-            connect:connect,
         };
     }
 

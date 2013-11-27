@@ -17,7 +17,6 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'twee
 
     function start() {
         currentLevel = new level.Level();
-        currentLevel.connect();
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene") );
 
