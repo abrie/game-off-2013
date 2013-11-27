@@ -43,15 +43,30 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         places.forEach( function(place) {
             place.filters.forEach( function(filter) {
                 filter.puzzles.forEach( function(puzzle) {
-                    chain.push(puzzle);
+                    var coordinate = {
+                        place:place, 
+                        filter:filter, 
+                        puzzle:puzzle
+                    };
+                    chain.push( coordinate );
                 });
             });
         });
 
         terminalPuzzle = chain.shift();
 
+        function indexOf( coordinate ) {
+            for( var index = 0; index < chain.length; index++ ) {
+                if( chain[index].puzzle === coordinate.puzzle ) {
+                    return index;
+                }
+            }
+            return -1;
+        }
+
         return {
             chain: chain,
+            indexOf: indexOf,
             terminalPuzzle: terminalPuzzle,
         };
     }
@@ -60,11 +75,11 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
+            id:0,
             puzzles:[
                 { id:4, generator: Puzzle.Hammer }, 
                 { id:32, generator: Puzzle.Hammer }
             ],
-            id:0,
         };
 
         var placeIndex = 0;
@@ -89,16 +104,16 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         function onTransport( coordinate ) {
             if( transferProduct.currentlyIn ) {
-                var index = graph.chain.indexOf( coordinate.puzzle ) + 1;
+                var index = graph.indexOf( coordinate ) + 1; 
                 if( index >= graph.chain.length ) {
                     index = 0;
                 }
-                if( graph.chain[index].object.isSolved() ) {
-                    coordinate.transfer.animator.deactivate( 1500, function() {
-                        coordinate.puzzle.object.removeItem( coordinate.transfer.product );
-                        graph.chain[index].object.addItem( graph.chain[index].transfer.product );
+                if( graph.chain[index].puzzle.object.isSolved() ) {
+                    coordinate.filter.transfer.animator.deactivate( 1500, function() {
+                        coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
+                        graph.chain[index].puzzle.object.addItem( graph.chain[index].filter.transfer.product );
                         transferProduct.currentlyIn = graph.chain[index];
-                        graph.chain[index].transfer.animator.activate( 2000 );
+                        graph.chain[index].filter.transfer.animator.activate( 2000 );
                     });
                 }
                 else {
@@ -107,9 +122,9 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
             else {
                 if( coordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.transfer.product );
-                    transferProduct.currentlyIn = coordinate.puzzle;
-                    coordinate.transfer.animator.activate( 3000 );
+                    coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
+                    transferProduct.currentlyIn = coordinate;
+                    coordinate.filter.transfer.animator.activate( 3000 );
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
