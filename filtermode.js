@@ -43,7 +43,7 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
 
         puzzles.forEach( function(o) {
             o.object.setOnSwap( function() {
-                result.onSwap( result, o );
+                result.onSwap( {filter:result, puzzle:o} );
             });
             o.object.setOnTransport( function() {
                 result.onTransport( o );

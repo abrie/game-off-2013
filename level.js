@@ -76,8 +76,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var sm = new strawman.Strawman();
         var graph = new Graph( places );
 
-        function onInteraction(f, o) {
-            if( sm.shouldDisplace( f, o ) ) {
+        function onInteraction( coordinate ) {
+            if( sm.shouldDisplace( coordinate.filter, coordinate.puzzle ) ) {
                 withdrawStrawman();
             }
             else {
