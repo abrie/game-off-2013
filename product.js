@@ -4,7 +4,25 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
     function Animator( product ) {
         var state = {z:100};
 
-        function activate( rate ) {
+        function detonate( rate, onComplete ) {
+            var tween = new TWEEN.Tween( {s:1.0} )
+                .to( {s:100}, rate )
+                .easing( TWEEN.Easing.Bounce.Out )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    product.model.scale.set( this.s, this.s, this.s );
+                })
+                .onComplete( function() {
+                    if( onComplete ) {
+                        onComplete();
+                    }
+                });
+
+            tween.start();
+        }
+
+        function activate( rate, onComplete ) {
             var tween = new TWEEN.Tween( state )
                 .to( {z:-100}, rate )
                 .easing( TWEEN.Easing.Bounce.Out )
@@ -14,6 +32,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     product.model.position.z = this.z;
                 })
                 .onComplete( function() {
+                    if( onComplete ) {
+                        onComplete();
+                    }
                 });
 
             tween.start();
@@ -40,6 +61,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var result = {
             activate: activate,
             deactivate: deactivate,
+            detonate: detonate,
         };
 
         return result;

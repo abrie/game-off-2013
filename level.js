@@ -96,6 +96,11 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
     function TransferProduct() {
         var currentCoordinate;
+        var energy = 0;
+
+        function detonate( ) {
+            currentCoordinate.filter.transfer.animator.detonate( 500 );
+        }
 
         function transfer( coordinate, graph ) {
             if( currentCoordinate ) {
@@ -109,7 +114,13 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                         coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
                         nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
                         currentCoordinate = nextCoordinate;
-                        nextCoordinate.filter.transfer.animator.activate( 500 );
+                        nextCoordinate.filter.transfer.animator.activate( 500, function() {
+                            energy--;
+                            console.log("energy now:", energy);
+                            if( energy === 0 ) {
+                                detonate();
+                            }
+                        } );
                     });
                 }
                 else {
@@ -121,6 +132,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                     coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                     currentCoordinate = coordinate;
                     coordinate.filter.transfer.animator.activate( 500 );
+                    energy = 3;
+                    console.log("initial energy: ", energy);
                 }
                 else {
                     console.log("cannot transfer. Target is not solved.");
