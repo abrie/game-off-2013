@@ -217,7 +217,6 @@ define(['settings','spitball'], function(settings, spitball) {
 
     function Strawman() {
         var spinTween = undefined;
-        var moveTween = undefined;
         var currentCoordinate = undefined;
         var withdrawn = true;
 
@@ -238,10 +237,11 @@ define(['settings','spitball'], function(settings, spitball) {
             var newCoordinate = graph.differentCoordinate( currentCoordinate );
             newCoordinate.puzzle.object.bump();
             addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
-            moveTween = currentCoordinate.filter.strawman.insert();
-            moveTween.onComplete = function() { moveTween = false; };
-            withdrawn = false;
-            moveTween.start();
+            currentCoordinate.filter.strawman.insert()
+                .onStart( function(){
+                    withdrawn = false;
+                })
+                .start();
         }
 
         function addStrawman( newCoordinate, position ) {
@@ -256,14 +256,10 @@ define(['settings','spitball'], function(settings, spitball) {
 
         function spinStrawman() {
             if( !currentCoordinate ) {
-                console.log("trying to spin strawman without position.");
                 return;
             }
             var target = new THREE.Object3D();
             currentCoordinate.filter.strawman.setTarget( target );
-
-            //spinTween = object.spin();
-            //spinTween.start();
         }
 
         function withdrawStrawman() {
@@ -271,12 +267,12 @@ define(['settings','spitball'], function(settings, spitball) {
                 spinTween.stop();
             }
 
-            moveTween = currentCoordinate.filter.strawman.withdraw();
-            moveTween.onComplete( function() {
-                removeStrawman();
-                withdrawn = true;
-            }); 
-            moveTween.start();
+            currentCoordinate.filter.strawman.withdraw()
+                .onComplete( function() {
+                    removeStrawman();
+                    withdrawn = true;
+                }) 
+                .start();
         }
 
         return {
