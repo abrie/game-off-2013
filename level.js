@@ -134,6 +134,10 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         function onTransport( coordinate ) {
             if( transferProduct.coordinate ) {
+                if( transferProduct.coordinate != coordinate ) {
+                    console.log("cannot transfer. transferProduct is not here.");
+                    return;
+                }
                 var nextCoordinate = graph.nextCoordinate( coordinate );
                 if( nextCoordinate.puzzle.object.isSolved() ) {
                     coordinate.filter.transfer.animator.deactivate( 1500, function() {
