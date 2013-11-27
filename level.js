@@ -1,6 +1,51 @@
 "use strict";
 define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, product, settings ) {
-    function Level( scene ) {
+    function Place( clipName, filterDescriptors ) {
+        var video = assets.get( clipName );
+        var filters = filterDescriptors.map( function(filterDescriptor) { 
+            var filter = new filtermode.Filter( filterDescriptor );
+            filter.onSwap = onSwap; 
+            filter.onTransport = onTransport;
+            return filter;
+        });
+
+        function getVideo() {
+            return video;
+        }
+
+        function getRandom() {
+            var filter = utility.randomElement( filters );
+            return {
+                filter: filter,
+                puzzle: filter.getRandomPuzzle(),
+            };
+        }
+
+        function getFilter( index ) {
+            return filters[index];
+        }
+
+        function onSwap( f, o ) {
+            result.onSwap( f, o );
+        }
+
+        function onTransport( o ) {
+            result.onTransport( o );
+        }
+
+        var result = {
+            filters: filters,
+            getFilter: getFilter,
+            getRandom: getRandom,
+            getVideo: getVideo,
+            onTransport: undefined,
+            onSwap: undefined,
+        };
+
+        return result;
+    }
+
+    function Level() {
         var filterA = { 
             puzzles:[
                 { id:4, generator: puzzle.Hammer }, 
@@ -23,6 +68,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         function connect() {
             chain.length = 0;
             places.forEach( function(place) {
+                place.onTransport = onTransport;
+                place.onSwap = onInteraction;
                 place.filters.forEach( function(filter) {
                     filter.puzzles.forEach( function(puzzle) {
                         chain.push(puzzle);
@@ -31,41 +78,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             });
 
             terminalPuzzle = chain.shift();
-            console.log("terminal:", terminalPuzzle );
-            console.log("chain:", chain );
-        }
-
-        function Place( clipName, filterDescriptors ) {
-            var video = assets.get( clipName );
-            var filters = filterDescriptors.map( function(filterDescriptor) { 
-                var filter = new filtermode.Filter( filterDescriptor );
-                filter.onSwap = onInteraction; 
-                filter.onTransport = onTransport;
-                return filter;
-            });
-
-            function getVideo() {
-                return video;
-            }
-
-            function getRandom() {
-                var filter = utility.randomElement( filters );
-                return {
-                    filter: filter,
-                    puzzle: filter.getRandomPuzzle(),
-                };
-            }
-
-            function getFilter( index ) {
-                return filters[index];
-            }
-
-            return {
-                filters: filters,
-                getFilter: getFilter,
-                getRandom:getRandom,
-                getVideo:getVideo,
-            };
         }
 
         var sm = new strawman.Strawman();
