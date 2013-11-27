@@ -1,5 +1,5 @@
 "use strict";
-define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitobject, product, utility ) {
+define(['arscene', 'pitobject', 'product', 'strawman', 'utility' ], function( arscene, pitobject, product, Strawman, utility ) {
 
     function Filter( descriptor ) {
         var view = new arscene.View();
@@ -8,6 +8,8 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
         transfer.product = new product.Music();
         transfer.product.model.position.z = 100;
         transfer.animator = new product.Animator( transfer.product );
+        
+        var strawman = new Strawman.StrawmanObject();
 
         var puzzles = descriptor.puzzles.map( function(puzzle) {
             return {
@@ -58,6 +60,7 @@ define(['arscene', 'pitobject', 'product', 'utility' ], function( arscene, pitob
             onSwap:undefined,
             onTransport:undefined,
             transfer: transfer,
+            strawman: strawman,
             remove:remove,
             getView:getView,
             add:add,

@@ -219,7 +219,6 @@ define(['settings','spitball'], function(settings, spitball) {
         var spinTween = undefined;
         var moveTween = undefined;
         var currentCoordinate = undefined;
-        var object = new StrawmanObject();
         var withdrawn = true;
 
         function change( actionCoordinate ) {
@@ -239,25 +238,32 @@ define(['settings','spitball'], function(settings, spitball) {
             var newCoordinate = graph.differentCoordinate( currentCoordinate );
             newCoordinate.puzzle.object.bump();
             addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
-            moveTween = object.insert();
+            moveTween = currentCoordinate.filter.strawman.insert();
             moveTween.onComplete = function() { moveTween = false; };
             withdrawn = false;
             moveTween.start();
         }
 
         function addStrawman( newCoordinate, position ) {
-            newCoordinate.filter.add( newCoordinate.puzzle.id, object );
+            newCoordinate.filter.add( newCoordinate.puzzle.id, newCoordinate.filter.strawman );
             currentCoordinate = newCoordinate;
-            object.setPosition( position );
+            currentCoordinate.filter.strawman.setPosition( position );
         }
 
         function removeStrawman() {
-            currentCoordinate.filter.remove( currentCoordinate.puzzle.id, object );
+            currentCoordinate.filter.remove( currentCoordinate.puzzle.id, currentCoordinate.filter.strawman );
         }
 
         function spinStrawman() {
-            spinTween = object.spin();
-            spinTween.start();
+            if( !currentCoordinate ) {
+                console.log("trying to spin strawman without position.");
+                return;
+            }
+            var target = new THREE.Object3D();
+            currentCoordinate.filter.strawman.setTarget( target );
+
+            //spinTween = object.spin();
+            //spinTween.start();
         }
 
         function withdrawStrawman() {
@@ -265,7 +271,7 @@ define(['settings','spitball'], function(settings, spitball) {
                 spinTween.stop();
             }
 
-            moveTween = object.withdraw();
+            moveTween = currentCoordinate.filter.strawman.withdraw();
             moveTween.onComplete( function() {
                 removeStrawman();
                 withdrawn = true;
@@ -281,6 +287,7 @@ define(['settings','spitball'], function(settings, spitball) {
     }
 
     return {
+        StrawmanObject:StrawmanObject,
         Strawman:Strawman,
     };
 });
