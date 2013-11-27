@@ -44,6 +44,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
     }
 
     function Graph( places ) {
+        var allChain = [];
         var chain = [];
         var terminalCoordinate;
 
@@ -52,6 +53,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 filter.puzzles.forEach( function(puzzle) {
                     var coordinate = new Coordinate( place, filter, puzzle );
                     puzzle.coordinate = coordinate;
+                    allChain.push( coordinate );
                     chain.push( coordinate );
                 });
             });
@@ -77,9 +79,18 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             return chain[nextIndex];
         }
 
+        function differentCoordinate( coordinate ) {
+            var result = utility.randomElement( allChain );
+            while( result === coordinate ) {
+                result = utility.randomElement( allChain );
+            }
+            return result;
+        }
+
         return {
             nextCoordinate: nextCoordinate,
             terminalCoordinate: terminalCoordinate,
+            differentCoordinate: differentCoordinate,
         };
     }
 
@@ -107,10 +118,11 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         ];
 
         var sm = new strawman.Strawman();
+        sm.coordinate = new Coordinate(); 
         var graph = new Graph( places );
 
         function onInteraction( coordinate ) {
-            if( sm.shouldDisplace( coordinate.filter, coordinate.puzzle ) ) {
+            if( sm.coordinate === coordinate ) {
                 withdrawStrawman();
             }
             else {
@@ -179,29 +191,23 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
                 return;
             }
 
-            var randomPlace = utility.randomElement( places );
-            var randomPuzzle;
-            do {
-                randomPuzzle = randomPlace.getRandomPuzzle();
-            } while( randomPuzzle.filter === sm.filter && randomPuzzle.puzzle === sm.puzzle );
-
-            randomPuzzle.puzzle.object.bump();
-            addStrawman( randomPuzzle.filter, randomPuzzle.puzzle, randomPuzzle.puzzle.object.getHolePosition() );
+            var newCoordinate = graph.differentCoordinate( sm.coordinate );
+            newCoordinate.puzzle.object.bump();
+            addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
             sm.moveTween = sm.object.insert();
             sm.moveTween.onComplete = function() { sm.moveTween = false; };
             sm.withdrawn = false;
             sm.moveTween.start();
         }
 
-        function addStrawman( filter, puzzle, position ) {
-            filter.add( puzzle.id, sm.object );
+        function addStrawman( newCoordinate, position ) {
+            newCoordinate.filter.add( newCoordinate.puzzle.id, sm.object );
+            sm.coordinate = newCoordinate;
             sm.object.setPosition( position );
-            sm.puzzle = puzzle;
-            sm.filter = filter;
         }
 
         function removeStrawman() {
-            sm.filter.remove( sm.puzzle.id, sm.object );
+            sm.coordinate.filter.remove( sm.coordinate.puzzle.id, sm.object );
         }
 
         function previousFilter() {
