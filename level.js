@@ -1,5 +1,5 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, puzzle, utility, product, settings ) {
+define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, strawman, assets, Puzzle, utility, product, settings ) {
     function Place( clipName, filterDescriptors ) {
         var video = assets.get( clipName );
         var filters = filterDescriptors.map( function(filterDescriptor) { 
@@ -13,7 +13,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             return video;
         }
 
-        function getRandom() {
+        function getRandomPuzzle() {
             var filter = utility.randomElement( filters );
             return {
                 filter: filter,
@@ -36,7 +36,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var result = {
             filters: filters,
             getFilter: getFilter,
-            getRandom: getRandom,
+            getRandomPuzzle: getRandomPuzzle,
             getVideo: getVideo,
             onTransport: undefined,
             onSwap: undefined,
@@ -48,8 +48,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
     function Level() {
         var filterA = { 
             puzzles:[
-                { id:4, generator: puzzle.Hammer }, 
-                { id:32, generator: puzzle.Hammer }
+                { id:4, generator: Puzzle.Hammer }, 
+                { id:32, generator: Puzzle.Hammer }
             ],
             id:0,
         };
@@ -156,28 +156,28 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             }
 
             var randomPlace = utility.randomElement( places );
-            var randomFilterPuzzle;
+            var randomPuzzle;
             do {
-                randomFilterPuzzle = randomPlace.getRandom();
-            } while( randomFilterPuzzle.filter === sm.filter && randomFilterPuzzle.puzzle === sm.thing );
+                randomPuzzle = randomPlace.getRandomPuzzle();
+            } while( randomPuzzle.filter === sm.filter && randomPuzzle.puzzle === sm.puzzle );
 
-            randomFilterPuzzle.puzzle.object.bump();
-            addStrawman( randomFilterPuzzle.filter, randomFilterPuzzle.puzzle, randomFilterPuzzle.puzzle.object.getHolePosition() );
+            randomPuzzle.puzzle.object.bump();
+            addStrawman( randomPuzzle.filter, randomPuzzle.puzzle, randomPuzzle.puzzle.object.getHolePosition() );
             sm.moveTween = sm.object.insert();
             sm.moveTween.onComplete = function() { sm.moveTween = false; };
             sm.withdrawn = false;
             sm.moveTween.start();
         }
 
-        function addStrawman( filter, thing, position ) {
-            filter.add( thing.id, sm.object );
+        function addStrawman( filter, puzzle, position ) {
+            filter.add( puzzle.id, sm.object );
             sm.object.setPosition( position );
-            sm.thing = thing;
+            sm.puzzle = puzzle;
             sm.filter = filter;
         }
 
         function removeStrawman() {
-            sm.filter.remove( sm.thing.id, sm.object );
+            sm.filter.remove( sm.puzzle.id, sm.object );
         }
 
         function previousFilter() {

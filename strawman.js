@@ -218,13 +218,13 @@ define(['settings','spitball'], function(settings, spitball) {
     function Strawman() {
         return {
             object:new StrawmanObject(),
-            thing:undefined,
+            puzzle:undefined,
             filter:undefined,
             spinTween:undefined,
             moveTween:undefined,
             withdrawn:true,
             shouldDisplace: function( f, t ) {
-                return f === this.filter && t === this.thing;
+                return f === this.filter && t === this.puzzle;
             }
         };
     }
