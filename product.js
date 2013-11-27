@@ -2,12 +2,11 @@
 
 define(['assets', 'utility', 'three.min'],function( assets, utility ){
     function Animator( product ) {
-        var up = {z:-100};
-        var down = {z:100};
+        var state = {z:100};
 
         function activate( rate ) {
-            var tween = new TWEEN.Tween( {z:100} )
-                .to( up, rate )
+            var tween = new TWEEN.Tween( state )
+                .to( {z:-100}, rate )
                 .easing( TWEEN.Easing.Bounce.Out )
                 .onStart( function() {
                 })
@@ -21,8 +20,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         } 
 
         function deactivate( rate, onComplete ) {
-            var tween = new TWEEN.Tween( {z:-100} )
-                .to( down, rate )
+            var tween = new TWEEN.Tween( state )
+                .to( {z:100}, rate )
                 .easing( TWEEN.Easing.Quintic.In )
                 .onStart( function() {
                 })
