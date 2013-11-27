@@ -216,12 +216,67 @@ define(['settings','spitball'], function(settings, spitball) {
     }
 
     function Strawman() {
+        var spinTween = undefined;
+        var moveTween = undefined;
+        var currentCoordinate = undefined;
+        var object = new StrawmanObject();
+        var withdrawn = true;
+
+        function change( actionCoordinate ) {
+            if( currentCoordinate === actionCoordinate ) {
+                withdrawStrawman();
+            }
+            else {
+                spinStrawman();
+            }
+        }
+
+        function bump( graph ) {
+            if( !withdrawn ) {
+                return;
+            }
+
+            var newCoordinate = graph.differentCoordinate( currentCoordinate );
+            newCoordinate.puzzle.object.bump();
+            addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
+            moveTween = object.insert();
+            moveTween.onComplete = function() { moveTween = false; };
+            withdrawn = false;
+            moveTween.start();
+        }
+
+        function addStrawman( newCoordinate, position ) {
+            newCoordinate.filter.add( newCoordinate.puzzle.id, object );
+            currentCoordinate = newCoordinate;
+            object.setPosition( position );
+        }
+
+        function removeStrawman() {
+            currentCoordinate.filter.remove( currentCoordinate.puzzle.id, object );
+        }
+
+        function spinStrawman() {
+            spinTween = object.spin();
+            spinTween.start();
+        }
+
+        function withdrawStrawman() {
+            if( spinTween ) {
+                spinTween.stop();
+            }
+
+            moveTween = object.withdraw();
+            moveTween.onComplete( function() {
+                removeStrawman();
+                withdrawn = true;
+            }); 
+            moveTween.start();
+        }
+
         return {
-            object:new StrawmanObject(),
-            spinTween:undefined,
-            moveTween:undefined,
-            withdrawn:true,
-            coordinate: undefined,
+            change: change,
+            bump: bump,
+            spin: spinStrawman,
         };
     }
 

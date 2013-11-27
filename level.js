@@ -160,12 +160,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var graph = new Graph( places );
 
         function onInteraction( coordinate ) {
-            if( strawman.coordinate === coordinate ) {
-                withdrawStrawman();
-            }
-            else {
-                spinStrawman();
-            }
+            strawman.change( coordinate );
         }
 
         var transferProduct = new TransferProduct();
@@ -177,52 +172,11 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var updateCount = 0; 
         function update() {
             if( updateCount++ % settings.bumpFrequency === 0 ) {
-                bumpStrawman();
+                strawman.bump( graph );
             }
             else if( updateCount % settings.spinFrequency === 0 ) {
-                spinStrawman();
+                strawman.spin();
             }
-        }
-
-        function spinStrawman() {
-            strawman.spinTween = strawman.object.spin();
-            strawman.spinTween.start();
-        }
-
-        function withdrawStrawman() {
-            if( strawman.spinTween ) {
-                strawman.spinTween.stop();
-            }
-            strawman.moveTween = strawman.object.withdraw();
-            strawman.moveTween.onComplete( function() {
-                removeStrawman();
-                strawman.withdrawn = true;
-            }); 
-            strawman.moveTween.start();
-        }
-
-        function bumpStrawman() {
-            if( !strawman.withdrawn ) {
-                return;
-            }
-
-            var newCoordinate = graph.differentCoordinate( strawman.coordinate );
-            newCoordinate.puzzle.object.bump();
-            addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
-            strawman.moveTween = strawman.object.insert();
-            strawman.moveTween.onComplete = function() { strawman.moveTween = false; };
-            strawman.withdrawn = false;
-            strawman.moveTween.start();
-        }
-
-        function addStrawman( newCoordinate, position ) {
-            newCoordinate.filter.add( newCoordinate.puzzle.id, strawman.object );
-            strawman.coordinate = newCoordinate;
-            strawman.object.setPosition( position );
-        }
-
-        function removeStrawman() {
-            strawman.coordinate.filter.remove( strawman.coordinate.puzzle.id, strawman.object );
         }
 
         function previousFilter() {
