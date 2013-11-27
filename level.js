@@ -1,98 +1,5 @@
 "use strict";
-define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settings' ], function( filtermode, Strawman, assets, Puzzle, utility, product, settings ) {
-    function Place( clipName, filterDescriptors, onTransport, onInteraction ) {
-        var video = assets.get( clipName );
-        var filters = filterDescriptors.map( function(filterDescriptor) { 
-            var filter = new filtermode.Filter( filterDescriptor );
-            filter.onSwap = onInteraction; 
-            filter.onTransport = onTransport;
-            return filter;
-        });
-
-        function getVideo() {
-            return video;
-        }
-
-        function getRandomPuzzle() {
-            var filter = utility.randomElement( filters );
-            return {
-                filter: filter,
-                puzzle: filter.getRandomPuzzle(),
-            };
-        }
-
-        function getFilter( index ) {
-            return filters[index];
-        }
-
-        var result = {
-            filters: filters,
-            getFilter: getFilter,
-            getRandomPuzzle: getRandomPuzzle,
-            getVideo: getVideo,
-        };
-
-        return result;
-    }
-
-    function Coordinate( place, filter, puzzle ) {
-        return {
-            place:place, 
-            filter:filter, 
-            puzzle:puzzle
-        };
-    }
-
-    function Graph( places ) {
-        var allChain = [];
-        var chain = [];
-        var terminalCoordinate;
-
-        places.forEach( function(place) {
-            place.filters.forEach( function(filter) {
-                filter.puzzles.forEach( function(puzzle) {
-                    var coordinate = new Coordinate( place, filter, puzzle );
-                    puzzle.coordinate = coordinate;
-                    allChain.push( coordinate );
-                    chain.push( coordinate );
-                });
-            });
-        });
-
-        terminalCoordinate = chain.shift();
-
-        function nextCoordinate( coordinate ) {
-            var index = chain.indexOf( coordinate );
-            var nextIndex;
-
-            if( index < 0 ) {
-                return undefined;
-            }
-
-            if( index < chain.length-1 ) {
-                nextIndex = index+1;
-            }
-            else {
-                nextIndex = 0;
-            }
-
-            return chain[nextIndex];
-        }
-
-        function differentCoordinate( coordinate ) {
-            var result = utility.randomElement( allChain );
-            while( result === coordinate ) {
-                result = utility.randomElement( allChain );
-            }
-            return result;
-        }
-
-        return {
-            nextCoordinate: nextCoordinate,
-            terminalCoordinate: terminalCoordinate,
-            differentCoordinate: differentCoordinate,
-        };
-    }
+define(['strawman', 'puzzle', 'place', 'graph', 'utility', 'settings' ], function( Strawman, Puzzle, Place, Graph, utility, settings ) {
 
     function TransferProduct() {
         var currentCoordinate;
@@ -164,13 +71,13 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
 
         var placeIndex = 0;
         var places = [ 
-            new Place( "clip1", [ filterA ], onTransport, onInteraction ), 
-            new Place( "clip2", [ filterA ], onTransport, onInteraction ) 
+            new Place.Place( "clip1", [ filterA ], onTransport, onInteraction ), 
+            new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ) 
         ];
 
         var strawman = new Strawman.Strawman();
-        strawman.coordinate = new Coordinate(); 
-        var graph = new Graph( places );
+        strawman.coordinate = new Graph.Coordinate(); 
+        var graph = new Graph.Graph( places );
 
         function onInteraction( coordinate ) {
             strawman.change( coordinate );
