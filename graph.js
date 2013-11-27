@@ -12,7 +12,6 @@ define(['utility'], function( utility ) {
     function Graph( places ) {
         var allChain = [];
         var chain = [];
-        var terminalCoordinate;
 
         places.forEach( function( place ) {
             place.filters.forEach( function(filter) {
@@ -25,7 +24,7 @@ define(['utility'], function( utility ) {
             });
         });
 
-        terminalCoordinate = chain.shift();
+        chain = utility.shuffleArray( chain );
 
         function nextCoordinate( coordinate ) {
             var index = chain.indexOf( coordinate );
@@ -55,7 +54,6 @@ define(['utility'], function( utility ) {
 
         return {
             nextCoordinate: nextCoordinate,
-            terminalCoordinate: terminalCoordinate,
             differentCoordinate: differentCoordinate,
         };
     }

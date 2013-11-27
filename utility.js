@@ -16,10 +16,23 @@ define([], function() {
         return Math.pow(2, ( noteNumber - 69 ) / 12) * 440;
     }
 
+    //http://stackoverflow.com/a/12646864
+    function shuffleArray(arr) {
+        var array = arr.slice();
+        for (var i = array.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+
     return {
         random: random,
         randomZero: randomZero,
         randomElement: randomElement,
         noteToFrequency: noteToFrequency,
+        shuffleArray: shuffleArray
     };
 });
