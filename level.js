@@ -57,6 +57,8 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
     }
 
     function Level() {
+        var filterIndex = 0;
+        var filterMax = 0;
         var filterA = { 
             puzzles:[
                 { id:4, generator: Puzzle.Hammer }, 
@@ -70,9 +72,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             new Place( "clip1", [ filterA ], onTransport, onInteraction ), 
             new Place( "clip2", [ filterA ], onTransport, onInteraction ) 
         ];
-
-        var filterIndex = 0;
-        var filterMax = 0;
 
         var sm = new strawman.Strawman();
         var graph = new Graph( places );
