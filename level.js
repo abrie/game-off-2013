@@ -95,8 +95,46 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
     }
 
     function TransferProduct() {
+        var currentCoordinate;
+
+        function transfer( coordinate, graph ) {
+            if( currentCoordinate ) {
+                if( currentCoordinate != coordinate ) {
+                    console.log("cannot transfer. transferProduct is not here.");
+                    return;
+                }
+                var nextCoordinate = graph.nextCoordinate( coordinate );
+                if( nextCoordinate.puzzle.object.isSolved() ) {
+                    coordinate.filter.transfer.animator.deactivate( 1500, function() {
+                        coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
+                        nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
+                        currentCoordinate = nextCoordinate;
+                        nextCoordinate.filter.transfer.animator.activate( 2000 );
+                    });
+                }
+                else {
+                    console.log("cannot transfer. Target is not solved.");
+                }
+            }
+            else {
+                if( coordinate.puzzle.object.isSolved() ) {
+                    coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
+                    currentCoordinate = coordinate;
+                    coordinate.filter.transfer.animator.activate( 3000 );
+                }
+                else {
+                    console.log("cannot transfer. Target is not solved.");
+                }
+            }
+        }
+
+        function getCurrentCoordinate() {
+            return currentCoordinate;
+        }
+
         return {
-            coordinate:undefined
+            transfer:transfer,
+            getCurrentCoordinate: getCurrentCoordinate,
         };
     }
 
@@ -133,34 +171,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var transferProduct = new TransferProduct();
 
         function onTransport( coordinate ) {
-            if( transferProduct.coordinate ) {
-                if( transferProduct.coordinate != coordinate ) {
-                    console.log("cannot transfer. transferProduct is not here.");
-                    return;
-                }
-                var nextCoordinate = graph.nextCoordinate( coordinate );
-                if( nextCoordinate.puzzle.object.isSolved() ) {
-                    coordinate.filter.transfer.animator.deactivate( 1500, function() {
-                        coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
-                        nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
-                        transferProduct.coordinate = nextCoordinate;
-                        nextCoordinate.filter.transfer.animator.activate( 2000 );
-                    });
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
-            }
-            else {
-                if( coordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
-                    transferProduct.coordinate = coordinate;
-                    coordinate.filter.transfer.animator.activate( 3000 );
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
-            }
+            transferProduct.transfer( coordinate, graph );
         }
 
         var updateCount = 0; 
