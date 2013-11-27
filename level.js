@@ -28,6 +28,22 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         var transferProduct = new Product.Product();
+        transferProduct.setEnergyCallback( onEnergy );
+        function onEnergy( amount ) {
+            if( amount === 0 ) {
+                var productCoordinate = transferProduct.getCurrentCoordinate();
+                var strawmanCoordinate = strawman.getCurrentCoordinate();
+                console.log( productCoordinate, strawmanCoordinate );
+                if( productCoordinate.place === strawmanCoordinate.place ) {
+                    transferProduct.detonate();
+                    console.log("win!");
+                }
+                else {
+                    transferProduct.fizzle();
+                    console.log("loss.");
+                }
+            }
+        }
 
         function onTransport( coordinate ) {
             transferProduct.transfer( coordinate, graph );

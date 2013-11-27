@@ -275,10 +275,15 @@ define(['settings','spitball'], function(settings, spitball) {
                 .start();
         }
 
+        function getCurrentCoordinate() {
+            return currentCoordinate;
+        }
+
         return {
             change: change,
             bump: bump,
             spin: spinStrawman,
+            getCurrentCoordinate: getCurrentCoordinate,
         };
     }
 

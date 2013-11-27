@@ -4,6 +4,26 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
     function Animator( product ) {
         var state = {z:100};
 
+        function fizzle( rate, onComplete ) {
+            var fizzleState = {s:1.0};
+            var countDownState = {r:10};
+            var countDownTime = 3000;
+
+            new TWEEN.Tween( countDownState )
+                .to( {r:10}, countDownTime )
+                .onUpdate( function() {
+                })
+                .chain(
+                new TWEEN.Tween( fizzleState )
+                    .to( {s:0.01}, rate )
+                    .easing( TWEEN.Easing.Linear.None )
+                    .onUpdate( function() {
+                        product.model.scale.set( this.s, this.s, this.s );
+                    })
+                )
+                .start();
+        }
+
         function detonate( rate, onComplete ) {
             var detonateState = {s:1.0};
             var countDownState = {r:10};
@@ -80,6 +100,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             activate: activate,
             deactivate: deactivate,
             detonate: detonate,
+            fizzle: fizzle,
         };
 
         return result;
@@ -171,6 +192,10 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             currentCoordinate.filter.transfer.animator.detonate( 500 );
         }
 
+        function fizzle( ) {
+            currentCoordinate.filter.transfer.animator.fizzle( 500 );
+        }
+
         function transfer( coordinate, graph ) {
             if( currentCoordinate ) {
                 if( currentCoordinate != coordinate ) {
@@ -184,11 +209,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                         nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
                         currentCoordinate = nextCoordinate;
                         nextCoordinate.filter.transfer.animator.activate( 500, function() {
-                            energy--;
-                            console.log("energy now:", energy);
-                            if( energy === 0 ) {
-                                detonate();
-                            }
+                            notifyEnergy( --energy );
                         } );
                     });
                 }
@@ -214,9 +235,17 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             return currentCoordinate;
         }
 
+        var energyCallback;
+        function notifyEnergy( amount ) {
+            energyCallback( amount );
+        }
+
         return {
+            detonate:detonate,
+            fizzle:fizzle,
             transfer:transfer,
             getCurrentCoordinate: getCurrentCoordinate,
+            setEnergyCallback: function(callback) { energyCallback = callback; }
         };
     }
 
