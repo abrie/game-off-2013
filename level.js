@@ -38,7 +38,6 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
     function Graph( places ) {
         var chain = [];
         var terminalPuzzle;
-        chain.length = 0;
 
         places.forEach( function(place) {
             place.filters.forEach( function(filter) {
@@ -121,13 +120,13 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
         var transferProduct = {};
 
         function onTransport( coordinate ) {
-            if( transferProduct.currentlyIn ) {
+            if( transferProduct.coordinate ) {
                 var nextCoordinate = graph.nextCoordinate( coordinate );
                 if( nextCoordinate.puzzle.object.isSolved() ) {
                     coordinate.filter.transfer.animator.deactivate( 1500, function() {
                         coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
                         nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
-                        transferProduct.currentlyIn = nextCoordinate;
+                        transferProduct.coordinate = nextCoordinate;
                         nextCoordinate.filter.transfer.animator.activate( 2000 );
                     });
                 }
@@ -138,7 +137,7 @@ define(['filtermode','strawman','assets','puzzle', 'utility', 'product', 'settin
             else {
                 if( coordinate.puzzle.object.isSolved() ) {
                     coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
-                    transferProduct.currentlyIn = coordinate;
+                    transferProduct.coordinate = coordinate;
                     coordinate.filter.transfer.animator.activate( 3000 );
                 }
                 else {
