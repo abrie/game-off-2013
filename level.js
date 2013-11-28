@@ -16,7 +16,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var placeIndex = 0;
         var places = [ 
             new Place.Place( "clip1", [ filterA ], onTransport, onInteraction ), 
-            new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ) 
+            new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ) 
         ];
 
         var strawman = new Strawman.Strawman();
@@ -52,7 +53,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var updateCount = 0; 
         function update() {
             if( updateCount++ % settings.bumpFrequency === 0 ) {
-                strawman.bump( graph );
+                strawman.bump( graph, transferProduct.getCurrentCoordinate() );
             }
             else if( updateCount % settings.spinFrequency === 0 ) {
                 strawman.spin();
