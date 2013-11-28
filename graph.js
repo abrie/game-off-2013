@@ -44,11 +44,18 @@ define(['utility'], function( utility ) {
             return chain[nextIndex];
         }
 
-        function differentCoordinate( coordinate ) {
+        function isPresent( check, avoidCoordinates ) {
+            return avoidCoordinates.some( function(coordinate) {
+                return coordinate === check;
+            });
+        } 
+
+        function differentCoordinate( avoidCoordinates  ) {
             var result = utility.randomElement( allChain );
-            while( result === coordinate ) {
+            while( isPresent( result, avoidCoordinates ) ) { 
                 result = utility.randomElement( allChain );
-            }
+            } 
+            
             return result;
         }
 

@@ -229,12 +229,12 @@ define(['settings','spitball'], function(settings, spitball) {
             }
         }
 
-        function bump( graph ) {
+        function bump( graph, avoidCoordinate ) {
             if( !withdrawn ) {
                 return;
             }
 
-            var newCoordinate = graph.differentCoordinate( currentCoordinate );
+            var newCoordinate = graph.differentCoordinate( [currentCoordinate, avoidCoordinate] );
             newCoordinate.puzzle.object.bump();
             addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
             currentCoordinate.filter.strawman.insert()
