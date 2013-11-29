@@ -71,6 +71,20 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
+        add( "clip4", new media.Video({
+            src: "assets/clip4.m4v",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
+        add( "clip5", new media.Video({
+            src: "assets/clip5.m4v",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
         add( "hudset", new media.BitmapCollection({
             files: [
                 { id: 'character', file: 'character.png' },

@@ -186,7 +186,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
     function Product() {
         var currentCoordinate;
-        var energy = 0;
+        var jumpCount = 0;
 
         function detonate( ) {
             currentCoordinate.filter.transfer.animator.detonate( 500 );
@@ -196,38 +196,35 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             currentCoordinate.filter.transfer.animator.fizzle( 500 );
         }
 
-        function transfer( coordinate, graph ) {
-            if( currentCoordinate ) {
-                if( currentCoordinate != coordinate ) {
-                    console.log("cannot transfer. transferProduct is not here.");
-                    return;
-                }
-                var nextCoordinate = graph.nextCoordinate( coordinate );
-                if( nextCoordinate.puzzle.object.isSolved() ) {
-                    coordinate.filter.transfer.animator.deactivate( 500, function() {
-                        coordinate.puzzle.object.removeItem( coordinate.filter.transfer.product );
-                        nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
-                        currentCoordinate = nextCoordinate;
-                        nextCoordinate.filter.transfer.animator.activate( 500, function() {
-                            notifyEnergy( --energy );
-                        } );
-                    });
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
+        function setCoordinate( coordinate, graph, callback ) {
+            if( coordinate.puzzle.object.isSolved() ) {
+                coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
+                currentCoordinate = coordinate;
+                coordinate.filter.transfer.animator.activate( 500, callback );
             }
             else {
-                if( coordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
-                    currentCoordinate = coordinate;
-                    coordinate.filter.transfer.animator.activate( 500 );
-                    energy = 3;
-                    console.log("initial energy: ", energy);
-                }
-                else {
-                    console.log("cannot transfer. Target is not solved.");
-                }
+                console.log("cannot transfer. Target is not solved.");
+            }
+        }
+
+        function transfer( graph ) {
+            if( !currentCoordinate ) {
+                console.log("cannot transfer because no coordinate");
+            }
+
+            var nextCoordinate = graph.nextCoordinate( currentCoordinate );
+            if( nextCoordinate.puzzle.object.isSolved() ) {
+                currentCoordinate.filter.transfer.animator.deactivate( 500, function() {
+                    currentCoordinate.puzzle.object.removeItem( currentCoordinate.filter.transfer.product );
+                    nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
+                    currentCoordinate = nextCoordinate;
+                    nextCoordinate.filter.transfer.animator.activate( 500, function() {
+                        notifyJumpCount( ++jumpCount );
+                    } );
+                });
+            }
+            else {
+                console.log("gate is closed.");
             }
         }
 
@@ -235,9 +232,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             return currentCoordinate;
         }
 
-        var energyCallback;
-        function notifyEnergy( amount ) {
-            energyCallback( amount );
+        var jumpCountCallback;
+        function notifyJumpCount( amount ) {
+            jumpCountCallback( amount );
         }
 
         return {
@@ -245,7 +242,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             fizzle:fizzle,
             transfer:transfer,
             getCurrentCoordinate: getCurrentCoordinate,
-            setEnergyCallback: function(callback) { energyCallback = callback; }
+            setCoordinate: setCoordinate,
+            setJumpCountCallback: function(callback) { jumpCountCallback = callback; }
         };
     }
 

@@ -17,7 +17,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var places = [ 
             new Place.Place( "clip1", [ filterA ], onTransport, onInteraction ), 
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
-            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ) 
+            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ), 
         ];
 
         var strawman = new Strawman.Strawman();
@@ -29,12 +30,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         var transferProduct = new Product.Product();
-        transferProduct.setEnergyCallback( onEnergy );
-        function onEnergy( amount ) {
-            if( amount === 0 ) {
+        transferProduct.setJumpCountCallback( onJumpCountChanged );
+        function onJumpCountChanged( amount ) {
+            if( amount === 3 ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
-                console.log( productCoordinate, strawmanCoordinate );
                 if( productCoordinate.place === strawmanCoordinate.place ) {
                     transferProduct.detonate();
                     console.log("win!");
@@ -44,10 +44,15 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                     console.log("loss.");
                 }
             }
+            else {
+                transferProduct.transfer( graph );
+            }
         }
 
         function onTransport( coordinate ) {
-            transferProduct.transfer( coordinate, graph );
+            if( !transferProduct.getCurrentCoordinate() ) {
+                transferProduct.setCoordinate( coordinate, graph, function() { console.log("!"); transferProduct.transfer(graph); } );
+            }
         }
 
         var updateCount = 0; 
