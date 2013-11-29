@@ -8,7 +8,16 @@ define(['arscene', 'pitobject', 'product', 'strawman', 'utility' ], function( ar
         transfer.product = new product.Music();
         transfer.product.model.position.z = 100;
         transfer.animator = new product.Animator( transfer.product );
-        
+
+        var probe = {};
+        probe.near = new product.ProbeEnd(0xFF0000);
+        probe.far = new product.ProbeEnd(0x00FF00);
+        probe.near.model.rotation.x = Math.PI;
+        probe.near.model.position.z = -50;
+        probe.far.model.position.z = 70;
+        probe.nearAnimator = new product.ProbeAnimator( probe.near );
+        probe.farAnimator = new product.ProbeAnimator( probe.far );
+
         var strawman = new Strawman.StrawmanObject();
 
         var puzzles = descriptor.puzzles.map( function(puzzle) {
@@ -61,6 +70,7 @@ define(['arscene', 'pitobject', 'product', 'strawman', 'utility' ], function( ar
             onTransport:undefined,
             transfer: transfer,
             strawman: strawman,
+            probe: probe,
             remove:remove,
             getView:getView,
             add:add,

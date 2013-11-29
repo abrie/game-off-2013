@@ -1,6 +1,60 @@
 "use strict";
 
 define(['assets', 'utility', 'three.min'],function( assets, utility ){
+    function ProbeAnimator( product ) {
+        var state = {z:100};
+        var fraction = 2/product.tubes.length;
+
+        function activate( rate, onComplete ) {
+            var tween = new TWEEN.Tween( state )
+                .to( {z:-100}, rate )
+                .easing( TWEEN.Easing.Bounce.Out )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    var z = this.z;
+                    product.tubes.forEach( function(tube, index) {
+                        tube.position.z = z*(fraction*index);
+                    });
+                })
+                .onComplete( function() {
+                    if( onComplete ) {
+                        onComplete();
+                    }
+                });
+
+            tween.start();
+        } 
+
+        function deactivate( rate, onComplete ) {
+            var tween = new TWEEN.Tween( state )
+                .to( {z:100}, rate )
+                .easing( TWEEN.Easing.Quintic.In )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    var z = this.z;
+                    product.tubes.forEach( function(tube, index) {
+                        tube.position.z = z*(fraction*index);
+                    });
+                })
+                .onComplete( function() {
+                    if( onComplete ) {
+                        onComplete();
+                    }
+                });
+
+            tween.start();
+        } 
+
+        var result = {
+            activate: activate,
+            deactivate: deactivate,
+        };
+
+        return result;
+    }
+
     function Animator( product ) {
         var state = {z:100};
 
@@ -184,6 +238,58 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         };
     }
 
+    function ProbeEnd( color ) {
+        var probeLength = 50;
+        var probeRadius = 12.5;
+        var points = new THREE.SplineCurve3([
+            new THREE.Vector3(0, -probeLength, 0),
+            new THREE.Vector3(0, 0, 0),
+        ]);
+           
+        // points, ?, radius, facets, ? ?
+        var tubes = [];
+        function makeTube( radius ) {
+            var geometry = new THREE.TubeGeometry(points, 12, radius, 16, false, false);
+
+            geometry.applyMatrix( 
+                 new THREE.Matrix4()
+                    .makeTranslation( 0, 0, 0 ) );
+
+            geometry.applyMatrix( 
+                 new THREE.Matrix4()
+                    .makeRotationFromQuaternion(
+                        new THREE.Quaternion()
+                            .setFromAxisAngle( 
+                                new THREE.Vector3( 1, 0, 0), 
+                                -Math.PI/2 )));
+
+            var material = new THREE.MeshPhongMaterial({
+                color: color,
+                side: THREE.DoubleSide,
+            });
+
+            return new THREE.Mesh( geometry, material );
+        }
+
+        var container = new THREE.Object3D();
+
+        function update() {
+        }
+
+        for( var i = 5; i > 0; i-- ) {
+            var tube = makeTube( i*2 );
+            tubes.push( tube );
+            container.add( tube );
+        }
+
+        return {
+            tubes: tubes,
+            model: container,
+            update: update,
+            type: "PROBE"
+        };
+    }
+
     function Product() {
         var currentCoordinate;
         var jumpCount = 0;
@@ -246,10 +352,52 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         };
     }
 
+    function Probe() {
+        var nearCoordinate;
+        var farCoordinate;
+        var withdrawn = true;
+
+        function setCoordinate( coordinate, graph, callback ) {
+            if( !withdrawn ) {
+                withdraw( function() { setCoordinate( coordinate, graph, callback ); } );
+            }
+            else {
+                farCoordinate = graph.nextCoordinate( coordinate );
+                if( farCoordinate.puzzle.object.isSolved() ) {
+                    coordinate.puzzle.object.addItem( coordinate.filter.probe.near );
+                    farCoordinate.puzzle.object.addItem( farCoordinate.filter.probe.far );
+                    nearCoordinate = coordinate;
+                    nearCoordinate.filter.probe.nearAnimator.activate( 500, callback );
+                    farCoordinate.filter.probe.farAnimator.activate( 500 );
+                    withdrawn = false;
+                }
+                else {
+                    console.log("cannot probe. Target is not solved.");
+                }
+            }
+        }
+
+        function withdraw( callback ) {
+            nearCoordinate.filter.probe.nearAnimator.deactivate( 250, function() {
+                withdrawn = true;
+                callback();
+            });
+            farCoordinate.filter.probe.farAnimator.deactivate( 250 );
+        }
+
+        return {
+            withdraw:withdraw,
+            setCoordinate: setCoordinate,
+        };
+    }
+
     return {
         Product: Product,
         Animator: Animator,
         Battery: Battery,
         Music: Music,
+        ProbeAnimator: ProbeAnimator,
+        ProbeEnd: ProbeEnd,
+        Probe: Probe,
     };
 });

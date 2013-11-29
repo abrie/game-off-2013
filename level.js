@@ -30,6 +30,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         var transferProduct = new Product.Product();
+        var probeProduct = new Product.Probe();
+
         function onJumpCountChanged( amount ) {
             console.log(amount);
             if( amount === 3 ) {
@@ -49,10 +51,16 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             }
         }
 
+        var mode = "PROBE"; 
         function onTransport( coordinate ) {
-            if( !transferProduct.getCurrentCoordinate() ) {
+            if( mode === "MUSIC" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 
                     transferProduct.transfer( graph, setPlace, onJumpCountChanged ); 
+                });
+            }
+            else if( mode === "PROBE" ) {
+                probeProduct.setCoordinate( coordinate, graph, function() {
+                    console.log("probing...");
                 });
             }
         }
