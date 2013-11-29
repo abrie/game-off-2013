@@ -2,7 +2,7 @@
 define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
        function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
-    function Level() {
+    function Level( onPlaceChanged ) {
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
@@ -88,7 +88,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 placeIndex = places.length-1;
             }
 
-            return places[placeIndex]; 
+            onPlaceChanged();
         }
 
         function nextPlace() {
@@ -96,7 +96,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 placeIndex = 0;
             }
 
-            return places[placeIndex]; 
+            onPlaceChanged();
         }
 
         function currentPlace() {

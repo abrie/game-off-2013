@@ -16,7 +16,7 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'twee
     }
 
     function start() {
-        currentLevel = new level.Level();
+        currentLevel = new level.Level( onPlaceChanged );
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene") );
 
@@ -45,12 +45,13 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'twee
 
     function previousPlace() {
         currentLevel.previousPlace();
-        source.setVideo( currentLevel.currentPlace().getVideo() ); 
-        scene.setView( currentLevel.currentFilter().getView() ); 
     }
 
     function nextPlace() {
         currentLevel.nextPlace();
+    }
+
+    function onPlaceChanged() {
         source.setVideo( currentLevel.currentPlace().getVideo() ); 
         scene.setView( currentLevel.currentFilter().getView() ); 
     }
