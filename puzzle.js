@@ -39,7 +39,7 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
 
         function HolePiece( params ) {
             var geometry = new THREE.CubeGeometry( params.width, params.height, params.depth );
-            var material = new THREE.MeshBasicMaterial( { color:0xAABBCC } );
+            var material = new THREE.MeshPhongMaterial( { color:0xAABBCC, transparent:true, opacity:0.40 } );
             var mesh = new THREE.Mesh( geometry, material );
             mesh.isPickable = true;
             var model = new THREE.Object3D();
