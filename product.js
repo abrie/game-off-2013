@@ -207,7 +207,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             }
         }
 
-        function transfer( graph ) {
+        function transfer( graph, outCallback, inCallback ) {
             if( !currentCoordinate ) {
                 console.log("cannot transfer because no coordinate");
             }
@@ -218,7 +218,13 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     currentCoordinate.puzzle.object.removeItem( currentCoordinate.filter.transfer.product );
                     nextCoordinate.puzzle.object.addItem( nextCoordinate.filter.transfer.product );
                     currentCoordinate = nextCoordinate;
+                    if( outCallback ) {
+                        outCallback();
+                    }
                     nextCoordinate.filter.transfer.animator.activate( 500, function() {
+                        if( inCallback ) {
+                            inCallback();
+                        }
                         notifyJumpCount( ++jumpCount );
                     } );
                 });

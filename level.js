@@ -45,7 +45,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 }
             }
             else {
-                transferProduct.transfer( graph );
+                transferProduct.transfer( graph, function() {
+                    placeIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
+                    console.log("changing place...");
+                    onPlaceChanged();
+                } );
             }
         }
 
