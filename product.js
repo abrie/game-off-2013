@@ -223,10 +223,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     }
                     nextCoordinate.filter.transfer.animator.activate( 500, function() {
                         if( inCallback ) {
-                            inCallback();
+                            inCallback( ++jumpCount );
                         }
-                        notifyJumpCount( ++jumpCount );
-                    } );
+                    });
                 });
             }
             else {
@@ -238,18 +237,12 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             return currentCoordinate;
         }
 
-        var jumpCountCallback;
-        function notifyJumpCount( amount ) {
-            jumpCountCallback( amount );
-        }
-
         return {
             detonate:detonate,
             fizzle:fizzle,
             transfer:transfer,
             getCurrentCoordinate: getCurrentCoordinate,
             setCoordinate: setCoordinate,
-            setJumpCountCallback: function(callback) { jumpCountCallback = callback; }
         };
     }
 
