@@ -99,7 +99,7 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
             files: [
                 { id: 'battery', file: 'battery-border.png' },
                 { id: 'music', file: 'note-border.png' },
-                { id: 'molecule', file: 'molecule.png' }
+                { id: 'probe', file: 'molecule.png' }
             ],
             loader: THREE.ImageLoader,
         }), onInitialize, onProgress );

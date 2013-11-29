@@ -2,7 +2,7 @@
 define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
        function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
-    function Level( onPlaceChanged ) {
+    function Level( onPlaceChanged, inventory ) {
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
@@ -29,6 +29,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             strawman.change( coordinate );
         }
 
+        inventory.addItemChangedListener( onInventoryItemChanged );
+        function onInventoryItemChanged() {
+            console.log("new item");
+            probeProduct.withdraw( function() {
+                console.log("probe withdrawn due to inventory switch");
+            });
+        }
+
         var transferProduct = new Product.Product();
         var probeProduct = new Product.Probe();
 
@@ -51,14 +59,13 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             }
         }
 
-        var mode = "PROBE"; 
         function onTransport( coordinate ) {
-            if( mode === "MUSIC" ) {
+            if( inventory.getCurrentItem() === "music" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 
                     transferProduct.transfer( graph, setPlace, onJumpCountChanged ); 
                 });
             }
-            else if( mode === "PROBE" ) {
+            else if( inventory.getCurrentItem() === "probe" ) {
                 probeProduct.setCoordinate( coordinate, graph, function() {
                     console.log("probing...");
                 });

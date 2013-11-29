@@ -1,10 +1,12 @@
 "use strict";
 
-define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'tween.min', 'three.min'], function( arscene, ui, imagesource, level, hud, audio, assets ) {
+define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'tween.min', 'three.min'], 
+       function( Inventory, arscene, ui, imagesource, level, hud, audio ) {
 
     var source = new imagesource.VideoSource( { width:480, height:360 } );
     var scene, hudView;
     var currentLevel;
+    var inventory;
 
     function animate() {
         requestAnimationFrame( animate );
@@ -16,9 +18,12 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'twee
     }
 
     function start() {
-        currentLevel = new level.Level( onPlaceChanged );
+        inventory = new Inventory.Inventory();
+        inventory.add("music"); 
+        inventory.add("probe"); 
+        currentLevel = new level.Level( onPlaceChanged, inventory );
         scene = new arscene.Scene( document.getElementById("scene"), source );
-        hudView = new hud.HUD( document.getElementById("scene") );
+        hudView = new hud.HUD( document.getElementById("scene"), inventory );
 
         ui.addFilterPreviousListener( previousFilter );
         ui.addFilterNextListener( nextFilter );
@@ -34,12 +39,14 @@ define(['arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 'assets', 'twee
     function previousFilter() {
         scene.setView( currentLevel.previousFilter().getView() ); 
         audio.setLens( currentLevel.currentFilter().id );
+        inventory.previousItem();
         hudView.previousFilter();
     }
 
     function nextFilter() {
         scene.setView( currentLevel.nextFilter().getView() ); 
         audio.setLens( currentLevel.currentFilter().id );
+        inventory.nextItem();
         hudView.nextFilter();
     }
 

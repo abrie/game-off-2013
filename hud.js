@@ -1,6 +1,6 @@
 "use strict";
 define(['assets'], function(assets) {
-    function HUD( parent ) {
+    function HUD( parent, inventory ) {
         var element = document.createElement("canvas");
         element.width = 261;
         element.height = 360; 
@@ -39,9 +39,9 @@ define(['assets'], function(assets) {
             clear();
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
-        }
-
-        function update() {
+            inventory.items.forEach( function(item, index) {
+                context.drawImage( assets.get("inventory").get(item), index*64, 168, 64, 64 );
+            });
         }
 
         render();

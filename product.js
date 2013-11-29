@@ -385,6 +385,10 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function withdraw( callback ) {
+            if( !nearCoordinate || !farCoordinate ) {
+                return;
+            }
+
             var count = 0;
             function twice() {
                 if(++count === 2) {
