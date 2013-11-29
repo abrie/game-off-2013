@@ -32,6 +32,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var transferProduct = new Product.Product();
         transferProduct.setJumpCountCallback( onJumpCountChanged );
         function onJumpCountChanged( amount ) {
+            console.log(amount);
             if( amount === 3 ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
@@ -45,20 +46,23 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 }
             }
             else {
-                transferProduct.transfer( graph, function() {
-                    placeIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
-                    console.log("changing place...");
-                    onPlaceChanged();
-                } );
+                transferProduct.transfer( graph, setPlace );
             }
         }
 
         function onTransport( coordinate ) {
             if( !transferProduct.getCurrentCoordinate() ) {
-                transferProduct.setCoordinate( coordinate, graph, function() { console.log("!"); transferProduct.transfer(graph); } );
+                transferProduct.setCoordinate( coordinate, graph, function() { 
+                    transferProduct.transfer( graph, setPlace ); 
+                });
             }
         }
 
+        function setPlace() {
+            placeIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
+            onPlaceChanged();
+        }
+        
         var updateCount = 0; 
         function update() {
             if( updateCount++ % settings.bumpFrequency === 0 ) {

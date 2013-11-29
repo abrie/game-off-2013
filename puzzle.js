@@ -180,7 +180,7 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
 
         var pieces = generatePieces();
         var logic = new puzzlelogic.PuzzleLogic( pieces );
-        logic.scramble(3);
+        logic.scramble(0);
         var container = new Container();
 
         var pointerSize = 5;
