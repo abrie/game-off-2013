@@ -358,6 +358,13 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var withdrawn = true;
 
         function setCoordinate( coordinate, graph, callback ) {
+            var count = 0;
+            function twice() {
+                if(++count === 2) {
+                    callback();
+                }
+            }
+
             if( !withdrawn ) {
                 withdraw( function() { setCoordinate( coordinate, graph, callback ); } );
             }
@@ -367,8 +374,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     coordinate.puzzle.object.addItem( coordinate.filter.probe.near );
                     farCoordinate.puzzle.object.addItem( farCoordinate.filter.probe.far );
                     nearCoordinate = coordinate;
-                    nearCoordinate.filter.probe.nearAnimator.activate( 500, callback );
-                    farCoordinate.filter.probe.farAnimator.activate( 500 );
+                    nearCoordinate.filter.probe.nearAnimator.activate( 500, twice );
+                    farCoordinate.filter.probe.farAnimator.activate( 500, twice );
                     withdrawn = false;
                 }
                 else {
@@ -378,11 +385,21 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function withdraw( callback ) {
+            var count = 0;
+            function twice() {
+                if(++count === 2) {
+                    withdrawn = true;
+                    callback();
+                }
+            }
             nearCoordinate.filter.probe.nearAnimator.deactivate( 250, function() {
-                withdrawn = true;
-                callback();
+                nearCoordinate.puzzle.object.removeItem( nearCoordinate.filter.probe.near );
+                twice();
             });
-            farCoordinate.filter.probe.farAnimator.deactivate( 250 );
+            farCoordinate.filter.probe.farAnimator.deactivate( 250, function() {
+                farCoordinate.puzzle.object.removeItem( farCoordinate.filter.probe.far );
+                twice();
+            } );
         }
 
         return {
