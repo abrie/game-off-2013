@@ -2,7 +2,7 @@
 
 define(['assets', 'utility', 'three.min'],function( assets, utility ){
     function ProbeAnimator( product ) {
-        var state = {z:100};
+        var state = {z:30};
         var fraction = 2/product.tubes.length;
 
         function activate( rate, onComplete ) {
@@ -28,7 +28,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
         function deactivate( rate, onComplete ) {
             var tween = new TWEEN.Tween( state )
-                .to( {z:100}, rate )
+                .to( {z:0}, rate )
                 .easing( TWEEN.Easing.Quintic.In )
                 .onStart( function() {
                 })
