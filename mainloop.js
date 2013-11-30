@@ -42,8 +42,7 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), inventory );
 
-        ui.addFilterPreviousListener( previousFilter );
-        ui.addFilterNextListener( nextFilter );
+        ui.addToolListener( changeTool );
         ui.addPlacePreviousListener( previousPlace );
         ui.addPlaceNextListener( nextPlace );
 
@@ -53,18 +52,8 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         requestAnimationFrame( animate );
     }
 
-    function previousFilter() {
-        scene.setView( currentLevel.previousFilter().getView() ); 
-        audio.setLens( currentLevel.currentFilter().id );
+    function changeTool() {
         inventory.previousItem();
-        hudView.previousFilter();
-    }
-
-    function nextFilter() {
-        scene.setView( currentLevel.nextFilter().getView() ); 
-        audio.setLens( currentLevel.currentFilter().id );
-        inventory.nextItem();
-        hudView.nextFilter();
     }
 
     function previousPlace() {

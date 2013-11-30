@@ -1,8 +1,8 @@
 "use strict";
 define([], function() {
-    return {
+    var result = {
         arMarkerPersist: 20,
-        arThreshold: 90,
+        arThreshold: 40,
         arMarkerSize: 150,
         tileDepth:30,
         strawLength: 100,
@@ -13,4 +13,6 @@ define([], function() {
         spinFrequency: 100,
         bumpFrequency: 30, 
     };
+    GLOBAL.settings = result;
+    return result;
 });

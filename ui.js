@@ -16,20 +16,16 @@ define(['keys','utility'], function( keys, utility ) {
         }
     };
 
-    function addFilterNextListener( callback ) {
-        addKeyEventListener("UP", callback);
-    }
-
-    function addFilterPreviousListener( callback ) {
-        addKeyEventListener("DOWN", callback);
+    function addToolListener( callback ) {
+        addKeyEventListener("TOOL", callback);
     }
 
     function addPlaceNextListener( callback ) {
-        addKeyEventListener("LEFT", callback);
+        addKeyEventListener("RIGHT", callback);
     }
 
     function addPlacePreviousListener( callback ) {
-        addKeyEventListener("RIGHT", callback);
+        addKeyEventListener("LEFT", callback);
     }
 
     function shake() {
@@ -67,8 +63,7 @@ define(['keys','utility'], function( keys, utility ) {
     }
 
     return {
-        addFilterNextListener: addFilterNextListener,
-        addFilterPreviousListener: addFilterPreviousListener,
+        addToolListener: addToolListener,
         addPlaceNextListener: addPlaceNextListener,
         addPlacePreviousListener: addPlacePreviousListener,
         shake:shake,

@@ -50,6 +50,20 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
 
         onAllLoaded = onComplete;
 
+        add( "message1", new media.Video({
+            src: "assets/message1.m4v",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
+        add( "message2", new media.Video({
+            src: "assets/message2.m4v",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
         add( "clip1", new media.Video({
             src: "assets/clip1.m4v",
             width: 480,

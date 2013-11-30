@@ -174,7 +174,7 @@ define([], function() {
         function seek( delta ) {
             var time = frameToTime( getCurrentFrame() + delta );
             video.currentTime = time;
-            return video.currentTime >= (video.duration - 1 );
+            return video.currentTime >= video.duration;
         }
 
         var getDimensions = function() {

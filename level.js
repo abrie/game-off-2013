@@ -22,11 +22,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         var nextToAdd = 2;
         var allPlaces = [ 
-            new Place.Place( "clip1", [ filterB ], onTransport, onInteraction ), 
+            new Place.Place( "message1", [ filterB ], onTransport, onInteraction ), 
+            new Place.Place( "message2", [ filterA ], onTransport, onInteraction ), 
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
             new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
             new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ),
-            new Place.Place( "clip5", [ filterA ], onTransport, onInteraction ),
             new Place.Place( "clip6", [ filterA ], onTransport, onInteraction ),
         ];
 
@@ -43,7 +43,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var graph = new Graph.Graph( places );
 
         var strawman = new Strawman.Strawman();
-        strawman.bump( graph.getCoordinate(0) );
+        strawman.bump( graph.getCoordinate(2) );
 
         function onInteraction( coordinate ) {
             if( strawman.getCurrentCoordinate() === coordinate ) {
@@ -79,7 +79,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                         places.push( newPlace );
                         graph.add( newPlace );
                         transferProduct.remove();
-                        strawman.bump( graph.randomCoordinate() );
+                        strawman.bump( graph.nextCoordinate( strawman.getCurrentCoordinate() ) );
                         jumpsRequired++;
                     });
                 }

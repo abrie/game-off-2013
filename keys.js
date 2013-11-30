@@ -8,7 +8,8 @@ define([], function() {
         UP: [87, 38],
         LEFT: [65, 37],
         DOWN: [83, 40],
-        RIGHT: [68, 39]
+        RIGHT: [68, 39],
+        TOOL: [84],
     };
 
     function onDocumentKeyDown( event ) {
