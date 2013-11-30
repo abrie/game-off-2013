@@ -47,8 +47,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         var failureCount = 0;
         function onJumpPathBlocked() {
-            console.log("path blocked");
-            transferProduct.fizzle( function() {
+            transferProduct.splat( function() {
                 onFailure( ++failureCount );
                 transferProduct.remove();
             });

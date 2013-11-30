@@ -57,7 +57,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
     function Animator( product ) {
         var state = {z:100};
-        var fizzleState = {s:1.0};
+        var fizzleState = {s:1.0,z:100};
 
         function fizzle( rate, onComplete ) {
             new TWEEN.Tween( fizzleState )
@@ -70,7 +70,37 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 .start();
         }
 
-        function reset( rate ) {
+        function splat( rate, onComplete ) {
+            var splatPosition = {z:-100};
+            var splatState = {s:1.0, w:1.0};
+            var a = new TWEEN.Tween( splatState )
+                .to( {s:0.5, w:2.0}, rate/2 )
+                .easing( TWEEN.Easing.Exponential.In )
+                .onUpdate( function() {
+                    product.model.scale.set( this.w, this.w, this.s );
+                });
+
+            var b = new TWEEN.Tween( splatState )
+                .to( {s:0.01, w:2.0}, rate/2 )
+                .easing( TWEEN.Easing.Exponential.Out )
+                .onUpdate( function() {
+                    product.model.scale.set( this.w, this.w, this.s );
+                })
+                .onComplete( onComplete );
+
+            var c = new TWEEN.Tween( splatPosition )
+                .to( {z:-30}, 500 )
+                .easing( TWEEN.Easing.Quintic.In )
+                .onUpdate( function() {
+                    product.model.position.z = this.z;
+                });
+
+            a.chain(b).start();
+            c.start();
+        }
+
+        function reset( ) {
+            fizzleState = {s:1.0, z:100};
             product.model.scale.set( 1, 1, 1);
         }
 
@@ -151,6 +181,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             deactivate: deactivate,
             detonate: detonate,
             fizzle: fizzle,
+            splat: splat,
         };
 
         return result;
@@ -221,6 +252,11 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
         tween.start();
 
+        function freeze() {
+            tween.stop();
+            particleSystem.rotation.set(0,0,0);
+        }
+
         function update() {
             particleSystem.rotation.y += Math.PI/90; 
             particleSystem.rotation.z += Math.PI/90; 
@@ -228,6 +264,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         return {
+            freeze: freeze,
             model: particleSystem,
             update: update,
             type: "MUSIC"
@@ -298,6 +335,11 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             currentCoordinate.filter.transfer.animator.fizzle( 500, callback );
         }
 
+        function splat( callback ) {
+            currentCoordinate.filter.transfer.product.freeze();
+            currentCoordinate.filter.transfer.animator.splat( 5000, callback );
+        }
+
         function remove() {
             console.log("remove");
             currentCoordinate.puzzle.object.removeItem( currentCoordinate.filter.transfer.product );
@@ -351,6 +393,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         return {
             detonate:detonate,
             fizzle:fizzle,
+            splat:splat,
             remove:remove,
             transfer:transfer,
             getCurrentCoordinate: getCurrentCoordinate,
