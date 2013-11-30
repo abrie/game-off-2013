@@ -125,6 +125,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function activate( rate, onComplete ) {
+            defizzle(1);
             var tween = new TWEEN.Tween( state )
                 .to( {z:-100}, rate )
                 .easing( TWEEN.Easing.Bounce.Out )
@@ -321,7 +322,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         function setCoordinate( coordinate, graph, callback ) {
             if( coordinate.puzzle.object.isSolved() ) {
                 jumpCount = 0;
-                coordinate.filter.transfer.animator.defizzle( 1 );
                 coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                 currentCoordinate = coordinate;
                 coordinate.filter.transfer.animator.activate( 1, callback );
@@ -331,7 +331,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             }
         }
 
-        function transfer( graph, outCallback, inCallback ) {
+        function transfer( graph, outCallback, inCallback, blockedCallback ) {
             if( !currentCoordinate ) {
                 console.log("cannot transfer because no coordinate");
             }
@@ -353,6 +353,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 });
             }
             else {
+                if( blockedCallback ) {
+                    blockedCallback( jumpCount );
+                }
                 console.log("gate is closed.");
             }
         }

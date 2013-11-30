@@ -46,8 +46,16 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var probeProduct = new Product.Probe();
 
         var failureCount = 0;
+        function onJumpPathBlocked() {
+            console.log("path blocked");
+            transferProduct.fizzle( function() {
+                failureCount++;
+                console.log("loss:", failureCount);
+                transferProduct.remove();
+            });
+        }
+
         function onJumpCountChanged( amount ) {
-            console.log(amount);
             if( amount === 3 ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
@@ -64,14 +72,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 }
             }
             else {
-                transferProduct.transfer( graph, setPlace, onJumpCountChanged );
+                transferProduct.transfer( graph, setPlace, onJumpCountChanged, onJumpPathBlocked );
             }
         }
 
         function onTransport( coordinate ) {
             if( inventory.getCurrentItem().name === "music" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 
-                    transferProduct.transfer( graph, setPlace, onJumpCountChanged ); 
+                    transferProduct.transfer( graph, setPlace, onJumpCountChanged, onJumpPathBlocked ); 
                 });
             }
             else if( inventory.getCurrentItem().name === "probe" ) {
