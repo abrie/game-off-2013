@@ -334,7 +334,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function remove() {
-            console.log("remove");
             currentCoordinate.puzzle.object.removeItem( currentCoordinate.filter.transfer.product );
         }
 
@@ -345,13 +344,12 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 coordinate.filter.transfer.animator.activate( 1, callback );
             }
             else {
-                console.log("cannot transfer. Target is not solved.");
             }
         }
 
         function transfer( graph, outCallback, inCallback, blockedCallback ) {
             if( !currentCoordinate ) {
-                console.log("cannot transfer because no coordinate");
+                return;
             }
 
             var nextCoordinate = graph.nextCoordinate( currentCoordinate );
@@ -374,7 +372,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 if( blockedCallback ) {
                     blockedCallback();
                 }
-                console.log("gate is closed.");
             }
         }
 

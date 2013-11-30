@@ -236,7 +236,6 @@ define(['settings','spitball'], function(settings, spitball) {
         function addStrawman( coordinate, position ) {
             coordinate.filter.add( coordinate.puzzle.id, coordinate.filter.strawman );
             coordinate.filter.strawman.setPosition( position );
-            console.log(coordinate);
         }
 
         function removeStrawman() {
