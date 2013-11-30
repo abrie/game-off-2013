@@ -33,11 +33,15 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         };
     }
 
+    function onGameComplete() {
+        ui.theEnd();
+    }
+
     function start() {
         inventory = new Inventory.Inventory();
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), inventory );
-        currentLevel = new level.Level( onPlaceChanged, onFailure, onWin, inventory, hudView );
+        currentLevel = new level.Level( onPlaceChanged, onFailure, onWin, onGameComplete, inventory, hudView );
 
         ui.addToolListener( changeTool );
         ui.addPlacePreviousListener( previousPlace );

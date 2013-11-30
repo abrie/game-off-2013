@@ -2,7 +2,7 @@
 define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
        function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
-    function Level( onPlaceChanged, onFailure, onWin, inventory, hud ) {
+    function Level( onPlaceChanged, onFailure, onWin, onGameComplete, inventory, hud ) {
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
@@ -95,6 +95,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                     transferProduct.detonate( function() {
                         onWin();
                         var newPlace = allPlaces[nextToAdd++];
+                        if( !newPlace ) {
+                            gameOver = true;
+                            onGameComplete();
+                            return;
+                        }
                         places.push( newPlace );
                         graph.add( newPlace );
                         transferProduct.remove();
@@ -115,7 +120,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             }
         }
 
+        var gameOver = false;
         function onTransport( coordinate ) {
+            if( gameOver ) {
+                return;
+            }
             ignoreJumpCount = false;
             if( inventory.getCurrentItem().name === "music" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 

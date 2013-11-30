@@ -41,7 +41,7 @@ define(['keys','utility'], function( keys, utility ) {
         }
     }
 
-    function flash(message, color) {
+    function flash( message, color ) {
         var element = document.getElementById("message");
         element.innerHTML = message;
         new TWEEN.Tween( {opacity:0} )
@@ -61,11 +61,34 @@ define(['keys','utility'], function( keys, utility ) {
             .start();
     }
 
+    function theEnd( ) {
+        var element = document.getElementById("message");
+        element.innerHTML = "completed #disheveledmind";
+        new TWEEN.Tween( {opacity:0} )
+            .repeat( Infinity )
+            .yoyo( true )
+            .to( {opacity:1.0}, 2000 )
+            .easing( TWEEN.Easing.Circular.Out )
+            .onStart( function() {
+                element.style.background = "#FFFFFF"; 
+                element.style.color = "#000000"; 
+                element.style.display = "block";
+            })
+            .onComplete( function() {
+                element.style.display = "none";
+            })
+            .onUpdate( function() {
+                element.style.opacity = this.opacity;
+            })
+            .start();
+    }
+
     return {
         addToolListener: addToolListener,
         addPlaceNextListener: addPlaceNextListener,
         addPlacePreviousListener: addPlacePreviousListener,
         shake:shake,
         flash:flash,
+        theEnd:theEnd,
     };
 });
