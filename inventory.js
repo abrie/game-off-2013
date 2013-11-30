@@ -4,7 +4,10 @@ define([], function() {
     function Inventory() {
         var items = [];
         var currentItemIndex = 0;
-        function add(item) {
+        function add(name) {
+            var item = {};
+            item.name = name;
+            item.animator = new Animator(item);
             items.push(item);
         }
 
@@ -45,6 +48,42 @@ define([], function() {
             getCurrentItem: getCurrentItem,
             addItemChangedListener: addItemChangedListener,
         };
+    }
+
+    function Animator( item ) {
+        var state = {scale:0.25};
+
+        console.log( TWEEN.Easing );
+        function activate( rate ) {
+            new TWEEN.Tween( state )
+                .to( {scale:5.0}, rate )
+                .easing( TWEEN.Easing.Circular.Out )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    item.scale = this.scale;
+                })
+                .start();
+        }
+
+        function deactivate( rate ) {
+            new TWEEN.Tween( state )
+                .to( {scale:1.0}, rate )
+                .easing( TWEEN.Easing.Circular.In )
+                .onStart( function() {
+                })
+                .onUpdate( function() {
+                    item.scale = this.scale;
+                })
+                .start();
+        }
+
+        var result = {
+            activate: activate,
+            deactivate: deactivate,
+        };
+
+        return result;
     }
 
     return {

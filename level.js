@@ -31,7 +31,6 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         inventory.addItemChangedListener( onInventoryItemChanged );
         function onInventoryItemChanged() {
-            console.log("new item");
             probeProduct.withdraw( function() {
                 console.log("probe withdrawn due to inventory switch");
             });
@@ -60,12 +59,12 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         function onTransport( coordinate ) {
-            if( inventory.getCurrentItem() === "music" ) {
+            if( inventory.getCurrentItem().name === "music" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 
                     transferProduct.transfer( graph, setPlace, onJumpCountChanged ); 
                 });
             }
-            else if( inventory.getCurrentItem() === "probe" ) {
+            else if( inventory.getCurrentItem().name === "probe" ) {
                 probeProduct.setCoordinate( coordinate, graph, function() {
                     console.log("probing...");
                 });
@@ -80,7 +79,11 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var updateCount = 0; 
         function update() {
             if( updateCount++ % settings.bumpFrequency === 0 ) {
-                strawman.bump( graph, transferProduct.getCurrentCoordinate() );
+                var newCoordinate = strawman.bump( graph, transferProduct.getCurrentCoordinate() );
+                if( probeProduct.getNearCoordinate() === newCoordinate || 
+                   probeProduct.getFarCoordinate() === newCoordinate ) {
+                    probeProduct.withdraw();
+                }
             }
             else if( updateCount % settings.spinFrequency === 0 ) {
                 strawman.spin();

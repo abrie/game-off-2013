@@ -15,20 +15,29 @@ define(['assets'], function(assets) {
 
         parent.appendChild( element );
 
+        inventory.addItemChangedListener( onInventoryItemChanged );
+        function onInventoryItemChanged() {
+            inventory.items.forEach( function(item) {
+                if( inventory.getCurrentItem() === item ) {
+                    item.animator.activate(250);
+                }
+                else {
+                    item.animator.deactivate(250);
+                    console.log("deactivate");
+                }
+            });
+        }
+
         function nextFilter() {
             if( ++lensImageIndex > lensImages.length-1 ) {
                 lensImageIndex = 0;
             }
-
-            render();
         }
 
         function previousFilter() {
             if( --lensImageIndex < 0 ) {
                 lensImageIndex = lensImages.length-1;
             }
-
-            render();
         }
 
         function clear() {
@@ -39,14 +48,15 @@ define(['assets'], function(assets) {
             clear();
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
-            inventory.items.forEach( function(item, index) {
-                context.drawImage( assets.get("inventory").get(item), index*64, 168, 64, 64 );
+            var x = 0;
+            inventory.items.forEach( function( item ) {
+                context.drawImage( assets.get("inventory").get(item.name), x, 168, 32*item.scale, 32*item.scale );
+                x+=32*item.scale;
             });
         }
 
-        render();
-
         return {
+            render:render,
             nextFilter:nextFilter,
             previousFilter:previousFilter,
         };

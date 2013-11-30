@@ -242,6 +242,8 @@ define(['settings','spitball'], function(settings, spitball) {
                     withdrawn = false;
                 })
                 .start();
+
+            return newCoordinate;
         }
 
         function addStrawman( newCoordinate, position ) {

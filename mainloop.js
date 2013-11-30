@@ -15,12 +15,14 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         source.update();
         scene.update();
         scene.render();
+        hudView.render();
     }
 
     function start() {
         inventory = new Inventory.Inventory();
         inventory.add("music"); 
         inventory.add("probe"); 
+        inventory.add("battery");
         currentLevel = new level.Level( onPlaceChanged, inventory );
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), inventory );

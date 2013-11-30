@@ -393,7 +393,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             function twice() {
                 if(++count === 2) {
                     withdrawn = true;
-                    callback();
+                    if( callback ) {
+                        callback();
+                    }
                 }
             }
             nearCoordinate.filter.probe.nearAnimator.deactivate( 250, function() {
@@ -406,9 +408,19 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             } );
         }
 
+        function getNearCoordinate() {
+            return nearCoordinate;
+        }
+
+        function getFarCoordinate() {
+            return farCoordinate;
+        }
+
         return {
             withdraw:withdraw,
             setCoordinate: setCoordinate,
+            getNearCoordinate:getNearCoordinate,
+            getFarCoordinate:getFarCoordinate,
         };
     }
 
