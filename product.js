@@ -140,7 +140,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function activate( rate, onComplete ) {
-            var tween = new TWEEN.Tween( state )
+            var tween = new TWEEN.Tween( {z:100} )
                 .to( {z:-100}, rate )
                 .easing( TWEEN.Easing.Bounce.Out )
                 .onStart( function() {
@@ -159,7 +159,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         } 
 
         function deactivate( rate, onComplete ) {
-            var tween = new TWEEN.Tween( state )
+            var tween = new TWEEN.Tween( {z:-100} )
                 .to( {z:100}, rate )
                 .easing( TWEEN.Easing.Quintic.In )
                 .onStart( function() {
