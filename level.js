@@ -33,7 +33,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var placeIndex = 0;
         var places = [ allPlaces[0], allPlaces[1] ]; 
 
-        var jumpsRequired = 1;
+        var jumpLevel = 1;
+        var jumpsRequired = jumpLevel;
 
         inventory.clear();
         inventory.add("music"); 
@@ -62,18 +63,32 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var transferProduct = new Product.Product();
         var probeProduct = new Product.Probe();
 
+        function resetJumps() {
+            jumpsRequired = jumpLevel;
+            hud.setJumpNumber( jumpsRequired );
+        }
+
+        function increaseJumps() {
+            jumpLevel++;
+            resetJumps();
+        }
+
+        var ignoreJumpCount = false;
         function onJumpPathBlocked() {
+            ignoreJumpCount = true;
             transferProduct.splat( function() {
                 onFailure("BLOCKED");
                 transferProduct.remove();
-                hud.setJumpNumber( jumpsRequired );
+                resetJumps();
             });
         }
 
-        function onJumpCountChanged( amount ) {
-            hud.setJumpNumber( jumpsRequired - amount );
-            if( amount === jumpsRequired ) {
-                console.log(jumpsRequired);
+        function onJumpCountChanged() {
+            if( !ignoreJumpCount ) {
+                jumpsRequired--;
+            }
+            hud.setJumpNumber( jumpsRequired );
+            if( jumpsRequired === 0 ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
@@ -84,13 +99,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                         graph.add( newPlace );
                         transferProduct.remove();
                         strawman.bump( graph.nextCoordinate( strawman.getCurrentCoordinate() ) );
-                        hud.setJumpNumber( ++jumpsRequired );
+                        increaseJumps();
                     });
                 }
                 else {
                     transferProduct.fizzle( function() {
                         onFailure("OUT OF JUMPS");
                         transferProduct.remove();
+                        resetJumps();
                     });
                 }
             }
@@ -100,6 +116,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         function onTransport( coordinate ) {
+            ignoreJumpCount = false;
             if( inventory.getCurrentItem().name === "music" ) {
                 transferProduct.setCoordinate( coordinate, graph, function() { 
                     transferProduct.transfer( graph, setPlace, onJumpCountChanged, onJumpPathBlocked ); 

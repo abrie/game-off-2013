@@ -319,7 +319,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
     function Product() {
         var currentCoordinate;
-        var jumpCount = 0;
 
         function detonate( callback ) {
             currentCoordinate.filter.transfer.animator.detonate( 500, callback );
@@ -341,7 +340,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
         function setCoordinate( coordinate, graph, callback ) {
             if( coordinate.puzzle.object.isSolved() ) {
-                jumpCount = 0;
                 coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                 currentCoordinate = coordinate;
                 coordinate.filter.transfer.animator.activate( 1, callback );
@@ -367,7 +365,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     }
                     nextCoordinate.filter.transfer.animator.activate( 500, function() {
                         if( inCallback ) {
-                            inCallback( ++jumpCount );
+                            inCallback();
                         }
                     });
                 });
