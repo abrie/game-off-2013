@@ -51,14 +51,14 @@ progress.assetProgress {
 
 #message {
     width: 741px;
-    height: 200px;
+    height: 100px;
     overflow: auto;
     margin: auto;
     position: absolute;
     top:0; left:0; bottom:0; right:0;
     color: white;
     text-align: center;
-    font-size: 170px;
+    font-size: 100px;
 }
 
 #scene {

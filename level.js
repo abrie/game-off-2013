@@ -66,12 +66,10 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             transferProduct.splat( function() {
                 onFailure("BLOCKED");
                 transferProduct.remove();
-                hud.setJumpNumber( jumpsRequired );
             });
         }
 
         function onJumpCountChanged( amount ) {
-            hud.setJumpNumber( jumpsRequired - amount );
             if( amount === jumpsRequired ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
@@ -84,14 +82,12 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                         transferProduct.remove();
                         strawman.bump( graph.nextCoordinate( strawman.getCurrentCoordinate() ) );
                         jumpsRequired++;
-                        hud.setJumpNumber( jumpsRequired );
                     });
                 }
                 else {
                     transferProduct.fizzle( function() {
                         onFailure("OUT OF JUMPS");
                         transferProduct.remove();
-                        hud.setJumpNumber( jumpsRequired );
                     });
                 }
             }
