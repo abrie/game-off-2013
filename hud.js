@@ -8,9 +8,8 @@ define(['assets'], function(assets) {
         var faceImage = assets.get("hudset").get("character");
         var lensImageIndex = 0;
         var lensImages = [
-            assets.get("hudset").get("lens1"),
-            assets.get("hudset").get("lens2"),
             assets.get("hudset").get("lens3"),
+            assets.get("hudset").get("lens1"),
         ];
 
         parent.appendChild( element );
@@ -47,9 +46,9 @@ define(['assets'], function(assets) {
             clear();
             context.drawImage( faceImage, 0, 0 );
             context.drawImage( lensImages[ lensImageIndex ], 0, 0 );
-            var x = 0;
+            x = 8;
             inventory.items.forEach( function( item ) {
-                context.drawImage( assets.get("inventory").get(item.name), x, 168, 32*item.scale, 32*item.scale );
+                context.drawImage( assets.get("inventory").get(item.name), x, 200, 32*item.scale, 32*item.scale );
                 x+=32*item.scale;
             });
         }
