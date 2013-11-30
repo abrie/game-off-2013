@@ -60,22 +60,13 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var fizzleState = {s:1.0};
 
         function fizzle( rate, onComplete ) {
-            var countDownState = {r:10};
-            var countDownTime = 3000;
-
-            new TWEEN.Tween( countDownState )
-                .to( {r:10}, countDownTime )
+            new TWEEN.Tween( fizzleState )
+                .to( {s:0.01}, rate )
+                .easing( TWEEN.Easing.Linear.None )
                 .onUpdate( function() {
+                    product.model.scale.set( this.s, this.s, this.s );
                 })
-                .chain(
-                new TWEEN.Tween( fizzleState )
-                    .to( {s:0.01}, rate )
-                    .easing( TWEEN.Easing.Linear.None )
-                    .onUpdate( function() {
-                        product.model.scale.set( this.s, this.s, this.s );
-                    })
-                    .onComplete( onComplete )
-                )
+                .onComplete( onComplete )
                 .start();
         }
 
