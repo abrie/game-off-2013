@@ -2,7 +2,7 @@
 define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
        function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
-    function Level( onPlaceChanged, onFailure, onWin, inventory ) {
+    function Level( onPlaceChanged, onFailure, onWin, inventory, hud ) {
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
@@ -44,6 +44,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         var strawman = new Strawman.Strawman();
         strawman.bump( graph.getCoordinate(2) );
+        hud.setJumpNumber( jumpsRequired );
 
         function onInteraction( coordinate ) {
             if( strawman.getCurrentCoordinate() === coordinate ) {
@@ -63,12 +64,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         function onJumpPathBlocked() {
             transferProduct.splat( function() {
-                onFailure();
+                onFailure("BLOCKED");
                 transferProduct.remove();
+                hud.setJumpNumber( jumpsRequired );
             });
         }
 
         function onJumpCountChanged( amount ) {
+            hud.setJumpNumber( jumpsRequired - amount );
             if( amount === jumpsRequired ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
@@ -81,12 +84,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                         transferProduct.remove();
                         strawman.bump( graph.nextCoordinate( strawman.getCurrentCoordinate() ) );
                         jumpsRequired++;
+                        hud.setJumpNumber( jumpsRequired );
                     });
                 }
                 else {
                     transferProduct.fizzle( function() {
-                        onFailure();
+                        onFailure("OUT OF JUMPS");
                         transferProduct.remove();
+                        hud.setJumpNumber( jumpsRequired );
                     });
                 }
             }

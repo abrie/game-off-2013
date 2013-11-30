@@ -18,14 +18,12 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         hudView.render();
     }
 
-    var tally = 0;
-    function onFailure() {
+    function onFailure(message) {
         var color = {
             background: "#FF0000",
             foreground: "#FFFFFF"
         };
-        tally--;
-        ui.flash( "FAIL", color );
+        ui.flash( message, color );
     }
 
     function onWin() {
@@ -33,14 +31,13 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
             background: "#FFFFFF",
             foreground: "#000000"
         };
-        tally++;
     }
 
     function start() {
         inventory = new Inventory.Inventory();
-        currentLevel = new level.Level( onPlaceChanged, onFailure, onWin, inventory );
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), inventory );
+        currentLevel = new level.Level( onPlaceChanged, onFailure, onWin, inventory, hudView );
 
         ui.addToolListener( changeTool );
         ui.addPlacePreviousListener( previousPlace );

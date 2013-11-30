@@ -11,6 +11,7 @@ define(['assets'], function(assets) {
             assets.get("hudset").get("lens3"),
             assets.get("hudset").get("lens1"),
         ];
+        context.font = "20pt Arial";
 
         parent.appendChild( element );
 
@@ -51,9 +52,16 @@ define(['assets'], function(assets) {
                 context.drawImage( assets.get("inventory").get(item.name), x, 200, 32*item.scale, 32*item.scale );
                 x+=32*item.scale;
             });
+            context.strokeText("jumps to jangle:" + jumpNumber, 10, 193);
+        }
+
+        var jumpNumber = 0;
+        function setJumpNumber( number ) {
+            jumpNumber = number;
         }
 
         return {
+            setJumpNumber: setJumpNumber,
             render:render,
             nextFilter:nextFilter,
             previousFilter:previousFilter,

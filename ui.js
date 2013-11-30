@@ -43,10 +43,9 @@ define(['keys','utility'], function( keys, utility ) {
 
     function flash(message, color) {
         var element = document.getElementById("message");
-        console.log(message);
         element.innerHTML = message;
         new TWEEN.Tween( {opacity:0} )
-            .to( {opacity:1.0}, 250 )
+            .to( {opacity:1.0}, 750 )
             .easing( TWEEN.Easing.Circular.Out )
             .onStart( function() {
                 element.style.background = color.background; 
