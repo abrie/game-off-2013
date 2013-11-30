@@ -10,7 +10,6 @@ define(['utility'], function( utility ) {
     }
 
     function Graph( places ) {
-        var allChain = [];
         var chain = [];
 
         places.forEach( function( place ) {
@@ -18,13 +17,10 @@ define(['utility'], function( utility ) {
                 filter.puzzles.forEach( function(puzzle) {
                     var coordinate = new Coordinate( place, filter, puzzle );
                     puzzle.coordinate = coordinate;
-                    allChain.push( coordinate );
                     chain.push( coordinate );
                 });
             });
         });
-
-        //chain = utility.shuffleArray( chain );
 
         function deltaCoordinate( coordinate, delta ) {
             var index = chain.indexOf( coordinate );
@@ -36,16 +32,20 @@ define(['utility'], function( utility ) {
             return deltaCoordinate( coordinate, 1);
         }
 
+        function randomCoordinate() {
+            return utility.randomElement( chain );
+        }
+
         function isPresent( check, avoidCoordinates ) {
             return avoidCoordinates.some( function(coordinate) {
                 return coordinate === check;
             });
         } 
 
-        function differentCoordinate( avoidCoordinates  ) {
-            var result = utility.randomElement( allChain );
+        function differentCoordinate( avoidCoordinates ) {
+            var result = utility.randomElement( chain );
             while( isPresent( result, avoidCoordinates ) ) { 
-                result = utility.randomElement( allChain );
+                result = utility.randomElement( chain );
             } 
             
             return result;
@@ -54,6 +54,7 @@ define(['utility'], function( utility ) {
         return {
             nextCoordinate: nextCoordinate,
             differentCoordinate: differentCoordinate,
+            randomCoordinate: randomCoordinate,
         };
     }
 
