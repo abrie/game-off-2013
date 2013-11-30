@@ -19,11 +19,19 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
     }
 
     function onFailure( count ) {
-        ui.flash( "failure:"+count );
+        var color = {
+            background: "#FF0000",
+            foreground: "#FFFFFF"
+        };
+        ui.flash( "fail #"+count, color );
     }
 
     function onWin() {
-        ui.flash( "well done." );
+        var color = {
+            background: "#FFFFFF",
+            foreground: "#000000"
+        };
+        ui.flash( "WIN", color );
     }
 
     function start() {

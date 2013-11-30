@@ -45,7 +45,7 @@ define(['keys','utility'], function( keys, utility ) {
         }
     }
 
-    function flash(message) {
+    function flash(message, color) {
         var element = document.getElementById("message");
         console.log(message);
         element.innerHTML = message;
@@ -55,6 +55,8 @@ define(['keys','utility'], function( keys, utility ) {
             .yoyo(true)
             .easing( TWEEN.Easing.Circular.Out )
             .onStart( function() {
+                element.style.background = color.background; 
+                element.style.color = color.foreground; 
                 element.style.display = "block";
             })
             .onComplete( function() {
