@@ -57,9 +57,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
     function Animator( product ) {
         var state = {z:100};
+        var fizzleState = {s:1.0};
 
         function fizzle( rate, onComplete ) {
-            var fizzleState = {s:1.0};
             var countDownState = {r:10};
             var countDownTime = 3000;
 
@@ -74,7 +74,18 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     .onUpdate( function() {
                         product.model.scale.set( this.s, this.s, this.s );
                     })
+                    .onComplete( onComplete )
                 )
+                .start();
+        }
+
+        function defizzle( rate ) {
+            new TWEEN.Tween( fizzleState )
+                .to( {s:1.0}, rate )
+                .easing( TWEEN.Easing.Linear.None )
+                .onUpdate( function() {
+                    product.model.scale.set( this.s, this.s, this.s );
+                })
                 .start();
         }
 
@@ -154,6 +165,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             deactivate: deactivate,
             detonate: detonate,
             fizzle: fizzle,
+            defizzle: defizzle,
         };
 
         return result;
@@ -293,16 +305,23 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var currentCoordinate;
         var jumpCount = 0;
 
-        function detonate( ) {
-            currentCoordinate.filter.transfer.animator.detonate( 500 );
+        function detonate( callback ) {
+            currentCoordinate.filter.transfer.animator.detonate( 500, callback );
         }
 
-        function fizzle( ) {
-            currentCoordinate.filter.transfer.animator.fizzle( 500 );
+        function fizzle( callback ) {
+            currentCoordinate.filter.transfer.animator.fizzle( 500, callback );
+        }
+
+        function remove() {
+            console.log("remove");
+            currentCoordinate.puzzle.object.removeItem( currentCoordinate.filter.transfer.product );
         }
 
         function setCoordinate( coordinate, graph, callback ) {
             if( coordinate.puzzle.object.isSolved() ) {
+                jumpCount = 0;
+                coordinate.filter.transfer.animator.defizzle( 1 );
                 coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                 currentCoordinate = coordinate;
                 coordinate.filter.transfer.animator.activate( 1, callback );
@@ -345,6 +364,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         return {
             detonate:detonate,
             fizzle:fizzle,
+            remove:remove,
             transfer:transfer,
             getCurrentCoordinate: getCurrentCoordinate,
             setCoordinate: setCoordinate,

@@ -45,6 +45,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var transferProduct = new Product.Product();
         var probeProduct = new Product.Probe();
 
+        var failureCount = 0;
         function onJumpCountChanged( amount ) {
             console.log(amount);
             if( amount === 3 ) {
@@ -52,11 +53,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
                     transferProduct.detonate();
-                    console.log("win!");
+                    console.log( "win!" );
                 }
                 else {
-                    transferProduct.fizzle();
-                    console.log("loss.");
+                    transferProduct.fizzle( function() {
+                        failureCount++;
+                        console.log("loss:", failureCount);
+                        transferProduct.remove();
+                    });
                 }
             }
             else {
