@@ -70,14 +70,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 .start();
         }
 
-        function defizzle( rate ) {
-            new TWEEN.Tween( fizzleState )
-                .to( {s:1.0}, rate )
-                .easing( TWEEN.Easing.Linear.None )
-                .onUpdate( function() {
-                    product.model.scale.set( this.s, this.s, this.s );
-                })
-                .start();
+        function reset( rate ) {
+            product.model.scale.set( 1, 1, 1);
         }
 
         function detonate( rate, onComplete ) {
@@ -116,11 +110,11 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         function activate( rate, onComplete ) {
-            defizzle(1);
             var tween = new TWEEN.Tween( state )
                 .to( {z:-100}, rate )
                 .easing( TWEEN.Easing.Bounce.Out )
                 .onStart( function() {
+                    reset();
                 })
                 .onUpdate( function() {
                     product.model.position.z = this.z;
@@ -157,7 +151,6 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             deactivate: deactivate,
             detonate: detonate,
             fizzle: fizzle,
-            defizzle: defizzle,
         };
 
         return result;
