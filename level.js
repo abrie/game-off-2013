@@ -2,7 +2,7 @@
 define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
        function( Strawman, Puzzle, Place, Product, Graph, settings ) {
 
-    function Level( onPlaceChanged, inventory ) {
+    function Level( onPlaceChanged, onFailure, onWin, inventory ) {
         var filterIndex = 0;
         var filterMax = 0;
         var filterA = { 
@@ -49,8 +49,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         function onJumpPathBlocked() {
             console.log("path blocked");
             transferProduct.fizzle( function() {
-                failureCount++;
-                console.log("loss:", failureCount);
+                onFailure( ++failureCount );
                 transferProduct.remove();
             });
         }
@@ -61,12 +60,12 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
                     transferProduct.detonate();
+                    onWin();
                     console.log( "win!" );
                 }
                 else {
                     transferProduct.fizzle( function() {
-                        failureCount++;
-                        console.log("loss:", failureCount);
+                        onFailure( ++failureCount );
                         transferProduct.remove();
                     });
                 }

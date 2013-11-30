@@ -42,9 +42,18 @@ define([], function() {
             parent.removeChild( progressContainer );
             parent.removeChild( document.getElementById("logo") );
             document.body.removeChild( document.getElementById("status"));
+
+            createGameScreen();
+        }
+
+        function createGameScreen() {
             var sceneElement = document.createElement("div");
             sceneElement.id = "scene";
             document.body.appendChild( sceneElement );
+            var messageElement = document.createElement("div");
+            messageElement.id = "message";
+            messageElement.style.display = "none";
+            document.body.appendChild( messageElement );
         }
 
         return {

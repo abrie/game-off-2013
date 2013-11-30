@@ -18,9 +18,17 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         hudView.render();
     }
 
+    function onFailure( count ) {
+        ui.flash( "failure:"+count );
+    }
+
+    function onWin() {
+        ui.flash( "well done." );
+    }
+
     function start() {
         inventory = new Inventory.Inventory();
-        currentLevel = new level.Level( onPlaceChanged, inventory );
+        currentLevel = new level.Level( onPlaceChanged, onFailure, onWin, inventory );
         scene = new arscene.Scene( document.getElementById("scene"), source );
         hudView = new hud.HUD( document.getElementById("scene"), inventory );
 
