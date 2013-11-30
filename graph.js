@@ -24,24 +24,16 @@ define(['utility'], function( utility ) {
             });
         });
 
-        chain = utility.shuffleArray( chain );
+        //chain = utility.shuffleArray( chain );
+
+        function deltaCoordinate( coordinate, delta ) {
+            var index = chain.indexOf( coordinate );
+            var rotated = utility.rotateArray( chain, index );
+            return utility.rotateArray( rotated, delta )[0];
+        }
 
         function nextCoordinate( coordinate ) {
-            var index = chain.indexOf( coordinate );
-            var nextIndex;
-
-            if( index < 0 ) {
-                return undefined;
-            }
-
-            if( index < chain.length-1 ) {
-                nextIndex = index+1;
-            }
-            else {
-                nextIndex = 0;
-            }
-
-            return chain[nextIndex];
+            return deltaCoordinate( coordinate, 1);
         }
 
         function isPresent( check, avoidCoordinates ) {

@@ -16,6 +16,12 @@ define([], function() {
         return Math.pow(2, ( noteNumber - 69 ) / 12) * 440;
     }
 
+    function rotateArray(array,n) {
+        var result = array.slice();
+        result.unshift.apply( result, result.splice( -n, result.length ) );
+        return result;
+    }
+
     //http://stackoverflow.com/a/12646864
     function shuffleArray(arr) {
         var array = arr.slice();
@@ -33,6 +39,7 @@ define([], function() {
         randomZero: randomZero,
         randomElement: randomElement,
         noteToFrequency: noteToFrequency,
-        shuffleArray: shuffleArray
+        shuffleArray: shuffleArray,
+        rotateArray: rotateArray
     };
 });
