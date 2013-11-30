@@ -66,11 +66,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             transferProduct.splat( function() {
                 onFailure("BLOCKED");
                 transferProduct.remove();
+                hud.setJumpNumber( jumpsRequired );
             });
         }
 
         function onJumpCountChanged( amount ) {
+            hud.setJumpNumber( jumpsRequired - amount );
             if( amount === jumpsRequired ) {
+                console.log(jumpsRequired);
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
@@ -81,7 +84,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                         graph.add( newPlace );
                         transferProduct.remove();
                         strawman.bump( graph.nextCoordinate( strawman.getCurrentCoordinate() ) );
-                        jumpsRequired++;
+                        hud.setJumpNumber( ++jumpsRequired );
                     });
                 }
                 else {
@@ -104,14 +107,16 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             }
             else if( inventory.getCurrentItem().name === "probe" ) {
                 probeProduct.setCoordinate( coordinate, graph, function() {
-                    console.log("probing...");
                 });
             }
         }
 
         function setPlace() {
-            placeIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
-            onPlaceChanged();
+            var newPlaceIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
+            if( newPlaceIndex != placeIndex ) {
+                placeIndex = newPlaceIndex;
+                onPlaceChanged();
+            }
         }
         
         var updateCount = 0; 

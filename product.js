@@ -66,7 +66,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 .onUpdate( function() {
                     product.model.scale.set( this.s, this.s, this.s );
                 })
-                .onComplete( onComplete )
+                .chain( new TWEEN.Tween( {r:0} ).to({r:1}, 500).onComplete (onComplete))
                 .start();
         }
 
@@ -74,19 +74,13 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             var splatPosition = {z:-100};
             var splatState = {s:1.0, w:1.0};
             var a = new TWEEN.Tween( splatState )
-                .to( {s:0.5, w:2.0}, rate/2 )
+                .to( {s:0.5, w:3}, rate*3 )
+                .delay( rate*1/3 )
                 .easing( TWEEN.Easing.Exponential.In )
                 .onUpdate( function() {
                     product.model.scale.set( this.w, this.w, this.s );
-                });
-
-            var b = new TWEEN.Tween( splatState )
-                .to( {s:0.01, w:2.0}, rate/2 )
-                .easing( TWEEN.Easing.Exponential.Out )
-                .onUpdate( function() {
-                    product.model.scale.set( this.w, this.w, this.s );
                 })
-                .onComplete( onComplete );
+                .chain( new TWEEN.Tween( {r:0} ).to({r:1}, 500).onComplete (onComplete));
 
             var c = new TWEEN.Tween( splatPosition )
                 .to( {z:-30}, 500 )
@@ -95,7 +89,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                     product.model.position.z = this.z;
                 });
 
-            a.chain(b).start();
+            a.start();
             c.start();
         }
 
@@ -380,7 +374,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             }
             else {
                 if( blockedCallback ) {
-                    blockedCallback( jumpCount );
+                    blockedCallback();
                 }
                 console.log("gate is closed.");
             }
