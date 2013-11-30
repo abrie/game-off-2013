@@ -21,6 +21,12 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ), 
         ];
 
+        inventory.clear();
+        inventory.add("music"); 
+        inventory.add("probe"); 
+        inventory.add("battery");
+        inventory.select("probe");
+
         var strawman = new Strawman.Strawman();
         strawman.coordinate = new Graph.Coordinate(); 
         var graph = new Graph.Graph( places );

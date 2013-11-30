@@ -23,7 +23,6 @@ define(['assets'], function(assets) {
                 }
                 else {
                     item.animator.deactivate(250);
-                    console.log("deactivate");
                 }
             });
         }

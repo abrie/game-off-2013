@@ -8,7 +8,24 @@ define([], function() {
             var item = {};
             item.name = name;
             item.animator = new Animator(item);
+            item.animator.deactivate();
             items.push(item);
+        }
+
+        function select( name ) {
+            items.forEach( function(item, index) {
+                if( item.name === name ) {
+                    item.animator.activate();
+                    currentItemIndex = index;
+                }
+                else {
+                    item.animator.deactivate();
+                }
+            });
+        }
+
+        function clear() {
+            items.length = [];
         }
 
         function getCurrentItem() {
@@ -43,7 +60,9 @@ define([], function() {
         return {
             add: add,
             items:items,
+            clear:clear,
             nextItem: nextItem,
+            select: select,
             previousItem: previousItem,
             getCurrentItem: getCurrentItem,
             addItemChangedListener: addItemChangedListener,
@@ -53,7 +72,6 @@ define([], function() {
     function Animator( item ) {
         var state = {scale:0.25};
 
-        console.log( TWEEN.Easing );
         function activate( rate ) {
             new TWEEN.Tween( state )
                 .to( {scale:5.0}, rate )
