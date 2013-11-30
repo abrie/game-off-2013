@@ -17,19 +17,19 @@ define(['keys','utility'], function( keys, utility ) {
     };
 
     function addFilterNextListener( callback ) {
-        addKeyEventListener("RIGHT", callback);
-    }
-
-    function addFilterPreviousListener( callback ) {
-        addKeyEventListener("LEFT", callback);
-    }
-
-    function addPlaceNextListener( callback ) {
         addKeyEventListener("UP", callback);
     }
 
-    function addPlacePreviousListener( callback ) {
+    function addFilterPreviousListener( callback ) {
         addKeyEventListener("DOWN", callback);
+    }
+
+    function addPlaceNextListener( callback ) {
+        addKeyEventListener("LEFT", callback);
+    }
+
+    function addPlacePreviousListener( callback ) {
+        addKeyEventListener("RIGHT", callback);
     }
 
     function shake() {

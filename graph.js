@@ -12,15 +12,7 @@ define(['utility'], function( utility ) {
     function Graph( places ) {
         var chain = [];
 
-        places.forEach( function( place ) {
-            place.filters.forEach( function(filter) {
-                filter.puzzles.forEach( function(puzzle) {
-                    var coordinate = new Coordinate( place, filter, puzzle );
-                    puzzle.coordinate = coordinate;
-                    chain.push( coordinate );
-                });
-            });
-        });
+        places.forEach( add );
 
         function nextCoordinate( coordinate ) {
             var index = chain.indexOf( coordinate );
@@ -29,6 +21,16 @@ define(['utility'], function( utility ) {
                 index = 0;
             }
             return chain[index];
+        }
+
+        function add( place ) {
+            place.filters.forEach( function(filter) {
+                filter.puzzles.forEach( function(puzzle) {
+                    var coordinate = new Coordinate( place, filter, puzzle );
+                    puzzle.coordinate = coordinate;
+                    chain.push( coordinate );
+                });
+            });
         }
 
         function randomCoordinate() {
@@ -46,6 +48,7 @@ define(['utility'], function( utility ) {
         } 
 
         return {
+            add: add,
             getCoordinate: getCoordinate,
             nextCoordinate: nextCoordinate,
             randomCoordinate: randomCoordinate,

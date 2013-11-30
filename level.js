@@ -12,6 +12,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 { id:32, generator: Puzzle.Hammer }
             ],
         };
+
         var filterB = { 
             id:0,
             puzzles:[
@@ -19,14 +20,24 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             ],
         };
 
-        var placeIndex = 0;
-        var places = [ 
+        var nextToAdd = 2;
+        var allPlaces = [ 
             new Place.Place( "clip1", [ filterB ], onTransport, onInteraction ), 
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip5", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip6", [ filterA ], onTransport, onInteraction ),
         ];
+
+        var placeIndex = 0;
+        var places = [ allPlaces[0], allPlaces[1] ]; 
+
+        var jumpsRequired = 1;
 
         inventory.clear();
         inventory.add("music"); 
+        inventory.add("probe"); 
         inventory.select("music");
 
         var graph = new Graph.Graph( places );
@@ -58,13 +69,18 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         function onJumpCountChanged( amount ) {
-            if( amount === 1 ) {
+            if( amount === jumpsRequired ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
                     transferProduct.detonate( function() {
                         onWin();
+                        var newPlace = allPlaces[nextToAdd++];
+                        places.push( newPlace );
+                        graph.add( newPlace );
                         transferProduct.remove();
+                        strawman.bump( graph.randomCoordinate() );
+                        jumpsRequired++;
                     });
                 }
                 else {
