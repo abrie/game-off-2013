@@ -81,12 +81,11 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         function detonate( rate, onComplete ) {
             var detonateState = {s:1.0};
             var countDownState = {r:10};
-            var countDownTime = 3000;
+            var countDownTime = 1000;
 
             new TWEEN.Tween( countDownState )
                 .to( {r:10}, countDownTime )
                 .onUpdate( function() {
-                    console.log("tick:", this.r);
                 })
                 .chain(
                 new TWEEN.Tween( detonateState )
@@ -277,7 +276,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         for( var i = 5; i > 0; i-- ) {
-            var tube = makeTube( i*2 );
+            var tube = makeTube( i*3 );
             tubes.push( tube );
             container.add( tube );
         }
@@ -306,7 +305,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
             if( coordinate.puzzle.object.isSolved() ) {
                 coordinate.puzzle.object.addItem( coordinate.filter.transfer.product );
                 currentCoordinate = coordinate;
-                coordinate.filter.transfer.animator.activate( 500, callback );
+                coordinate.filter.transfer.animator.activate( 1, callback );
             }
             else {
                 console.log("cannot transfer. Target is not solved.");
