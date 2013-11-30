@@ -1,7 +1,7 @@
 "use strict";
 define(['arscene', 'pitobject', 'product', 'strawman', 'utility' ], function( arscene, pitobject, product, Strawman, utility ) {
 
-    function Filter( descriptor ) {
+    function Filter( descriptor, noScramble ) {
         var view = new arscene.View();
         
         var transfer = {};
@@ -21,10 +21,17 @@ define(['arscene', 'pitobject', 'product', 'strawman', 'utility' ], function( ar
         var strawman = new Strawman.StrawmanObject();
 
         var puzzles = descriptor.puzzles.map( function(puzzle) {
-            return {
+            var result = {
                 id: puzzle.id, 
                 object: new puzzle.generator( descriptor.id ), 
             };
+            if( noScramble ) {
+                return result;
+            }
+            else {
+                result.object.scramble(4);
+                return result;
+            }
         });
 
         function add( id, object ) {

@@ -180,8 +180,11 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
 
         var pieces = generatePieces();
         var logic = new puzzlelogic.PuzzleLogic( pieces );
-        logic.scramble(0);
         var container = new Container();
+
+        function scramble(depth) {
+            logic.scramble(depth);
+        }
 
         var pointerSize = 5;
         var pointer = new factory.PointerMesh(pointerSize); 
@@ -304,6 +307,7 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
             addItem:addItem,
             bump: bump,
             isSolved: logic.isSolved,
+            scramble: scramble
         };
 
         return result;

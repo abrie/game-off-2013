@@ -1,9 +1,9 @@
 "use strict";
 define(['filtermode','assets', 'utility', 'settings' ], function( filtermode, assets, utility, settings ) {
-    function Place( clipName, filterDescriptors, onTransport, onInteraction ) {
+    function Place( clipName, filterDescriptors, onTransport, onInteraction, noScramble ) {
         var video = assets.get( clipName );
         var filters = filterDescriptors.map( function(filterDescriptor) { 
-            var filter = new filtermode.Filter( filterDescriptor );
+            var filter = new filtermode.Filter( filterDescriptor, noScramble );
             filter.onSwap = onInteraction; 
             filter.onTransport = onTransport;
             return filter;

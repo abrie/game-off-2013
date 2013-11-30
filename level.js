@@ -22,8 +22,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         var nextToAdd = 2;
         var allPlaces = [ 
-            new Place.Place( "message1", [ filterB ], onTransport, onInteraction ), 
-            new Place.Place( "message2", [ filterA ], onTransport, onInteraction ), 
+            new Place.Place( "message1", [ filterB ], onTransport, onInteraction, true ), 
+            new Place.Place( "message2", [ filterA ], onTransport, onInteraction, true ), 
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
             new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
             new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ),
