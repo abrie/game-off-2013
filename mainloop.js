@@ -18,12 +18,14 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
         hudView.render();
     }
 
-    function onFailure( count ) {
+    var tally = 0;
+    function onFailure() {
         var color = {
             background: "#FF0000",
             foreground: "#FFFFFF"
         };
-        ui.flash( "fail #"+count, color );
+        tally--;
+        ui.flash( "FAIL", color );
     }
 
     function onWin() {
@@ -31,7 +33,7 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
             background: "#FFFFFF",
             foreground: "#000000"
         };
-        ui.flash( "WIN", color );
+        tally++;
     }
 
     function start() {

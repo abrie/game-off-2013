@@ -50,9 +50,7 @@ define(['keys','utility'], function( keys, utility ) {
         console.log(message);
         element.innerHTML = message;
         new TWEEN.Tween( {opacity:0} )
-            .to( {opacity:1.0}, 1000 )
-            .repeat(1)
-            .yoyo(true)
+            .to( {opacity:1.0}, 250 )
             .easing( TWEEN.Easing.Circular.Out )
             .onStart( function() {
                 element.style.background = color.background; 

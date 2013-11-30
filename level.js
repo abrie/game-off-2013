@@ -45,10 +45,9 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var transferProduct = new Product.Product();
         var probeProduct = new Product.Probe();
 
-        var failureCount = 0;
         function onJumpPathBlocked() {
             transferProduct.splat( function() {
-                onFailure( ++failureCount );
+                onFailure();
                 transferProduct.remove();
             });
         }
@@ -58,13 +57,14 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
-                    transferProduct.detonate();
-                    onWin();
-                    console.log( "win!" );
+                    transferProduct.detonate( function() {
+                        onWin();
+                        transferProduct.remove();
+                    });
                 }
                 else {
                     transferProduct.fizzle( function() {
-                        onFailure( ++failureCount );
+                        onFailure();
                         transferProduct.remove();
                     });
                 }

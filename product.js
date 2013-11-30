@@ -337,7 +337,7 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
 
         function splat( callback ) {
             currentCoordinate.filter.transfer.product.freeze();
-            currentCoordinate.filter.transfer.animator.splat( 5000, callback );
+            currentCoordinate.filter.transfer.animator.splat( 500, callback );
         }
 
         function remove() {
