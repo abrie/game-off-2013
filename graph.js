@@ -22,18 +22,21 @@ define(['utility'], function( utility ) {
             });
         });
 
-        function deltaCoordinate( coordinate, delta ) {
-            var index = chain.indexOf( coordinate );
-            var rotated = utility.rotateArray( chain, index );
-            return utility.rotateArray( rotated, delta )[0];
-        }
-
         function nextCoordinate( coordinate ) {
-            return deltaCoordinate( coordinate, 1);
+            var index = chain.indexOf( coordinate );
+            index++;
+            if( index >= chain.length ) {
+                index = 0;
+            }
+            return chain[index];
         }
 
         function randomCoordinate() {
             return utility.randomElement( chain );
+        }
+
+        function getCoordinate( index ) {
+            return chain[index];
         }
 
         function isPresent( check, avoidCoordinates ) {
@@ -42,18 +45,9 @@ define(['utility'], function( utility ) {
             });
         } 
 
-        function differentCoordinate( avoidCoordinates ) {
-            var result = utility.randomElement( chain );
-            while( isPresent( result, avoidCoordinates ) ) { 
-                result = utility.randomElement( chain );
-            } 
-            
-            return result;
-        }
-
         return {
+            getCoordinate: getCoordinate,
             nextCoordinate: nextCoordinate,
-            differentCoordinate: differentCoordinate,
             randomCoordinate: randomCoordinate,
         };
     }

@@ -12,26 +12,32 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
                 { id:32, generator: Puzzle.Hammer }
             ],
         };
+        var filterB = { 
+            id:0,
+            puzzles:[
+                { id:32, generator: Puzzle.Hammer }, 
+            ],
+        };
 
         var placeIndex = 0;
         var places = [ 
-            new Place.Place( "clip1", [ filterA ], onTransport, onInteraction ), 
+            new Place.Place( "clip1", [ filterB ], onTransport, onInteraction ), 
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
-            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
-            new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ), 
         ];
 
         inventory.clear();
         inventory.add("music"); 
-        inventory.add("probe"); 
-        inventory.select("probe");
+        inventory.select("music");
 
-        var strawman = new Strawman.Strawman();
-        strawman.coordinate = new Graph.Coordinate(); 
         var graph = new Graph.Graph( places );
 
+        var strawman = new Strawman.Strawman();
+        strawman.bump( graph.getCoordinate(0) );
+
         function onInteraction( coordinate ) {
-            strawman.change( coordinate );
+            if( strawman.getCurrentCoordinate() === coordinate ) {
+                strawman.bump( graph.nextCoordinate(coordinate));
+            }
         }
 
         inventory.addItemChangedListener( onInventoryItemChanged );
@@ -52,7 +58,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         }
 
         function onJumpCountChanged( amount ) {
-            if( amount === 3 ) {
+            if( amount === 1 ) {
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
@@ -93,14 +99,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         
         var updateCount = 0; 
         function update() {
-            if( updateCount++ % settings.bumpFrequency === 0 ) {
-                var newCoordinate = strawman.bump( graph, transferProduct.getCurrentCoordinate() );
-                if( probeProduct.getNearCoordinate() === newCoordinate || 
-                   probeProduct.getFarCoordinate() === newCoordinate ) {
-                    probeProduct.withdraw();
-                }
-            }
-            else if( updateCount % settings.spinFrequency === 0 ) {
+            if( ++updateCount % settings.spinFrequency === 0 ) {
                 strawman.spin();
             }
         }

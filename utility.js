@@ -5,7 +5,7 @@ define([], function() {
     }
 
     function randomElement( array ) {
-        return array[ random(array.length) ];
+        return array[ random(array.length-1) ];
     }
 
     function randomZero(max) {

@@ -220,36 +220,23 @@ define(['settings','spitball'], function(settings, spitball) {
         var currentCoordinate = undefined;
         var withdrawn = true;
 
-        function change( actionCoordinate ) {
-            if( currentCoordinate === actionCoordinate ) {
-                withdrawStrawman();
-            }
-            else {
-                spinStrawman();
-            }
+        function bump( coordinate ) {
+            withdrawStrawman( function() {
+                coordinate.puzzle.object.bump();
+                addStrawman( coordinate, coordinate.puzzle.object.getHolePosition() );
+                coordinate.filter.strawman.insert()
+                    .onStart( function(){
+                        withdrawn = false;
+                        currentCoordinate = coordinate;
+                    })
+                    .start();
+            });
         }
 
-        function bump( graph, avoidCoordinate ) {
-            if( !withdrawn ) {
-                return;
-            }
-
-            var newCoordinate = graph.differentCoordinate( [currentCoordinate, avoidCoordinate] );
-            newCoordinate.puzzle.object.bump();
-            addStrawman( newCoordinate, newCoordinate.puzzle.object.getHolePosition() );
-            currentCoordinate.filter.strawman.insert()
-                .onStart( function(){
-                    withdrawn = false;
-                })
-                .start();
-
-            return newCoordinate;
-        }
-
-        function addStrawman( newCoordinate, position ) {
-            newCoordinate.filter.add( newCoordinate.puzzle.id, newCoordinate.filter.strawman );
-            currentCoordinate = newCoordinate;
-            currentCoordinate.filter.strawman.setPosition( position );
+        function addStrawman( coordinate, position ) {
+            coordinate.filter.add( coordinate.puzzle.id, coordinate.filter.strawman );
+            coordinate.filter.strawman.setPosition( position );
+            console.log(coordinate);
         }
 
         function removeStrawman() {
@@ -264,17 +251,23 @@ define(['settings','spitball'], function(settings, spitball) {
             currentCoordinate.filter.strawman.setTarget( target );
         }
 
-        function withdrawStrawman() {
+        function withdrawStrawman( callback ) {
             if( spinTween ) {
                 spinTween.stop();
             }
 
-            currentCoordinate.filter.strawman.withdraw()
-                .onComplete( function() {
-                    removeStrawman();
-                    withdrawn = true;
-                }) 
-                .start();
+            if( withdrawn ) {
+                callback();
+            }
+            else {
+                currentCoordinate.filter.strawman.withdraw()
+                    .onComplete( function() {
+                        removeStrawman();
+                        withdrawn = true;
+                        callback();
+                    }) 
+                    .start();
+            }
         }
 
         function getCurrentCoordinate() {
@@ -282,7 +275,6 @@ define(['settings','spitball'], function(settings, spitball) {
         }
 
         return {
-            change: change,
             bump: bump,
             spin: spinStrawman,
             getCurrentCoordinate: getCurrentCoordinate,
