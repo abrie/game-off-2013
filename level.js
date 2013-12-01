@@ -14,14 +14,14 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
         };
 
         var filterB = { 
-            id:0,
+            id:1,
             puzzles:[
                 { id:32, generator: Puzzle.Hammer }, 
             ],
         };
 
         var filterC = { 
-            id:0,
+            id:2,
             puzzles:[
                 { id:4, generator: Puzzle.Hammer }, 
                 { id:32, generator: Puzzle.Hammer },
@@ -29,16 +29,22 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             ],
         };
 
+        var filterD = {
+            id:3,
+            puzzles:[],
+        };
+
         var nextToAdd = 2;
         var allPlaces = [ 
             new Place.Place( "message1", [ filterB ], onTransport, onInteraction, true ), 
             new Place.Place( "message2", [ filterA ], onTransport, onInteraction, true ), 
-            new Place.Place( "clip2", [ filterA ], onTransport, onInteraction, true ),
-            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction, true ),
-            new Place.Place( "clip3b", [ filterB ], onTransport, onInteraction, true ),
-            new Place.Place( "clip7", [ filterC ], onTransport, onInteraction, true ), 
-            new Place.Place( "clip4", [ filterA ], onTransport, onInteraction, true ),
-            new Place.Place( "clip6", [ filterA ], onTransport, onInteraction, true ),
+            new Place.Place( "clip2", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip3", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip3b", [ filterB ], onTransport, onInteraction ),
+            new Place.Place( "clip7", [ filterC ], onTransport, onInteraction ), 
+            new Place.Place( "clip8", [ filterD ], onTransport, onInteraction ),
+            new Place.Place( "clip4", [ filterA ], onTransport, onInteraction ),
+            new Place.Place( "clip6", [ filterA ], onTransport, onInteraction ),
         ];
 
         var placeIndex = 0;
