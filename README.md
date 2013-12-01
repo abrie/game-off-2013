@@ -1,4 +1,4 @@
-![GitHub Game Off Game Jam](https://f.cloud.github.com/assets/121322/1436486/25f88b78-4158-11e3-9b23-43596516362c.png)
+![Product of a Disheveled Mind](screenshot.png)
 
 ## The Challenge
 
