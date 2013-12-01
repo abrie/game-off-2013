@@ -60,6 +60,9 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
 
         var graph = new Graph.Graph( places );
 
+        var transferProduct = new Product.Product();
+        var probeProduct = new Product.Probe();
+
         var strawman = new Strawman.Strawman();
         strawman.bump( graph.getCoordinate(2) );
         hud.setJumpNumber( jumpsRequired );
@@ -67,6 +70,13 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
         function onInteraction( coordinate ) {
             if( strawman.getCurrentCoordinate() === coordinate ) {
                 strawman.bump( graph.nextCoordinate(coordinate));
+            }
+            if( inProbeMode && 
+               (probeProduct.getNearCoordinate() === coordinate ||
+                probeProduct.getFarCoordinate() === coordinate )) {
+                    probeProduct.withdraw( function() {
+                        console.log("probe withdrawn due to interaction");
+                });
             }
         }
 
@@ -77,8 +87,9 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             });
         }
 
-        var transferProduct = new Product.Product();
-        var probeProduct = new Product.Probe();
+        function inProbeMode() {
+            return inventory.getCurrentItem().name === "probe";
+        }
 
         function resetJumps() {
             jumpsRequired = jumpLevel;
