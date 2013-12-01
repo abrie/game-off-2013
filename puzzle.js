@@ -186,11 +186,6 @@ define(['colors', 'assets', 'puzzlelogic', 'settings', 'factory', 'three.min', '
             logic.scramble(depth);
         }
 
-        var pointerSize = 5;
-        var pointer = new factory.PointerMesh(pointerSize); 
-        pointer.position.set( 0, -settings.arMarkerSize/2-pointerSize*3, 0 );
-        container.add( pointer );
-
         pieces.forEach( function(piece) {
             if( piece ) {
                 container.add( piece.model );
