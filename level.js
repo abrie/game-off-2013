@@ -87,7 +87,7 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
         var ignoreJumpCount = false;
         function onJumpPathBlocked() {
             ignoreJumpCount = true;
-            audio.dispatch( sound2 );
+            audio.dispatch( sound2_blocked );
             transferProduct.splat( function() {
                 onFailure("BLOCKED");
                 transferProduct.remove();
@@ -96,7 +96,7 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
         }
 
         var sound1 = {
-            notes:[64,65,66,67],
+            notes: [69, 72, 76, 57], 
             span: 500,
             delay: 0,
             target: "oscsynth",
@@ -106,7 +106,7 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             lensId: 0,
         };
 
-        var sound2 = {
+        var sound2_blocked = {
             notes:[30],
             span: 1000,
             delay: 450,
@@ -117,19 +117,19 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             lensId: 0,
         };
 
-        var sound3 = {
-            notes:[70,71,72,73,74,75,76],
+        var sound3_burst = {
+            notes:[77, 81, 84, 65, 69],
             span: 900,
             delay: 0,
             target: "oscsynth",
-            type: "sine",
+            type: "square",
             velocity: 1,
             adsr: {attack:0.05, release:0.05},
             lensId: 0,
         };
 
         var sound3_down = {
-            notes:[70,71,72,72,71,70,69],
+            notes:[50, 53, 69],
             span: 900,
             delay: 0,
             target: "oscsynth",
@@ -139,14 +139,25 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             lensId: 0,
         };
 
-        var sound4 = {
-            notes:[70,71,72,73,74,75,76],
-            span: 400,
+        var sound4_layer1 = {
+            notes:[72, 84, 69, 65, 62],
+            span: 600,
             delay: 1000,
             target: "oscsynth",
             type: "sine",
             velocity: 1,
             adsr: {attack:0.05, release:0.05},
+            lensId: 0,
+        };
+
+        var sound4_layer2 = {
+            notes:[57, 53, 50, 60, 72],
+            span: 900,
+            delay: 1000,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.05, release:0.12},
             lensId: 0,
         };
 
@@ -171,8 +182,11 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
-                    audio.dispatch(sound3);
-                    audio.dispatch(sound4);
+                    audio.dispatch(sound3_burst);
+                    audio.dispatch(sound4_layer1);
+                    audio.dispatch(sound4_layer2);
+                    sound4_layer1.notes = utility.rotateArray( sound4_layer1.notes, 1 );
+                    sound4_layer2.notes = utility.rotateArray( sound4_layer2.notes, 2 );
                     transferProduct.detonate( function() {
                         onWin();
                         var newPlace = allPlaces[nextToAdd++];
