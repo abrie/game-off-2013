@@ -1,6 +1,6 @@
 "use strict";
-define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ], 
-       function( Strawman, Puzzle, Place, Product, Graph, settings ) {
+define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 'settings' ], 
+       function( audio, Strawman, Puzzle, Place, Product, Graph, utility, settings ) {
 
     function Level( onPlaceChanged, onFailure, onWin, onGameComplete, inventory, hud ) {
         var filterIndex = 0;
@@ -77,6 +77,7 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
         var ignoreJumpCount = false;
         function onJumpPathBlocked() {
             ignoreJumpCount = true;
+            audio.dispatch( sound2 );
             transferProduct.splat( function() {
                 onFailure("BLOCKED");
                 transferProduct.remove();
@@ -84,6 +85,28 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
             });
         }
 
+        var sound1 = {
+            notes:[64,65,66,67],
+            span: 500,
+            delay: 0,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.05, release:0.05},
+            lensId: 0,
+        };
+
+        var sound2 = {
+            notes:[30],
+            span: 1000,
+            delay: 450,
+            target: "oscsynth",
+            type: "sawtooth",
+            velocity: 1,
+            adsr: {attack:0.5, release:0.15},
+            lensId: 0,
+        };
+            
         function onJumpCountChanged() {
             if( !ignoreJumpCount ) {
                 jumpsRequired--;
@@ -140,6 +163,8 @@ define(['strawman', 'puzzle', 'place', 'product', 'graph', 'settings' ],
 
         function setPlace() {
             var newPlaceIndex = places.indexOf( transferProduct.getCurrentCoordinate().place ); 
+            audio.dispatch( sound1 );
+            sound1.notes = utility.rotateArray( sound1.notes, 1 );
             if( newPlaceIndex != placeIndex ) {
                 placeIndex = newPlaceIndex;
                 onPlaceChanged();

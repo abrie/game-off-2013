@@ -67,7 +67,7 @@ function( oscsynth, sampler, utility, google ) {
         if( event.target === "oscsynth" ) {
             var duration = event.span / 1000 / event.notes.length;
             event.notes.forEach( function( note, index ) {
-                event.at = index * duration;
+                event.at = index * duration + event.delay/1000;
                 event.duration = duration;
                 event.note = note;
                 oscsynth.play( event ); 
@@ -77,6 +77,7 @@ function( oscsynth, sampler, utility, google ) {
             sampler.play( event );
         } 
     }
+
 
 	return {
         dispatch: dispatch,
