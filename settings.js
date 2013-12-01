@@ -1,8 +1,8 @@
 "use strict";
 define([], function() {
     var result = {
-        arMarkerPersist: 20,
-        arThreshold: 40,
+        arMarkerPersist: 60,
+        arThreshold: 55,
         arMarkerSize: 150,
         tileDepth:30,
         strawLength: 100,

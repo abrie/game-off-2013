@@ -51,56 +51,63 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
         onAllLoaded = onComplete;
 
         add( "message1", new media.Video({
-            src: "assets/message1.m4v",
+            src: "assets/message1.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "message2", new media.Video({
-            src: "assets/message2.m4v",
+            src: "assets/message2.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip1", new media.Video({
-            src: "assets/clip1.m4v",
+            src: "assets/clip1.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip2", new media.Video({
-            src: "assets/clip2.m4v",
+            src: "assets/clip2.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip3", new media.Video({
-            src: "assets/clip3.m4v",
+            src: "assets/clip3.webmhd.webm",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
+        add( "clip3b", new media.Video({
+            src: "assets/clip3b.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip4", new media.Video({
-            src: "assets/clip4.m4v",
+            src: "assets/clip4.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip5", new media.Video({
-            src: "assets/clip5.m4v",
+            src: "assets/clip5.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
         add( "clip6", new media.Video({
-            src: "assets/clip6.m4v",
+            src: "assets/clip6.webmhd.webm",
             width: 480,
             height: 360,
             frameRate: 29.970628
