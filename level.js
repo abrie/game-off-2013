@@ -106,6 +106,51 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             adsr: {attack:0.5, release:0.15},
             lensId: 0,
         };
+
+        var sound3 = {
+            notes:[70,71,72,73,74,75,76],
+            span: 900,
+            delay: 0,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.05, release:0.05},
+            lensId: 0,
+        };
+
+        var sound3_down = {
+            notes:[70,71,72,72,71,70,69],
+            span: 900,
+            delay: 0,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.05, release:0.05},
+            lensId: 0,
+        };
+
+        var sound4 = {
+            notes:[70,71,72,73,74,75,76],
+            span: 400,
+            delay: 1000,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.05, release:0.05},
+            lensId: 0,
+        };
+
+        var sound5 = {
+            notes:[64],
+            span: 500,
+            delay: 1000,
+            target: "oscsynth",
+            type: "sine",
+            velocity: 1,
+            adsr: {attack:0.10, release:0.5},
+            lensId: 0,
+        };
+
             
         function onJumpCountChanged() {
             if( !ignoreJumpCount ) {
@@ -116,6 +161,8 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
                 var productCoordinate = transferProduct.getCurrentCoordinate();
                 var strawmanCoordinate = strawman.getCurrentCoordinate();
                 if( productCoordinate.place === strawmanCoordinate.place ) {
+                    audio.dispatch(sound3);
+                    audio.dispatch(sound4);
                     transferProduct.detonate( function() {
                         onWin();
                         var newPlace = allPlaces[nextToAdd++];
@@ -132,6 +179,8 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
                     });
                 }
                 else {
+                    audio.dispatch(sound3_down);
+                    audio.dispatch(sound5);
                     transferProduct.fizzle( function() {
                         onFailure("OUT OF JUMPS");
                         transferProduct.remove();
