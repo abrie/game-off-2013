@@ -52,7 +52,10 @@ define(['assets'], function(assets) {
                 context.drawImage( assets.get("inventory").get(item.name), x, 200, 32*item.scale, 32*item.scale );
                 x+=32*item.scale;
             });
+            context.font = "20pt Arial";
             context.strokeText("jumps to jangle:" + jumpNumber, 10, 193);
+            context.font = "12pt Courier";
+            context.strokeText("score:" + score, 170, 350);
         }
 
         var jumpNumber = 0;
@@ -60,7 +63,13 @@ define(['assets'], function(assets) {
             jumpNumber = number;
         }
 
+        var score = 0;
+        function setScore( number ) {
+            score = number;
+        }
+
         return {
+            setScore: setScore,
             setJumpNumber: setJumpNumber,
             render:render,
             nextFilter:nextFilter,

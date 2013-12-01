@@ -7,6 +7,7 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
     var scene, hudView;
     var currentLevel;
     var inventory;
+    var score = 0;
 
     function animate() {
         requestAnimationFrame( animate );
@@ -24,6 +25,8 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
             foreground: "#FFFFFF"
         };
         ui.flash( message, color );
+        score = score === 0 ? score : score-1;
+        hudView.setScore(score);
     }
 
     function onWin() {
@@ -31,6 +34,8 @@ define(['inventory', 'arscene', 'ui', 'imagesource', 'level', 'hud', 'audio', 't
             background: "#FFFFFF",
             foreground: "#000000"
         };
+        score++;
+        hudView.setScore(score);
     }
 
     function onGameComplete() {
