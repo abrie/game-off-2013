@@ -71,20 +71,20 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             if( strawman.getCurrentCoordinate() === coordinate ) {
                 strawman.bump( graph.nextCoordinate(coordinate));
             }
-            if( inProbeMode && 
+            if( inProbeMode() && 
                (probeProduct.getNearCoordinate() === coordinate ||
                 probeProduct.getFarCoordinate() === coordinate )) {
-                    probeProduct.withdraw( function() {
-                        console.log("probe withdrawn due to interaction");
-                });
+                    probeProduct.recheck();
             }
         }
 
         inventory.addItemChangedListener( onInventoryItemChanged );
         function onInventoryItemChanged() {
-            probeProduct.withdraw( function() {
-                console.log("probe withdrawn due to inventory switch");
-            });
+            if( !inProbeMode() ) {
+                probeProduct.withdraw( function() {
+                    probeProduct.turnOff();
+                });
+            }
         }
 
         function inProbeMode() {

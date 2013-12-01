@@ -395,6 +395,18 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         var farCoordinate;
         var withdrawn = true;
 
+        function turnOff() {
+            if( !withdrawn ) {
+                withdraw( turnOff );
+            }
+            if( nearCoordinate ) {
+                nearCoordinate.puzzle.object.removeItem( nearCoordinate.filter.probe.near );
+            }
+            if( farCoordinate ) {
+                farCoordinate.puzzle.object.removeItem( farCoordinate.filter.probe.far );
+            }
+        }
+
         function setCoordinate( coordinate, graph, callback ) {
             var count = 0;
             function twice() {
@@ -407,18 +419,42 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 withdraw( function() { setCoordinate( coordinate, graph, callback ); } );
             }
             else {
-                farCoordinate = graph.nextCoordinate( coordinate );
+                if( nearCoordinate ) {
+                    nearCoordinate.puzzle.object.removeItem( nearCoordinate.filter.probe.near );
+                }
+                if( farCoordinate ) {
+                    farCoordinate.puzzle.object.removeItem( farCoordinate.filter.probe.far );
+                }
+
+                nearCoordinate = coordinate;
+                farCoordinate = graph.nextCoordinate( nearCoordinate );
+                nearCoordinate.puzzle.object.addItem( nearCoordinate.filter.probe.near );
+                farCoordinate.puzzle.object.addItem( farCoordinate.filter.probe.far );
+
                 if( farCoordinate.puzzle.object.isSolved() ) {
-                    coordinate.puzzle.object.addItem( coordinate.filter.probe.near );
-                    farCoordinate.puzzle.object.addItem( farCoordinate.filter.probe.far );
-                    nearCoordinate = coordinate;
                     nearCoordinate.filter.probe.nearAnimator.activate( 500, twice );
                     farCoordinate.filter.probe.farAnimator.activate( 500, twice );
                     withdrawn = false;
                 }
                 else {
-                    console.log("cannot probe. Target is not solved.");
+                    //console.log("cannot probe. Target is not solved.");
                 }
+            }
+        }
+
+        function recheck() {
+            if( nearCoordinate.puzzle.object.isSolved() ) {
+                nearCoordinate.filter.probe.nearAnimator.activate( 350 );
+            }
+            else {
+                nearCoordinate.filter.probe.nearAnimator.deactivate( 150 );
+                farCoordinate.filter.probe.farAnimator.deactivate( 150 );
+            }
+            if( farCoordinate.puzzle.object.isSolved() && nearCoordinate.puzzle.object.isSolved() ) {
+                farCoordinate.filter.probe.farAnimator.activate( 350 );
+            }
+            else {
+                farCoordinate.filter.probe.farAnimator.deactivate( 150 );
             }
         }
 
@@ -437,11 +473,9 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
                 }
             }
             nearCoordinate.filter.probe.nearAnimator.deactivate( 250, function() {
-                nearCoordinate.puzzle.object.removeItem( nearCoordinate.filter.probe.near );
                 twice();
             });
             farCoordinate.filter.probe.farAnimator.deactivate( 250, function() {
-                farCoordinate.puzzle.object.removeItem( farCoordinate.filter.probe.far );
                 twice();
             } );
         }
@@ -455,6 +489,8 @@ define(['assets', 'utility', 'three.min'],function( assets, utility ){
         }
 
         return {
+            recheck:recheck,
+            turnOff:turnOff,
             withdraw:withdraw,
             setCoordinate: setCoordinate,
             getNearCoordinate:getNearCoordinate,
