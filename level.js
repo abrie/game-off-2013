@@ -20,6 +20,15 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             ],
         };
 
+        var filterC = { 
+            id:0,
+            puzzles:[
+                { id:4, generator: Puzzle.Hammer }, 
+                { id:32, generator: Puzzle.Hammer },
+                { id:16, generator: Puzzle.Hammer }
+            ],
+        };
+
         var nextToAdd = 2;
         var allPlaces = [ 
             new Place.Place( "message1", [ filterB ], onTransport, onInteraction, true ), 
@@ -27,6 +36,7 @@ define(['audio', 'strawman', 'puzzle', 'place', 'product', 'graph','utility', 's
             new Place.Place( "clip2", [ filterA ], onTransport, onInteraction, true ),
             new Place.Place( "clip3", [ filterA ], onTransport, onInteraction, true ),
             new Place.Place( "clip3b", [ filterB ], onTransport, onInteraction, true ),
+            new Place.Place( "clip7", [ filterC ], onTransport, onInteraction, true ), 
             new Place.Place( "clip4", [ filterA ], onTransport, onInteraction, true ),
             new Place.Place( "clip6", [ filterA ], onTransport, onInteraction, true ),
         ];

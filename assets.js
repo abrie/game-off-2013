@@ -113,6 +113,13 @@ define(['media','bufferloader', 'audio', 'three.min'], function( media, bufferlo
             frameRate: 29.970628
         }), onInitialize, onProgress );
 
+        add( "clip7", new media.Video({
+            src: "assets/clip7.webmhd.webm",
+            width: 480,
+            height: 360,
+            frameRate: 29.970628
+        }), onInitialize, onProgress );
+
         add( "hudset", new media.BitmapCollection({
             files: [
                 { id: 'character', file: 'character.png' },
