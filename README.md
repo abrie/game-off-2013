@@ -14,12 +14,13 @@ You can switch to an optional Probe Tool by pressing the 't' key. Use this tool 
 * There is an issue with layout while using Chrome on Windows machines. It results in an overflow scrollbar. Tragic.
 * Startup hangs when using Firefox because of an idiosyncracy in the webaudio implementation. Classic.
 
+The game was developed with Chrome on OSX.
+
 ## The Technicals
 This game is written in Javascript, and uses the following libraries:
 * [THREE.JS](http://threejs.org)
 * [JSARToolkit](https://github.com/kig/JSARToolKit)
 * [TWEENJS](https://github.com/sole/tween.js/)
-* Developed with Chrome, so please use Chrome if possible.
 
 ## For further information
 abrhie@gmail, twitter@abrihe
