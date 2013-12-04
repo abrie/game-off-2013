@@ -11,8 +11,8 @@ In this game you chase a Strawman around by solving [8-puzzles](http://en.wikipe
 You can switch to an optional Probe Tool by pressing the 't' key. Use this tool to discover where a jumphole leads. Probing will neither earn nor cost points. If the probe doesn't enter the Jumphole then it means the Jump Destination puzzle is unsolved, so search for a likely candiate and solve it! Also note that you can displace the Strawman by shifting a tile of the puzzle he occupies.
 
 ## The Bugs
-* There is an issue with layout while using Chrome on Windows machines. It results in an overflow scrollbar. Tragic.
-* Startup hangs when using Firefox because of an idiosyncracy in the webaudio implementation. Classic.
+* There is an issue with layout while using Chrome on Windows machines. It results in an overflow scrollbar.
+* Startup hangs when using Firefox because of an idiosyncracy in the webaudio implementation.
 
 The game was developed with Chrome on OSX.
 
