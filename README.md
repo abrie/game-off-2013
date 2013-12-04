@@ -2,6 +2,8 @@
 
 A #ggo13 entry. The result of a constantly changing mind.
 
+*** note: there is a bug in the layout on Windows machines. The fix is in a branch named *windowsfix". Tragic.
+
 ## The Game
 This game was developed and tested with Chrome, so please use it to play if possible. In this game you chase a Strawman around by solving [8-puzzles](http://en.wikipedia.org/wiki/15_puzzle). A solved 8-puzzle turns into a Jumphole through which you pass a Jingleball. The first puzzle you see has been solved for you as a model. Click the center hole and the Jingleball will begin a Jump Sequence. The Jingleball will Jangle after a number of Jumps. If the Jangle occurs in the same scene as the Strawman then you earn a point and the level advances with an additional scene. You can switch between scenes using the left/right arrows keys or the A/D of WASD. Be warned that the Jump Sequence will be blocked if the destination puzzle is unsolved. That'll cost you a point. And you should know that the Jangleball fizzles out if it runs out of jumps. That'll also cost a point. [Play the game](http://abrie.github.io/game-off-2013/).
 
